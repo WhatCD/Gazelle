@@ -16,7 +16,7 @@ if (empty($_GET['order']) || !isset($SortOrders[$_GET['order']])) {
 }
 $OrderBy = $_GET['order'];
 
-if (!empty($_GET['sort']) && $_GET['sort'] == 'asc') {
+if (!empty($_GET['sort']) && $_GET['sort'] === 'asc') {
 	$OrderWay = 'asc';
 } else {
 	$_GET['sort'] = 'desc';
@@ -49,7 +49,7 @@ $BookmarkView = false;
 
 if (empty($_GET['type'])) {
 	$Title = 'Requests';
-	if (!check_perms('site_see_old_requests') || empty($_GET['showall'])) {
+	if (empty($_GET['showall'])) {
 		$SphQL->where('visible', 1);
 	}
 } else {
@@ -289,7 +289,7 @@ if (!empty($_GET['releases'])) {
 	}
 }
 
-if (!empty($_GET['requestor']) && check_perms('site_see_old_requests')) {
+if (!empty($_GET['requestor'])) {
 	if (is_number($_GET['requestor'])) {
 		$SphQL->where('userid', $_GET['requestor']);
 	} else {

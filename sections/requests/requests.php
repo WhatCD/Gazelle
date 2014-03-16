@@ -16,7 +16,7 @@ if (empty($_GET['order']) || !isset($SortOrders[$_GET['order']])) {
 }
 $OrderBy = $_GET['order'];
 
-if (!empty($_GET['sort']) && $_GET['sort'] == 'asc') {
+if (!empty($_GET['sort']) && $_GET['sort'] === 'asc') {
 	$OrderWay = 'asc';
 } else {
 	$_GET['sort'] = 'desc';
@@ -49,7 +49,7 @@ $BookmarkView = false;
 
 if (empty($_GET['type'])) {
 	$Title = 'Requests';
-	if (!check_perms('site_see_old_requests') || empty($_GET['showall'])) {
+	if (empty($_GET['showall'])) {
 		$SphQL->where('visible', 1);
 	}
 } else {
@@ -291,7 +291,7 @@ if (!empty($_GET['releases'])) {
 	}
 }
 
-if (!empty($_GET['requestor']) && check_perms('site_see_old_requests')) {
+if (!empty($_GET['requestor'])) {
 	if (is_number($_GET['requestor'])) {
 		$SphQL->where('userid', $_GET['requestor']);
 	} else {
@@ -388,26 +388,25 @@ View::show_header($Title, 'requests');
 				</td>
 			</tr>
 			<tr id="include_filled">
-				<td class="label">Include filled:</td>
+				<td class="label"><label for="include_filled_box">Include filled:</label></td>
 				<td>
-					<input type="checkbox" name="show_filled"<? if (!$Submitted || !empty($_GET['show_filled']) || (!$Submitted && !empty($_GET['type']) && $_GET['type'] === 'filled')) { ?> checked="checked"<? } ?> />
+					<input type="checkbox" id="include_filled_box" name="show_filled"<? if (!$Submitted || !empty($_GET['show_filled']) || (!$Submitted && !empty($_GET['type']) && $_GET['type'] === 'filled')) { ?> checked="checked"<? } ?> />
 				</td>
 			</tr>
-<?		if (check_perms('site_see_old_requests')) { ?>
 			<tr id="include_old">
-				<td class="label">Include old:</td>
+				<td class="label"><label for="include_old_box">Include old:</label></td>
 				<td>
-					<input type="checkbox" name="showall"<? if (!empty($_GET['showall'])) { ?> checked="checked"<? } ?> />
+					<input type="checkbox" id="include_old_box" name="showall"<? if (!empty($_GET['showall'])) { ?> checked="checked"<? } ?> />
 				</td>
 			</tr>
-<?	/* ?>
+<?		/* ?>
 			<tr>
 				<td class="label">Requested by:</td>
 				<td>
 					<input type="text" name="requester" size="75" value="<?=display_str($_GET['requester'])?>" />
 				</td>
 			</tr>
-<?		*/} ?>
+<?		*/ ?>
 		</table>
 		<table class="layout cat_list">
 <?

@@ -290,6 +290,12 @@ span.secondary_class {
 	background: url("../common/table-order.png") no-repeat scroll right -79px transparent;
 }
 
+.headerSort.sorter-false,
+.headerSort.sorter-false span {
+    background-image: none;
+    cursor: default;
+}
+
 .album_votes {
 	text-align: center;
 }

@@ -1,5 +1,17 @@
 CHANGE LOG
 
+2014-03-16 by hateradio
+Update TableSorter JS; remove minified version; improve table sorting by adding attributes to table headings instead of relying on JS to disable columns.
+
+2014-03-16 by alderaan
+Remove permission "site_see_old_requests"
+
+2014-03-16 by alderaan
+Remove sections/requests/requests.php.presphinx
+
+2014-03-16 by alderaan
+requests.php: Add <label> elements for the "include filled" and "include old" check boxes
+
 2014-03-12 by Ajax
 Open donor icon links in a new tab
 

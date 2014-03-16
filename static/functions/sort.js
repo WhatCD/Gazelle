@@ -1,23 +1,43 @@
 var sortableTable;
-$(document).ready(function () {
+$(function () {
 
+	// tips/notes:
+	// In HTML add data-sorter="false" to table headings (TH) that should not be sorted
+	// or add data-sorter="myParser" to THs that require a custom parser
+
+	// sorts dates placed in the title attribute of a td
 	$.tablesorter.addParser({
-		id: 'relative_time',
+		id: 'relativeTime',
 		is: function (s) {
 			return false;
 		},
-		format: function(str, table, td) {
+		format: function (str, table, td) {
 			return td.title;
 		},
 		type: 'text'
 	});
 
+	// sort to ignore (English) articles
+	// add data-sorter="ignoreArticles" to THs
+	$.tablesorter.addParser({
+		id: 'ignoreArticles',
+		$format: $.tablesorter.getParserById('text').format,
+		articlesRegEx: /^(?:the\s|a\s|an\s)/i,
+		is: function () {
+			return false;
+		},
+		format: function (s, table) {
+			return this.$format((s || '').replace(this.articlesRegEx, ''), table);
+		},
+		type: 'text'
+	});
+
 	sortableTable = {
-		container : $('#manage_collage_table'),
-		form : $('#drag_drop_collage_form'),
-		serialInput : $('#drag_drop_collage_sort_order'),
-		check : $('#check_all'),
-		counter : function () {
+		container: $('#manage_collage_table'),
+		form: $('#drag_drop_collage_form'),
+		serialInput: $('#drag_drop_collage_sort_order'),
+		check: $('#check_all'),
+		counter: function () {
 			var x = 10;
 			$('input.sort_numbers').each(function () {
 				this.value = x;
@@ -25,7 +45,7 @@ $(document).ready(function () {
 			});
 			this.serializer();
 		},
-		color : function () {
+		color: function () {
 			var i = 0, css;
 			$('tr.drag').each(function () {
 				css = i % 2 === 0 ? ['rowa', 'rowb'] : ['rowb', 'rowa'];
@@ -33,19 +53,19 @@ $(document).ready(function () {
 				i++;
 			});
 		},
-		serializer : function () {
+		serializer: function () {
 			this.serialInput.val(this.container.sortable('serialize'));
 		},
-		save : function () {
+		save: function () {
 			sortableTable.form.submit();
 		},
-		widthFix : function(e, row) {
+		widthFix: function (e, row) {
 			row.children('td').each(function () {
 				$(this).width($(this).width());
 			});
 			return row;
 		},
-		init : function () {
+		init: function () {
 			$('.drag_drop_save').removeClass('hidden');
 
 			this.noteToggle();
@@ -58,7 +78,7 @@ $(document).ready(function () {
 				$('.save_sortable_collage').click(sortableTable.save);
 			}
 		},
-		draggable : function () {
+		draggable: function () {
 			this.container.sortable({
 				items: '.drag',
 				axis: 'y',
@@ -68,25 +88,22 @@ $(document).ready(function () {
 				stop: sortableTable.postSort
 			});
 		},
-		tableSorter : function () {
-			var obj = { 0: { sorter : false }, 6: { sorter : false } };
-			if (this.check.length !== 0) {
-				obj[5] = { sorter : 'relative_time' };
-			}
+		tableSorter: function () {
 			this.container.tablesorter({
-				cssHeader : 'headerSort',
-				textExtraction: sortableTable.extractor,
-				headers : obj
+				cssHeader: 'headerSort',
+				cssDesc: 'headerSortUp',
+				cssAsc: 'headerSortDown',
+				textExtraction: sortableTable.extractor
 			}).on('sortEnd', sortableTable.postSort);
 		},
-		extractor : function (node) {
+		extractor: function (node) {
 			return node.textContent || node.innerText;
 		},
-		postSort : function () {
+		postSort: function () {
 			sortableTable.color();
 			sortableTable.counter();
 		},
-		noteToggle : function () {
+		noteToggle: function () {
 			var span = $('<a href="#" class="brackets tooltip" title="Toggle note">Hide</a>').click(function (e) {
 				e.preventDefault();
 				$('#drag_drop_textnote > :first-child').toggle();
@@ -95,15 +112,15 @@ $(document).ready(function () {
 			});
 			$('#sorting_head').append(' ', span);
 		},
-		checks : function () {
+		checks: function () {
 			this.check.on('click', 'input', function () {
 				var s = this.checked ?
-					'td.center :checkbox:not(:checked)' :
-					'td.center :checked';
+						'td.center :checkbox:not(:checked)' :
+						'td.center :checked';
 				$(s).click();
 			}).find('span').html('<input type="checkbox" />');
 
-			this.container.on('click', 'td > :checkbox', function() {
+			this.container.on('click', 'td > :checkbox', function () {
 				$(this).parents('tr').toggleClass('row_checked');
 			}).on('dblclick', 'tr.drag', function () {
 				$(this).find(':checkbox').click();

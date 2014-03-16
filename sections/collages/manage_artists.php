@@ -32,7 +32,7 @@ $DB->query("
 $Artists = $DB->to_array('ArtistID', MYSQLI_ASSOC);
 
 
-View::show_header("Manage collage $Name", 'jquery-ui,jquery.tablesorter.min,sort');
+View::show_header("Manage collage $Name", 'jquery-ui,jquery.tablesorter,sort');
 
 ?>
 
@@ -61,11 +61,11 @@ View::show_header("Manage collage $Name", 'jquery-ui,jquery.tablesorter.min,sort
 	<table id="manage_collage_table">
 		<thead>
 			<tr class="colhead">
-				<th style="width: 7%;">Order</th>
+				<th style="width: 7%;" data-sorter="false">Order</th>
 				<th style="width: 1%;"><span><abbr class="tooltip" title="Current rank">#</abbr></span></th>
-				<th style="text-align: left;"><span>Artist</span></th>
-				<th style="width: 7%;"><span>User</span></th>
-				<th style="width: 7%; text-align: right;" class="nobr"><span><abbr class="tooltip" title="Modify an individual row.">Tweak</abbr></span></th>
+				<th style="text-align: left;" data-sorter="ignoreArticles"><span>Artist</span></th>
+				<th style="width: 7%;" data-sorter="ignoreArticles"><span>User</span></th>
+				<th style="width: 7%; text-align: right;" class="nobr" data-sorter="false"><span><abbr class="tooltip" title="Modify an individual row.">Tweak</abbr></span></th>
 			</tr>
 		</thead>
 	<tbody>
