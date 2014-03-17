@@ -768,8 +768,6 @@ if (!$NoDaily && $Day != $NextDay || $_GET['runday']) {
 	sleep(5);
 
 	//------------- Disable downloading ability of users on ratio watch
-
-/*
 	$UserQuery = $DB->query("
 			SELECT ID, torrent_pass
 			FROM users_info AS i
@@ -808,8 +806,6 @@ if (!$NoDaily && $Day != $NextDay || $_GET['runday']) {
 	foreach ($Passkeys as $Passkey) {
 		Tracker::update_tracker('update_user', array('passkey' => $Passkey, 'can_leech' => '0'));
 	}
-
-	*/
 
 	//------------- Disable inactive user accounts --------------------------//
 	sleep(5);

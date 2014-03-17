@@ -148,6 +148,7 @@ function toggle_group(groupid, link, event) {
 	if (event.preventDefault) {
 		event.preventDefault();
 	} else {
+		// for IE < 9 support
 		event.returnValue = false;
 	}
 }
@@ -182,6 +183,7 @@ function toggle_edition(groupid, editionid, lnk, event) {
 	if (event.preventDefault) {
 		event.preventDefault();
 	} else {
+		// for IE < 9 support
 		event.returnValue = false;
 	}
 }

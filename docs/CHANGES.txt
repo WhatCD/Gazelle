@@ -1,5 +1,8 @@
 CHANGE LOG
 
+2014-03-17 by alderaan
+Uncomment some of the Ratio Watch code in public Gazelle. This was accidentally commented out in the public code.
+
 2014-03-16 by hateradio
 Update TableSorter JS; remove minified version; improve table sorting by adding attributes to table headings instead of relying on JS to disable columns.
 

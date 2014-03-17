@@ -98,7 +98,8 @@ class DEBUG {
 			),
 			$Time
 		);
-		send_irc('PRIVMSG '.LAB_CHAN." :{$Message} $Document ".site_url()."tools.php?action=analysis&case=$Identifier ".site_url().$_SERVER['REQUEST_URI']);
+		$RequestURI = !empty($_SERVER['REQUEST_URI']) ? substr($_SERVER['REQUEST_URI'], 1) : '';
+		send_irc('PRIVMSG '.LAB_CHAN." :{$Message} $Document ".site_url()."tools.php?action=analysis&case=$Identifier ".site_url().$RequestURI);
 	}
 
 	public function get_cpu_time() {
