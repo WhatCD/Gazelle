@@ -3,9 +3,9 @@ Gazelle is a web framework geared towards private BitTorrent trackers. Although 
 
 ## Gazelle Runtime Dependencies
 * [Nginx](http://wiki.nginx.org/Main) (recommended)
-* [PHP 5.4 or later](https://www.php.net/) (required)
+* [PHP 5.4 or newer](https://www.php.net/) (required)
 * [Memcached](http://memcached.org/) (required)
-* [Sphinx](http://sphinxsearch.com/) (required)
+* [Sphinx 2.0.6 or newer](http://sphinxsearch.com/) (required)
 * [procps-ng](http://sourceforge.net/projects/procps-ng/) (recommended)
 
 ## Gazelle/Ocelot Compile-time Dependencies
