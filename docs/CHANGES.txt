@@ -1,6 +1,12 @@
 CHANGE LOG
 
 2014-03-18 by alderaan
+Add a "[Jump to staff tools]" button on user profiles that links to a page anchor after the "Recent Snatches", "Recent Uploads", collage sections, etc.
+
+2014-03-18 by alderaan
+Remove page anchor buttons on user profiles
+
+2014-03-18 by alderaan
 README: State that Sphinx 2.0.6 or newer is required
 
 2014-03-17 by alderaan

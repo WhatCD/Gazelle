@@ -229,6 +229,11 @@ if (check_perms('admin_clear_cache') && check_perms('users_override_paranoia')) 
 		<a href="user.php?action=clearcache&amp;id=<?=$UserID?>" class="brackets">Clear cache</a>
 <?
 }
+if (check_perms('users_mod')) {
+?>
+		<a href="#staff_tools" class="brackets">Jump to staff tools</a>
+<?
+}
 ?>
 	</div>
 
@@ -623,7 +628,7 @@ if (check_paranoia_here('snatched')) {
 	<table class="layout recent" id="recent_snatches" cellpadding="0" cellspacing="0" border="0">
 		<tr class="colhead">
 			<td colspan="5">
-				<a href="#recent_snatches" class="brackets anchor">#</a> Recent Snatches
+				Recent Snatches
 			</td>
 		</tr>
 		<tr>
@@ -668,7 +673,7 @@ if (check_paranoia_here('uploads')) {
 	<table class="layout recent" id="recent_uploads" cellpadding="0" cellspacing="0" border="0">
 		<tr class="colhead">
 			<td colspan="5">
-				<a href="#recent_uploads" class="brackets anchor">#</a> Recent Uploads
+				Recent Uploads
 			</td>
 		</tr>
 		<tr>
@@ -712,7 +717,7 @@ foreach ($Collages as $CollageInfo) {
 		<tr class="colhead">
 			<td colspan="5">
 				<span style="float: left;">
-					<a href="#collage<?=$CollageID?>_box" class="brackets anchor">#</a> <?=display_str($CName)?> - <a href="collages.php?id=<?=$CollageID?>" class="brackets">See full</a>
+					<?=display_str($CName)?> - <a href="collages.php?id=<?=$CollageID?>" class="brackets">See full</a>
 				</span>
 				<span style="float: right;">
 					<a href="#" onclick="$('#collage<?=$CollageID?>_box .images').gtoggle(); this.innerHTML = (this.innerHTML == 'Hide' ? 'Show' : 'Hide'); return false;" class="brackets"><?=$FirstCol ? 'Hide' : 'Show' ?></a>
@@ -739,8 +744,10 @@ foreach ($Collages as $CollageInfo) {
 <?
 	$FirstCol = false;
 }
-
-
+?>
+	<!-- for the "jump to staff tools" button -->
+	<a id="staff_tools"></a>
+<?
 
 // Linked accounts
 if (check_perms('users_mod')) {
@@ -754,7 +761,7 @@ if ((check_perms('users_view_invites')) && $Invited > 0) {
 ?>
 		<div class="box" id="invitetree_box">
 			<div class="head">
-				<a href="#invitetree_box" class="brackets anchor">#</a> Invite Tree <a href="#" onclick="$('#invitetree').gtoggle(); return false;" class="brackets">View</a>
+				Invite Tree <a href="#" onclick="$('#invitetree').gtoggle(); return false;" class="brackets">View</a>
 			</div>
 			<div id="invitetree" class="hidden">
 <?				$Tree->make_tree(); ?>
@@ -783,7 +790,7 @@ if (empty($LoggedUser['DisableRequests']) && check_paranoia_here('requestsvoted_
 ?>
 		<div class="box" id="requests_box">
 			<div class="head">
-				<a href="#requests_box" class="brackets anchor">#</a> Requests <a href="#" onclick="$('#requests').gtoggle(); return false;" class="brackets">View</a>
+				Requests <a href="#" onclick="$('#requests').gtoggle(); return false;" class="brackets">View</a>
 			</div>
 			<div id="requests" class="request_table hidden">
 				<table cellpadding="6" cellspacing="1" border="0" class="border" width="100%">
@@ -878,7 +885,7 @@ if (check_perms('users_mod', $Class) || $IsFLS) {
 ?>
 		<div class="box" id="staffpms_box">
 			<div class="head">
-				<a href="#staffpms_box" class="brackets anchor">#</a> Staff PMs <a href="#" onclick="$('#staffpms').gtoggle(); return false;" class="brackets">View</a>
+				Staff PMs <a href="#" onclick="$('#staffpms').gtoggle(); return false;" class="brackets">View</a>
 			</div>
 			<table width="100%" class="message_table hidden" id="staffpms">
 				<tr class="colhead">
@@ -950,7 +957,7 @@ if (check_perms('users_mod', $Class)) { ?>
 
 		<div class="box box2" id="staff_notes_box">
 			<div class="head">
-				<a href="#staff_notes_box" class="brackets anchor">#</a> Staff Notes
+				Staff Notes
 				<a href="#" name="admincommentbutton" onclick="ChangeTo('text'); return false;" class="brackets">Edit</a>
 				<a href="#" onclick="$('#staffnotes').gtoggle(); return false;" class="brackets">Toggle</a>
 			</div>
@@ -968,7 +975,7 @@ if (check_perms('users_mod', $Class)) { ?>
 		<table class="layout" id="user_info_box">
 			<tr class="colhead">
 				<td colspan="2">
-					<a href="#user_info_box" class="brackets anchor">#</a> User Information
+					User Information
 				</td>
 			</tr>
 <?	if (check_perms('users_edit_usernames', $Class)) { ?>
@@ -1156,7 +1163,7 @@ if (check_perms('users_mod', $Class)) { ?>
 		<table class="layout" id="warn_user_box">
 			<tr class="colhead">
 				<td colspan="2">
-					<a href="#warn_user_box" class="brackets anchor">#</a> Warnings
+					Warnings
 				</td>
 			</tr>
 			<tr>
@@ -1215,7 +1222,7 @@ if (check_perms('users_mod', $Class)) { ?>
 		<table class="layout" id="user_privs_box">
 			<tr class="colhead">
 				<td colspan="2">
-					<a href="#user_privs_box" class="brackets anchor">#</a> User Privileges
+					User Privileges
 				</td>
 			</tr>
 <?	if (check_perms('users_disable_posts') || check_perms('users_disable_any')) {
@@ -1310,7 +1317,7 @@ if (check_perms('users_mod', $Class)) { ?>
 		<table class="layout" id="session_box">
 			<tr class="colhead">
 				<td colspan="2">
-					<a href="#session_box" class="brackets anchor">#</a> Session
+					Session
 				</td>
 			</tr>
 			<tr>
@@ -1331,7 +1338,7 @@ if (check_perms('users_mod', $Class)) { ?>
 		<table class="layout" id="submit_box">
 			<tr class="colhead">
 				<td colspan="2">
-					<a href="#submit_box" class="brackets anchor">#</a> Submit
+					Submit
 				</td>
 			</tr>
 			<tr>

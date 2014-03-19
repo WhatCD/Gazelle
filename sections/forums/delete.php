@@ -11,7 +11,7 @@ if (!check_perms('site_admin_forums')) {
 	error(403);
 }
 
-// Get topicid, forumid, number of pages
+// Get topic ID, forum ID, number of pages
 $DB->query("
 	SELECT
 		TopicID,
@@ -44,7 +44,8 @@ $DB->query("
 list($LastID) = $DB->next_record();
 $DB->query("
 	UPDATE forums AS f, forums_topics AS t
-	SET f.NumPosts = f.NumPosts - 1, t.NumPosts = t.NumPosts - 1
+	SET f.NumPosts = f.NumPosts - 1,
+		t.NumPosts = t.NumPosts - 1
 	WHERE f.ID = '$ForumID'
 		AND t.ID = '$TopicID'");
 
@@ -144,4 +145,7 @@ Subscriptions::flush_subscriptions('forums', $TopicID);
 
 // quote notifications
 Subscriptions::flush_quote_notifications('forums', $TopicID);
-$DB->query("DELETE FROM users_notify_quoted WHERE Page = 'forums' AND PostID = '" . $PostID . "'");
+$DB->query("
+	DELETE FROM users_notify_quoted
+	WHERE Page = 'forums'
+		AND PostID = '$PostID'");

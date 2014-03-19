@@ -6,7 +6,7 @@ class DonationsView {
 		<table class="layout" id="donation_box">
 			<tr class="colhead">
 				<td colspan="2">
-					<a href="#donor_ranks" class="brackets anchor">#</a> Donor System (add points)
+					Donor System (add points)
 				</td>
 			</tr>
 			<tr>
@@ -34,7 +34,7 @@ class DonationsView {
 		<table class="layout" id="donor_points_box">
 			<tr class="colhead">
 				<td colspan="3" class="tooltip" title='Use this tool only when manually correcting values. If crediting donations normally, use the "Donor System (add points)" tool'>
-					<a href="#donor_points" class="brackets anchor">#</a> Donor System (modify values)
+					Donor System (modify values)
 				</td>
 			</tr>
 			<tr>
@@ -121,7 +121,7 @@ class DonationsView {
 ?>
 		<div class="box box2" id="donation_history_box">
 			<div class="head">
-				<a href="#donation_history_box" class="brackets anchor">#</a> Donation History <a href="#" onclick="$('#donation_history').gtoggle(); return false;" class="brackets">View</a>
+				Donation History <a href="#" onclick="$('#donation_history').gtoggle(); return false;" class="brackets">View</a>
 			</div>
 <?		$Row = 'b'; ?>
 			<div class="hidden" id="donation_history">

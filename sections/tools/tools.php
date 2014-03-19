@@ -178,6 +178,8 @@ View::show_header('Staff Tools');
 	// begin Site Information category
 	$ToolsHTML = "";
 	create_row("Economic stats", "tools.php?action=economic_stats", check_perms("site_view_flow"));
+	create_row("Economic stats", "tools.php?action=economic_stats", check_perms("site_view_flow"));
+
 	create_row("Invite pool", "tools.php?action=invite_pool", check_perms("users_view_invites"));
 	create_row("Registration log", "tools.php?action=registration_log", check_perms("users_view_ips") && check_perms("users_view_email"));
 	create_row("Torrent stats", "tools.php?action=torrent_stats", check_perms("site_view_flow"));
