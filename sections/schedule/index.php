@@ -966,8 +966,6 @@ if (!$NoDaily && $Day != $NextDay || $_GET['runday']) {
 
 	sleep(10);
 
-	$i = 0;
-
 	$DB->query("
 		SELECT
 			t.ID,
@@ -984,15 +982,15 @@ if (!$NoDaily && $Day != $NextDay || $_GET['runday']) {
 			(t.last_action < '".time_minus(3600 * 24 * 28)."' AND t.last_action != 0)
 			OR
 			(t.Time < '".time_minus(3600 * 24 * 2)."' AND t.last_action = 0)");
-	$Torrents = $DB->to_array();
+	$Torrents = $DB->to_array(false, MYSQLI_NUM, false);
 	echo 'Found '.count($Torrents)." inactive torrents to be deleted.\n";
 
 	$LogEntries = $DeleteNotes = array();
 
 	// Exceptions for inactivity deletion
 	$InactivityExceptionsMade = array(//UserID => expiry time of exception
-
 	);
+	$i = 0;
 	foreach ($Torrents as $Torrent) {
 		list($ID, $GroupID, $Name, $Format, $Encoding, $UserID, $Media, $InfoHash) = $Torrent;
 		if (array_key_exists($UserID, $InactivityExceptionsMade) && (time() < $InactivityExceptionsMade[$UserID])) {
