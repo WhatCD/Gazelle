@@ -1,5 +1,14 @@
 CHANGE LOG
 
+2014-03-20 by alderaan
+Use class="wide_input_text" for the "extra log message" and "extra staff notes" text boxes on the Reports v2 and torrent deletion forms
+
+2014-03-20 by alderaan
+Rename "Upload" to "Remove upload privileges" on the torrent deletion form
+
+2014-03-20 by alderaan
+Add <label> tags for the "Delete", "Warning", and "Upload" fields on the torrent deletion form
+
 2014-03-18 by alderaan
 Add a "[Jump to staff tools]" button on user profiles that links to a page anchor after the "Recent Snatches", "Recent Uploads", collage sections, etc.
 

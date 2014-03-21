@@ -581,20 +581,20 @@ if (count($Reports) === 0) {
 				<tr>
 					<td class="label"><strong>Extra</strong> log message:</td>
 					<td>
-						<input type="text" name="log_message" id="log_message<?=$ReportID?>" size="40"
-<?					if ($ExtraIDs) {
+						<input type="text" class="wide_input_text" name="log_message" id="log_message<?=$ReportID?>"<?
+					if ($ExtraIDs) {
 						$Extras = explode(' ', $ExtraIDs);
 						$Value = '';
 						foreach ($Extras as $ExtraID) {
 							$Value .= site_url()."torrents.php?torrentid=$ExtraID ";
 						}
-						echo 'value="'.trim($Value).'"';
+						echo ' value="'.trim($Value).'"';
 					} ?>
 						/>
 					</td>
 					<td class="label"><strong>Extra</strong> staff notes:</td>
 					<td>
-						<input type="text" name="admin_message" id="admin_message<?=$ReportID?>" size="40" />
+						<input type="text" class="wide_input_text" name="admin_message" id="admin_message<?=$ReportID?>" />
 					</td>
 				</tr>
 				<tr>

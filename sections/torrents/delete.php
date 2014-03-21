@@ -256,11 +256,11 @@ foreach ($TypeList as $IType => $Data) {
 						</select>
 						<span id="options<?=$ReportID?>">
 							<span class="tooltip" title="Delete torrent?">
-								<strong>Delete</strong>
+								<label for="delete<?=$ReportID?>"><strong>Delete</strong></label>
 								<input type="checkbox" name="delete" id="delete<?=$ReportID?>"<?=($ReportType['resolve_options']['delete'] ? ' checked="checked"' : '')?> />
 							</span>
 							<span class="tooltip" title="Warning length in weeks">
-								<strong>Warning</strong>
+								<label for="warning<?=$ReportID?>"><strong>Warning</strong></label>
 								<select name="warning" id="warning<?=$ReportID?>">
 <?	for ($i = 0; $i < 9; $i++) { ?>
 									<option value="<?=$i?>"<?=(($ReportType['resolve_options']['warn'] == $i) ? ' selected="selected"' : '')?>><?=$i?></option>
@@ -268,7 +268,7 @@ foreach ($TypeList as $IType => $Data) {
 								</select>
 							</span>
 							<span class="tooltip" title="Remove upload privileges?">
-								<strong>Upload</strong>
+								<label for="upload<?=$ReportID?>"><strong>Remove upload privileges</strong></label>
 								<input type="checkbox" name="upload" id="upload<?=$ReportID?>"<?=($ReportType['resolve_options']['upload'] ? ' checked="checked"' : '')?> />
 							</span>
 						</span>
@@ -277,20 +277,20 @@ foreach ($TypeList as $IType => $Data) {
 				<tr>
 					<td class="label">PM uploader:</td>
 					<td colspan="3">
-						<span class="tooltip" title="Appended to the regular message unless using &quot;Send Now&quot;.">
+						<span class="tooltip" title="Appended to the regular message unless using &quot;Send now&quot;.">
 							<textarea name="uploader_pm" id="uploader_pm<?=$ReportID?>" cols="50" rows="1"></textarea>
 						</span>
-						<input type="button" value="Send Now" onclick="SendPM(<?=$ReportID?>);" />
+						<input type="button" value="Send now" onclick="SendPM(<?=$ReportID?>);" />
 					</td>
 				</tr>
 				<tr>
 					<td class="label"><strong>Extra</strong> log message:</td>
 					<td>
-						<input type="text" name="log_message" id="log_message<?=$ReportID?>" size="40" />
+						<input type="text" class="wide_input_text" name="log_message" id="log_message<?=$ReportID?>" />
 					</td>
 					<td class="label"><strong>Extra</strong> staff notes:</td>
 					<td>
-						<input type="text" name="admin_message" id="admin_message<?=$ReportID?>" size="40" />
+						<input type="text" class="wide_input_text" name="admin_message" id="admin_message<?=$ReportID?>" />
 					</td>
 				</tr>
 				<tr>
