@@ -41,12 +41,8 @@ View::show_header('Ask the Staff', 'questions,bbcode');
 ?>
 <div class="thin">
 	<div class="header">
-		<h2>
-			User Questions
-			<span style="float: right;">
-				<?=$TotalQuestions?> questions asked, <?=count($Questions)?> left to answer
-			</span>
-		</h2>
+		<h2>User Questions</h2>
+		<h3><?=number_format($TotalQuestions)?> questions asked; <?=number_format(count($Questions))?> left to answer</h3>
 	</div>
 	<div class="linkbox">
 		<a class="brackets" href="questions.php?action=answers">View staff answers</a>

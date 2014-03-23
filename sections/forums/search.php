@@ -97,13 +97,13 @@ View::show_header('Forums &gt; Search', 'bbcode,forum_search,datetime_picker', '
 			<tr>
 				<td><strong>Search for:</strong></td>
 				<td>
-					<input type="text" name="search" size="70" value="<?=display_str($Search)?>" />
+					<input type="search" name="search" size="70" value="<?=display_str($Search)?>" />
 				</td>
 			</tr>
 			<tr>
-				<td><strong>Username:</strong></td>
+				<td><strong>Posted by:</strong></td>
 				<td>
-					<input type="text" name="user" size="70" value="<?=display_str($User)?>" />
+					<input type="search" name="user" placeholder="Username" size="70" value="<?=display_str($User)?>" />
 				</td>
 			</tr>
 			<tr>
@@ -224,8 +224,8 @@ if ($Type == 'body') {
 			p.Body,
 			t.CreatedTime
 		FROM forums_posts AS p
-			JOIN forums_topics AS t ON t.ID=p.TopicID
-			JOIN forums AS f ON f.ID=t.ForumID
+			JOIN forums_topics AS t ON t.ID = p.TopicID
+			JOIN forums AS f ON f.ID = t.ForumID
 		WHERE " . Forums::user_forums_sql() . ' AND ';
 
 	//In tests, this is significantly faster than LOCATE
@@ -238,13 +238,13 @@ if ($Type == 'body') {
 	//$SQL .= "', p.Body) ";
 
 	if (isset($SearchForums)) {
-		$SQL.=" AND f.ID IN ($SearchForums)";
+		$SQL .= " AND f.ID IN ($SearchForums)";
 	}
 	if (isset($AuthorID)) {
-		$SQL.=" AND p.AuthorID='$AuthorID' ";
+		$SQL .= " AND p.AuthorID = '$AuthorID' ";
 	}
 	if (!empty($ThreadID)) {
-		$SQL.=" AND t.ID='$ThreadID' ";
+		$SQL .= " AND t.ID = '$ThreadID' ";
 	}
 	if (!empty($ThreadAfterDate)) {
 		$SQL .= " AND t.CreatedTime >= '$ThreadAfterDate'";
@@ -276,7 +276,7 @@ if ($Type == 'body') {
 			'',
 			t.CreatedTime
 		FROM forums_topics AS t
-			JOIN forums AS f ON f.ID=t.ForumID
+			JOIN forums AS f ON f.ID = t.ForumID
 		WHERE " . Forums::user_forums_sql() . ' AND ';
 	$SQL .= "t.Title LIKE '%";
 	$SQL .= implode("%' AND t.Title LIKE '%", $Words);

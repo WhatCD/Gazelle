@@ -98,19 +98,21 @@ if (isset($_POST['Username'])) {
 		<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 		<table class="layout" cellpadding="2" cellspacing="1" border="0" align="center">
 			<tr valign="top">
-				<td align="right">Username&nbsp;</td>
+				<td align="right" class="label">Username:</td>
 				<td align="left"><input type="text" name="Username" id="username" class="inputtext" /></td>
 			</tr>
 			<tr valign="top">
-				<td align="right">Email&nbsp;</td>
-				<td align="left"><input type="text" name="Email" id="email" class="inputtext" /></td>
+				<td align="right" class="label">Email address:</td>
+				<td align="left"><input type="email" name="Email" id="email" class="inputtext" /></td>
 			</tr>
 			<tr valign="top">
-				<td align="right">Password&nbsp;</td>
+				<td align="right" class="label">Password:</td>
 				<td align="left"><input type="password" name="Password" id="password" class="inputtext" /></td>
 			</tr>
 			<tr>
-				<td colspan="2" align="right"><input type="submit" name="submit" value="Create User" class="submit" /></td>
+				<td colspan="2" align="right">
+					<input type="submit" name="submit" value="Create User" class="submit" />
+				</td>
 			</tr>
 		</table>
 	</form>

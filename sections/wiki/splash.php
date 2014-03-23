@@ -7,7 +7,7 @@
 		<p>Search the wiki for user created tutorials and information.</p>
 		<form class="search_form" name="wiki" action="wiki.php" method="get">
 			<input type="hidden" name="action" value="search" />
-			<input type="text" name="search" size="80" />
+			<input type="search" name="search" size="80" />
 			<input value="Search" type="submit" class="hidden" />
 		</form>
 		<br />

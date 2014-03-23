@@ -2,7 +2,8 @@
 if (!check_perms('users_view_invites')) {
 	error(403);
 }
-View::show_header('Invite Pool');
+$Title = 'Invite Pool';
+View::show_header($Title);
 define('INVITES_PER_PAGE', 50);
 list($Page, $Limit) = Format::page_limit(INVITES_PER_PAGE);
 
@@ -44,6 +45,9 @@ list($Results) = $DB->next_record();
 
 $DB->set_query_id($RS);
 ?>
+	<div class="header">
+		<h2><?=$Title?></h2>
+	</div>
 	<div class="box pad">
 		<p><?=number_format($Results)?> unused invites have been sent.</p>
 	</div>
@@ -52,10 +56,10 @@ $DB->set_query_id($RS);
 		<form class="search_form" name="invites" action="" method="get">
 			<table cellpadding="6" cellspacing="1" border="0" class="layout border" width="100%">
 				<tr>
-					<td class="label"><strong>Email:</strong></td>
+					<td class="label"><strong>Email address:</strong></td>
 					<td>
 						<input type="hidden" name="action" value="invite_pool" />
-						<input type="text" name="search" size="60" value="<?=display_str($Search)?>" />
+						<input type="email" name="search" size="60" value="<?=display_str($Search)?>" />
 						&nbsp;
 						<input type="submit" value="Search log" />
 					</td>
@@ -72,8 +76,8 @@ $DB->set_query_id($RS);
 	<table width="100%">
 		<tr class="colhead">
 			<td>Inviter</td>
-			<td>Email</td>
-			<td>IP</td>
+			<td>Email address</td>
+			<td>IP address</td>
 			<td>InviteCode</td>
 			<td>Expires</td>
 <? if (check_perms('users_edit_invites')) { ?>

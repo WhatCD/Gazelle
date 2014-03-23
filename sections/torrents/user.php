@@ -346,7 +346,7 @@ $Pages = Format::get_pages($Page, $TorrentCount, TORRENTS_PER_PAGE);
 					<td>
 						<input type="hidden" name="type" value="<?=$_GET['type']?>" />
 						<input type="hidden" name="userid" value="<?=$UserID?>" />
-						<input type="text" name="search" size="60" value="<?Format::form('search')?>" />
+						<input type="search" name="search" size="60" value="<?Format::form('search')?>" />
 					</td>
 				</tr>
 				<tr>
@@ -409,7 +409,7 @@ $Pages = Format::get_pages($Page, $TorrentCount, TORRENTS_PER_PAGE);
 				<tr>
 					<td class="label"><strong>Tags:</strong></td>
 					<td>
-						<input type="text" name="tags" size="60" class="tooltip" title="Use !tag to exclude tag" value="<?Format::form('tags')?>" />&nbsp;
+						<input type="search" name="tags" size="60" class="tooltip" title="Use !tag to exclude tag" value="<?Format::form('tags')?>" />&nbsp;
 						<input type="radio" name="tags_type" id="tags_type0" value="0"<?Format::selected('tags_type', 0, 'checked')?> /><label for="tags_type0"> Any</label>&nbsp;&nbsp;
 						<input type="radio" name="tags_type" id="tags_type1" value="1"<?Format::selected('tags_type', 1, 'checked')?> /><label for="tags_type1"> All</label>
 					</td>

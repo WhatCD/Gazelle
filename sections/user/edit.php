@@ -787,7 +787,7 @@ list($ArtistsAdded) = $DB->next_record();
 				<td class="label tooltip" title="This is the email address you want associated with your <?=SITE_NAME?> account. It will be used if you forget your password or if an alert needs to be sent to you."><strong>Email address</strong></td>
 				<td>
 					<div class="field_div">
-						<input type="text" size="50" name="email" id="email" value="<?=display_str($Email)?>" />
+						<input type="email" size="50" name="email" id="email" value="<?=display_str($Email)?>" />
 					</div>
 					<p class="min_padding">When changing your email address, you must enter your current password in the "Current password" field before saving your changes.</p>
 				</td>

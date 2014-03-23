@@ -178,7 +178,7 @@ View::show_header(($BookmarkView) ? 'Your bookmarked collages' : 'Browse collage
 				<tr id="search_terms">
 					<td class="label">Search terms:</td>
 					<td>
-						<input type="text" name="search" size="70" value="<?=(!empty($_GET['search']) ? display_str($_GET['search']) : '')?>" />
+						<input type="search" name="search" size="70" value="<?=(!empty($_GET['search']) ? display_str($_GET['search']) : '')?>" />
 					</td>
 				</tr>
 				<tr id="tagfilter">

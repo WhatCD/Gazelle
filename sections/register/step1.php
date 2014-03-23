@@ -26,9 +26,9 @@ if (empty($Sent)) {
 			</td>
 		</tr>
 		<tr valign="top">
-			<td align="right">Email&nbsp;</td>
+			<td align="right">Email address&nbsp;</td>
 			<td align="left">
-				<input type="text" name="email" id="email" class="inputtext" placeholder="Email" value="<?=(!empty($_REQUEST['email']) ? display_str($_REQUEST['email']) : (!empty($InviteEmail) ? display_str($InviteEmail) : ''))?>" />
+				<input type="email" name="email" id="email" class="inputtext" placeholder="Email" value="<?=(!empty($_REQUEST['email']) ? display_str($_REQUEST['email']) : (!empty($InviteEmail) ? display_str($InviteEmail) : ''))?>" />
 			</td>
 		</tr>
 		<tr valign="top">

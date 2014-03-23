@@ -91,9 +91,9 @@ echo "\t\t$Pages\n";
 		<form class="search_form" name="<?=($Section === 'sentbox' ? 'sentbox' : 'inbox')?>" action="inbox.php" method="get" id="searchbox">
 			<div>
 				<input type="hidden" name="action" value="<?=$Section?>" />
-				<input type="radio" name="searchtype" value="user"<?=(empty($_GET['searchtype']) || $_GET['searchtype'] == 'user' ? ' checked="checked"' : '')?> /> User
-				<input type="radio" name="searchtype" value="subject"<?=(!empty($_GET['searchtype']) && $_GET['searchtype'] == 'subject' ? ' checked="checked"' : '')?> /> Subject
-				<input type="radio" name="searchtype" value="message"<?=(!empty($_GET['searchtype']) && $_GET['searchtype'] == 'message' ? ' checked="checked"' : '')?> /> Message
+				<input type="radio" name="searchtype" value="user"<?=(empty($_GET['searchtype']) || $_GET['searchtype'] === 'user' ? ' checked="checked"' : '')?> /> User
+				<input type="radio" name="searchtype" value="subject"<?=(!empty($_GET['searchtype']) && $_GET['searchtype'] === 'subject' ? ' checked="checked"' : '')?> /> Subject
+				<input type="radio" name="searchtype" value="message"<?=(!empty($_GET['searchtype']) && $_GET['searchtype'] === 'message' ? ' checked="checked"' : '')?> /> Message
 				<span style="float: right;">
 <?			// provide a temporary toggle for sorting PMs
 		$ToggleTitle = 'Temporary toggle switch for sorting PMs. To permanently change the sorting behavior, edit the setting in your profile.';
@@ -106,10 +106,7 @@ echo "\t\t$Pages\n";
 <?		} ?>
 				</span>
 				<br />
-				<input type="text" name="search" value="<?=(!empty($_GET['search']) ? display_str($_GET['search']) : 'Search '.($Section === 'sentbox' ? 'Sentbox' : 'Inbox'))?>" style="width: 98%;"
-						onfocus="if (this.value == 'Search <?=($Section === 'sentbox' ? 'Sentbox' : 'Inbox')?>') { this.value = ''; }"
-						onblur="if (this.value == '') { this.value = 'Search <?=($Section === 'sentbox' ? 'Sentbox' : 'Inbox')?>'; }"
-				/>
+				<input type="search" name="search" placeholder="<?=(!empty($_GET['search']) ? display_str($_GET['search']) : 'Search '.($Section === 'sentbox' ? 'sentbox' : 'inbox'))?>" style="width: 98%;" />
 			</div>
 		</form>
 		<form class="manage_form" name="messages" action="inbox.php" method="post" id="messageform">

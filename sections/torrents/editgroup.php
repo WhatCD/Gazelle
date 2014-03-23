@@ -64,13 +64,14 @@ View::show_header('Edit torrent group');
 				<h3>Torrent group description:</h3>
 				<textarea name="body" cols="91" rows="20"><?=$Body?></textarea><br />
 <?	if ($CategoryID == 1) { ?>
-				<select id="releasetype" name="releasetype">
+				<h3>Release type:
+					<select id="releasetype" name="releasetype">
 <?		foreach ($ReleaseTypes as $Key => $Val) { ?>
-					<option value="<?=$Key?>"<?=($Key == $ReleaseType ? ' selected="selected"' : '')?>><?=$Val?></option>
+						<option value="<?=$Key?>"<?=($Key == $ReleaseType ? ' selected="selected"' : '')?>><?=$Val?></option>
 <?		} ?>
-				</select>
+					</select>
+				</h3>
 <?		if (check_perms('torrents_edit_vanityhouse')) { ?>
-				<br />
 				<h3>
 					<label>Vanity House: <input type="checkbox" name="vanity_house" value="1" <?=($VanityHouse ? 'checked="checked" ' : '')?>/></label>
 				</h3>
@@ -167,8 +168,9 @@ View::show_header('Edit torrent group');
 				<input type="hidden" name="action" value="merge" />
 				<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 				<input type="hidden" name="groupid" value="<?=$GroupID?>" />
-				<h3>Target torrent group ID</h3>
-				<input type="text" name="targetgroupid" size="10" />
+				<h3>Target torrent group ID:
+					<input type="text" name="targetgroupid" size="10" />
+				</h3>
 				<div style="text-align: center;">
 					<input type="submit" value="Merge" />
 				</div>

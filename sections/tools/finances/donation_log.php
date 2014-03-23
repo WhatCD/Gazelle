@@ -106,19 +106,19 @@ if (empty($_GET['email']) && empty($_GET['source']) && empty($_GET['username']) 
 			<tr>
 				<td class="label"><strong>Username:</strong></td>
 				<td>
-					<input type="text" name="username" size="60" value="<? if (!empty($_GET['username'])) { echo display_str($_GET['username']); } ?>" />
+					<input type="search" name="username" size="60" value="<? if (!empty($_GET['username'])) { echo display_str($_GET['username']); } ?>" />
 				</td>
 			</tr>
 			<tr>
 				<td class="label"><strong>Email:</strong></td>
 				<td>
-					<input type="text" name="email" size="60" value="<? if (!empty($_GET['email'])) { echo display_str($_GET['email']); } ?>" />
+					<input type="search" name="email" size="60" value="<? if (!empty($_GET['email'])) { echo display_str($_GET['email']); } ?>" />
 				</td>
 			</tr>
 			<tr>
 				<td class="label"><strong>Source:</strong></td>
 				<td>
-					<input type="text" name="source" size="60" value="<? if (!empty($_GET['source'])) { echo display_str($_GET['source']); } ?>" />
+					<input type="search" name="source" size="60" value="<? if (!empty($_GET['source'])) { echo display_str($_GET['source']); } ?>" />
 				</td>
 			</tr>
 			<tr>

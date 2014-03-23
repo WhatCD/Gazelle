@@ -192,11 +192,11 @@ View::show_header($ThreadInfo['Title'] . ' &lt; '.$Forums[$ForumID]['Name'].' &l
 					<table cellpadding="6" cellspacing="1" border="0" class="layout border">
 						<tr>
 							<td><strong>Search for:</strong></td>
-							<td><input type="text" id="searchbox" name="search" size="70" /></td>
+							<td><input type="search" id="searchbox" name="search" size="70" /></td>
 						</tr>
 						<tr>
-							<td><strong>Username:</strong></td>
-							<td><input type="text" id="username" name="user" size="70" /></td>
+							<td><strong>Posted by:</strong></td>
+							<td><input type="search" id="username" name="user" placeholder="Username" size="70" /></td>
 						</tr>
 						<tr>
 							<td colspan="2" style="text-align: center;">

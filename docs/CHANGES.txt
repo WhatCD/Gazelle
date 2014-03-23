@@ -1,5 +1,35 @@
 CHANGE LOG
 
+2014-03-22 by alderaan
+Forum search: Rename "Username" to "Posted by" and add an HTML5 placeholder for the "posted by" text box
+
+2014-03-22 by alderaan
+"ask the staff" tool: improve display of page header
+
+2014-03-22 by alderaan
+Use HTML5 input type "search" for text boxes in search forms
+
+2014-03-22 by alderaan
+Use HTML5's placeholder attribute for the "search inbox" text box
+
+2014-03-22 by alderaan
+Add class="label" to the form labels on the "create a user" page
+
+2014-03-22 by alderaan
+Add missing header for the "invite pool" staff tool page
+
+2014-03-22 by alderaan
+Remove duplicated "economic stats" link on /tools.php
+
+2014-03-22 by alderaan
+Use HTML5 input type "email" for forms that require email address input
+
+2014-03-22 by alderaan
+Move the text box for entering the target torrent group ID into the same row as its label
+
+2014-03-22 by alderaan
+Add a "release type" label for the drop-down menu when editing torrent groups
+
 2014-03-20 by alderaan
 Use class="wide_input_text" for the "extra log message" and "extra staff notes" text boxes on the Reports v2 and torrent deletion forms
 

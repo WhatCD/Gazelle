@@ -17,7 +17,7 @@ include(SERVER_ROOT.'/sections/log/sphinx.php');
 				<tr>
 					<td class="label"><strong>Search for:</strong></td>
 					<td>
-						<input type="text" name="search" size="60"<?=(!empty($_GET['search']) ? ' value="'.display_str($_GET['search']).'"' : '')?> />
+						<input type="search" name="search" size="60"<?=(!empty($_GET['search']) ? ' value="'.display_str($_GET['search']).'"' : '')?> />
 						&nbsp;
 						<input type="submit" value="Search log" />
 					</td>

@@ -71,10 +71,11 @@ if ($DB->has_results()) {
 <?	} ?>
 	</table>
 	<div class="linkbox">
-<? echo $Pages; ?>
+<?	echo $Pages; ?>
 	</div>
-<? } else { ?>
+<?	} else { ?>
 	<h2 align="center">There are currently no users with more than <?=IP_OVERLAPS?> IP overlaps.</h2>
-<? }
+<?
+	}
 View::show_footer();
 ?>

@@ -255,7 +255,7 @@ View::show_header('Transcode Search');
 			<tr>
 				<td class="label"><strong>Search</strong></td>
 				<td>
-					<input type="text" name="search" size="60" value="<?=(!empty($_GET['search']) ? display_str($_GET['search']) : '')?>" />
+					<input type="search" name="search" size="60" value="<?=(!empty($_GET['search']) ? display_str($_GET['search']) : '')?>" />
 				</td>
 			</tr>
 			<tr><td>&nbsp;</td><td><input type="submit" value="Search" /></td></tr>

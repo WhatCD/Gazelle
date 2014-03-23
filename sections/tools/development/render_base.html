@@ -76,9 +76,7 @@
 									id="torrentssearch"
 									accesskey="t"
 									spellcheck="false"
-									onfocus="if (this.value == 'Torrents') this.value='';"
-									onblur="if (this.value == '') this.value='Torrents';"
-									value="Torrents" type="text" name="searchstr" size="17"
+									placeholder="Torrents" type="search" name="searchstr" size="17"
 									/>
 							</form>
 						</li>
@@ -86,39 +84,38 @@
 							<span class="hidden">Artist: </span>
 							<form class="search_form" name="artists" action="" method="get">
 								<script type="text/javascript" src="static/functions/autocomplete.js?v=1362029969"></script>
-								<input id="artistsearch" value="Artists" type="text" name="artistname" size="17"/>
+								<input id="artistsearch" placeholder="Artists" type="search" name="artistname" size="17" />
 								<ul id="artistcomplete" style="visibility: hidden;"><li /></ul>
 							</form>
 						</li>
 						<li id="searchbar_requests">
 							<span class="hidden">Requests: </span>
 							<form class="search_form" name="requests" action="" method="get">
-								<input id="requestssearch" value="Requests" type="text" name="search" size="17"/>
+								<input id="requestssearch" placeholder="Requests" type="search" name="search" size="17" />
 							</form>
 						</li>
 						<li id="searchbar_forums">
 							<span class="hidden">Forums: </span>
 							<form class="search_form" name="forums" action="" method="get">
 								<input value="search" type="hidden" name="action" />
-								<input id="forumssearch" value="Forums" type="text" name="search" size="17"/>
+								<input id="forumssearch" placeholder="Forums" type="search" name="search" size="17" />
 							</form>
 						</li>
 						<li id="searchbar_log">
 							<span class="hidden">Log: </span>
 							<form class="search_form" name="log" action="" method="get">
-								<input id="logsearch" value="Log" type="text" name="search" size="17"/>
+								<input id="logsearch" placeholder="Log" type="search" name="search" size="17" />
 							</form>
 						</li>
 						<li id="searchbar_users">
 							<span class="hidden">Users: </span>
 							<form class="search_form" name="users" action="" method="get">
 								<input type="hidden" name="action" value="search" />
-								<input id="userssearch" value="Users" type="text" name="search" size="20"/>
+								<input id="userssearch" placeholder="Users" type="search" name="search" size="20" />
 							</form>
 						</li>
 					</ul>
 				</div>
-
 			</div>
 			<div id="content">
 				<div class="thin">

@@ -92,9 +92,9 @@ if ($_POST['id']) {
 		<table class="layout">
 			<tr>
 				<td class="label"><strong>UserID</strong></td>
-				<td><input type="text" size="10" name="id" id="id" /></td>
+				<td><input type="search" size="10" name="id" id="id" /></td>
 				<td class="label"><strong>Mandatory comment!</strong></td>
-				<td><input type="text" size="40" name="comment" id="comment" /></td>
+				<td><input type="search" size="40" name="comment" id="comment" /></td>
 			</tr>
 			<tr>
 				<td class="label"><strong>Action: </strong></td>

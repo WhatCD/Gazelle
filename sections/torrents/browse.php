@@ -642,29 +642,29 @@ View::show_header('Browse Torrents', 'browse');
 			<tr id="artist_name" class="ftr_advanced<?=$HideAdvanced?>">
 				<td class="label">Artist name:</td>
 				<td colspan="3" class="ft_artistname">
-					<input type="text" spellcheck="false" size="40" name="artistname" class="inputtext smaller fti_advanced" value="<?Format::form('artistname')?>" />
+					<input type="search" spellcheck="false" size="40" name="artistname" class="inputtext smaller fti_advanced" value="<?Format::form('artistname')?>" />
 				</td>
 			</tr>
 			<tr id="album_torrent_name" class="ftr_advanced<?=$HideAdvanced?>">
 				<td class="label">Album/Torrent name:</td>
 				<td colspan="3" class="ft_groupname">
-					<input type="text" spellcheck="false" size="40" name="groupname" class="inputtext smaller fti_advanced" value="<?Format::form('groupname')?>" />
+					<input type="search" spellcheck="false" size="40" name="groupname" class="inputtext smaller fti_advanced" value="<?Format::form('groupname')?>" />
 				</td>
 			</tr>
 			<tr id="record_label" class="ftr_advanced<?=$HideAdvanced?>">
 				<td class="label">Record label:</td>
 				<td colspan="3" class="ft_recordlabel">
-					<input type="text" spellcheck="false" size="40" name="recordlabel" class="inputtext smaller fti_advanced" value="<?Format::form('recordlabel')?>" />
+					<input type="search" spellcheck="false" size="40" name="recordlabel" class="inputtext smaller fti_advanced" value="<?Format::form('recordlabel')?>" />
 				</td>
 			</tr>
 			<tr id="catalogue_number_year" class="ftr_advanced<?=$HideAdvanced?>">
 				<td class="label">Catalogue number:</td>
 				<td class="ft_cataloguenumber">
-					<input type="text" size="40" name="cataloguenumber" class="inputtext smallest fti_advanced" value="<?Format::form('cataloguenumber')?>" />
+					<input type="search" size="40" name="cataloguenumber" class="inputtext smallest fti_advanced" value="<?Format::form('cataloguenumber')?>" />
 				</td>
 				<td class="label">Year:</td>
 				<td class="ft_year">
-					<input type="text" name="year" class="inputtext smallest fti_advanced" value="<?Format::form('year')?>" size="4" />
+					<input type="search" name="year" class="inputtext smallest fti_advanced" value="<?Format::form('year')?>" size="4" />
 				</td>
 			</tr>
 			<tr id="edition_expand" class="ftr_advanced<?=$HideAdvanced?>">
@@ -684,35 +684,35 @@ if (Format::form('remastertitle', true) == ''
 			<tr id="edition_title" class="ftr_advanced<?=$HideAdvanced . $Hidden?>">
 				<td class="label">Edition title:</td>
 				<td class="ft_remastertitle">
-					<input type="text" spellcheck="false" size="40" name="remastertitle" class="inputtext smaller fti_advanced" value="<?Format::form('remastertitle')?>" />
+					<input type="search" spellcheck="false" size="40" name="remastertitle" class="inputtext smaller fti_advanced" value="<?Format::form('remastertitle')?>" />
 				</td>
 				<td class="label">Edition year:</td>
 				<td class="ft_remasteryear">
-					<input type="text" name="remasteryear" class="inputtext smallest fti_advanced" value="<?Format::form('remasteryear')?>" size="4" />
+					<input type="search" name="remasteryear" class="inputtext smallest fti_advanced" value="<?Format::form('remasteryear')?>" size="4" />
 				</td>
 			</tr>
 			<tr id="edition_label" class="ftr_advanced<?=$HideAdvanced . $Hidden?>">
 				<td class="label">Edition release label:</td>
 				<td colspan="3" class="ft_remasterrecordlabel">
-					<input type="text" spellcheck="false" size="40" name="remasterrecordlabel" class="inputtext smaller fti_advanced" value="<?Format::form('remasterrecordlabel')?>" />
+					<input type="search" spellcheck="false" size="40" name="remasterrecordlabel" class="inputtext smaller fti_advanced" value="<?Format::form('remasterrecordlabel')?>" />
 				</td>
 			</tr>
 			<tr id="edition_catalogue" class="ftr_advanced<?=$HideAdvanced . $Hidden?>">
 				<td class="label">Edition catalogue number:</td>
 				<td colspan="3" class="ft_remastercataloguenumber">
-					<input type="text" size="40" name="remastercataloguenumber" class="inputtext smallest fti_advanced" value="<?Format::form('remastercataloguenumber')?>" />
+					<input type="search" size="40" name="remastercataloguenumber" class="inputtext smallest fti_advanced" value="<?Format::form('remastercataloguenumber')?>" />
 				</td>
 			</tr>
 			<tr id="file_list" class="ftr_advanced<?=$HideAdvanced?>">
 				<td class="label">File list:</td>
 				<td colspan="3" class="ft_filelist">
-					<input type="text" spellcheck="false" size="40" name="filelist" class="inputtext fti_advanced" value="<?Format::form('filelist')?>" />
+					<input type="search" spellcheck="false" size="40" name="filelist" class="inputtext fti_advanced" value="<?Format::form('filelist')?>" />
 				</td>
 			</tr>
 			<tr id="torrent_description" class="ftr_advanced<?=$HideAdvanced?>">
 				<td class="label"><span title="Search torrent descriptions (not group information)" class="tooltip">Torrent description:</span></td>
 				<td colspan="3" class="ft_description">
-					<input type="text" spellcheck="false" size="40" name="description" class="inputtext fti_advanced" value="<?Format::form('description')?>" />
+					<input type="search" spellcheck="false" size="40" name="description" class="inputtext fti_advanced" value="<?Format::form('description')?>" />
 				</td>
 			</tr>
 			<tr id="rip_specifics" class="ftr_advanced<?=$HideAdvanced?>">
@@ -780,13 +780,13 @@ if (Format::form('remastertitle', true) == ''
 			<tr id="search_terms" class="ftr_basic<?=$HideBasic?>">
 				<td class="label">Search terms:</td>
 				<td colspan="3" class="ftb_searchstr">
-					<input type="text" spellcheck="false" size="40" name="searchstr" class="inputtext fti_basic" value="<?Format::form('searchstr')?>" />
+					<input type="search" spellcheck="false" size="40" name="searchstr" class="inputtext fti_basic" value="<?Format::form('searchstr')?>" />
 				</td>
 			</tr>
 			<tr id="tagfilter">
 				<td class="label"><span title="Use !tag to exclude tag" class="tooltip">Tags (comma-separated):</span></td>
 				<td colspan="3" class="ft_taglist">
-					<input type="text" size="40" id="tags" name="taglist" class="inputtext smaller" value="<?=str_replace('_', '.', display_str($TagListString)) /* Use aliased tags, not actual query string. */ ?>" />&nbsp;
+					<input type="search" size="40" id="tags" name="taglist" class="inputtext smaller" value="<?=str_replace('_', '.', display_str($TagListString)) /* Use aliased tags, not actual query string. */ ?>" />&nbsp;
 					<input type="radio" name="tags_type" id="tags_type0" value="0"<?Format::selected('tags_type', 0, 'checked')?> /><label for="tags_type0"> Any</label>&nbsp;&nbsp;
 					<input type="radio" name="tags_type" id="tags_type1" value="1"<?Format::selected('tags_type', 1, 'checked')?> /><label for="tags_type1"> All</label>
 				</td>

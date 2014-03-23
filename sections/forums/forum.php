@@ -101,7 +101,7 @@ View::show_header('Forums &gt; '. $Forums[$ForumID]['Name'], '', $IsDonorForum ?
 								<strong>Search for:</strong>
 							</td>
 							<td>
-								<input type="text" id="searchbox" name="search" size="70" />
+								<input type="search" id="searchbox" name="search" size="70" />
 							</td>
 						</tr>
 						<tr>
@@ -114,11 +114,13 @@ View::show_header('Forums &gt; '. $Forums[$ForumID]['Name'], '', $IsDonorForum ?
 							</td>
 						</tr>
 						<tr>
-							<td><strong>Username:</strong></td>
-							<td><input type="text" id="username" name="user" size="70" /></td>
+							<td><strong>Posted by:</strong></td>
+							<td><input type="search" id="username" name="user" placeholder="Username" size="70" /></td>
 						</tr>
 						<tr>
-							<td colspan="2" style="text-align: center;"><input type="submit" name="submit" value="Search" /></td>
+							<td colspan="2" style="text-align: center;">
+								<input type="submit" name="submit" value="Search" />
+							</td>
 						</tr>
 					</table>
 				</form>

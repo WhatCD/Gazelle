@@ -63,11 +63,7 @@ View::show_header($Title,'wiki,bbcode');
 			<div class="pad">
 			<form class="search_form" name="articles" action="wiki.php" method="get">
 				<input type="hidden" name="action" value="search" />
-				<input
-					onfocus="if (this.value == 'Search articles') { this.value = ''; }"
-					onblur="if (this.value == '') { this.value = 'Search articles'; }"
-					value="Search articles" type="text" name="search" size="20"
-				/>
+				<input type="search" placeholder="Search articles" name="search" size="20" />
 				<input value="Search" type="submit" class="hidden" />
 			</form>
 			<br style="line-height: 10px;" />

@@ -85,7 +85,7 @@ $DB->set_query_id($RS);
 				<tr>
 					<td class="label"><label for="search"><strong>Search for:</strong></label></td>
 					<td colspan="3">
-						<input type="text" name="search" id="search" size="70" value="<?=display_str($_GET['search'])?>" />
+						<input type="search" name="search" id="search" size="70" value="<?=display_str($_GET['search'])?>" />
 					</td>
 				</tr>
 				<tr>

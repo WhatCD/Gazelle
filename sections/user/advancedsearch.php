@@ -482,7 +482,7 @@ View::show_header('User search');
 				</td>
 			</tr>
 			<tr>
-				<td class="label nobr">Email:</td>
+				<td class="label nobr">Email address:</td>
 				<td>
 					<input type="text" name="email" size="20" value="<?=display_str($_GET['email'])?>" />
 				</td>

@@ -376,13 +376,13 @@ View::show_header($Title, 'requests');
 			<tr id="search_terms">
 				<td class="label">Search terms:</td>
 				<td>
-					<input type="text" name="search" size="75" value="<? if (isset($_GET['search'])) { echo display_str($_GET['search']); } ?>" />
+					<input type="search" name="search" size="75" value="<? if (isset($_GET['search'])) { echo display_str($_GET['search']); } ?>" />
 				</td>
 			</tr>
 			<tr id="tagfilter">
 				<td class="label">Tags (comma-separated):</td>
 				<td>
-					<input type="text" name="tags" id="tags" size="60" value="<?=(!empty($TagNames) ? display_str(implode(', ', $TagNames)) : '') ?>"<? Users::has_autocomplete_enabled('other'); ?> />&nbsp;
+					<input type="search" name="tags" id="tags" size="60" value="<?=(!empty($TagNames) ? display_str(implode(', ', $TagNames)) : '') ?>"<? Users::has_autocomplete_enabled('other'); ?> />&nbsp;
 					<input type="radio" name="tags_type" id="tags_type0" value="0"<? Format::selected('tags_type', 0, 'checked')?> /><label for="tags_type0"> Any</label>&nbsp;&nbsp;
 					<input type="radio" name="tags_type" id="tags_type1" value="1"<? Format::selected('tags_type', 1, 'checked')?> /><label for="tags_type1"> All</label>
 				</td>
@@ -403,7 +403,7 @@ View::show_header($Title, 'requests');
 			<tr>
 				<td class="label">Requested by:</td>
 				<td>
-					<input type="text" name="requester" size="75" value="<?=display_str($_GET['requester'])?>" />
+					<input type="search" name="requester" size="75" value="<?=display_str($_GET['requester'])?>" />
 				</td>
 			</tr>
 <?		*/ ?>

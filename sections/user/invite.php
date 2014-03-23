@@ -151,7 +151,7 @@ if (!$Sneaky
 				<tr>
 					<td class="label">Email address:</td>
 					<td>
-						<input type="text" name="email" size="60" />
+						<input type="email" name="email" size="60" />
 						<input type="submit" value="Invite" />
 					</td>
 				</tr>
@@ -179,7 +179,7 @@ if (!empty($Pending)) {
 	<div class="box pad">
 		<table width="100%">
 			<tr class="colhead">
-				<td>Email</td>
+				<td>Email address</td>
 				<td>Expires in</td>
 				<td>Delete invite</td>
 			</tr>

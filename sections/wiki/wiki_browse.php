@@ -53,7 +53,7 @@ $DB->query($sql);
 		<form class="search_form" name="wiki" action="wiki.php" method="get">
 			<input type="hidden" name="action" value="search" />
 			<input type="hidden" name="nojump" value="1" />
-			<input type="text" name="search" size="80" />
+			<input type="search" name="search" size="80" />
 			<input value="Search" type="submit" class="hidden" />
 		</form>
 		<br />

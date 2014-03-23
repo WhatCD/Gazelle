@@ -90,7 +90,7 @@ View::show_header('Transcode Search');
 				<td>
 					<input type="hidden" name="method" value="transcode" />
 					<input type="hidden" name="type" value="<?=$_GET['type']?>" />
-					<input type="text" name="search" size="60" value="<?=(!empty($_GET['search']) ? display_str($_GET['search']) : '')?>" />
+					<input type="search" name="search" size="60" value="<?=(!empty($_GET['search']) ? display_str($_GET['search']) : '')?>" />
 					&nbsp;
 					<input type="submit" value="Search" />
 				</td>

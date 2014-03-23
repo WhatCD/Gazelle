@@ -14,8 +14,8 @@ if (empty($Sent) || (!empty($Sent) && $Sent != 1)) {
 		An email will be sent to your email address with information on how to reset your password.<br /><br />
 		<table class="layout" cellpadding="2" cellspacing="1" border="0" align="center">
 			<tr valign="top">
-				<td align="right">Email&nbsp;</td>
-				<td align="left"><input type="text" name="email" id="email" class="inputtext" /></td>
+				<td align="right">Email address:&nbsp;</td>
+				<td align="left"><input type="email" name="email" id="email" class="inputtext" /></td>
 			</tr>
 			<tr>
 				<td colspan="2" align="right"><input type="submit" name="reset" value="Reset!" class="submit" /></td>

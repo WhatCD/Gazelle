@@ -50,7 +50,8 @@ View::show_header($Title);
 
 <form action="" method="get">
 	<input type="hidden" name="action" value="donor_rewards" />
-	<strong>Username Search: </strong><input type="text" name="username" />
+	<strong>Username Search: </strong>
+	<input type="search" name="username" />
 </form>
 	<table style="table-layout: fixed; width: 100%;">
 		<tr class="colhead">
