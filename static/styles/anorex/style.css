@@ -239,7 +239,8 @@ ul.thin li {
 	display: inline;
 }
 
-#searchbars input {
+#searchbars input,
+#searchbars input[type="search"] {
 	background-color: #F1E6CC;
 	border: 1px solid #65430F;
 	font-size: 0.9em;

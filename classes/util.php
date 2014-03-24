@@ -182,7 +182,7 @@ function json_print($Status, $Message) {
 	} elseif ($Message) {
 		print json_encode(array('status' => $Status, 'error' => $Message));
 	} else {
-		print json_encode(array('status' => $Status));
+		print json_encode(array('status' => $Status, 'response' => array()));
 	}
 }
 

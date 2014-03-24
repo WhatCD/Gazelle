@@ -265,7 +265,10 @@ h1.hidden {
 	width: 50px !important;
 }
 
-button,input[type="button"],input[type="submit"],#userinfo_username .brackets a {
+button,
+input[type="button"],
+input[type="submit"],
+#userinfo_username .brackets a {
 	cursor: pointer;
 	padding: 6px 8px;
 	font: 12pt Helvetica,Arial,sans-serif;
@@ -283,7 +286,10 @@ button,input[type="button"],input[type="submit"],#userinfo_username .brackets a 
 	border: 1px solid #4d4d4d;
 }
 
-button:active,input[type="button"]:active,input[type="submit"]:active,#userinfo_username .brackets a:active {
+button:active,
+input[type="button"]:active,
+input[type="submit"]:active,
+#userinfo_username .brackets a:active {
 	background: -webkit-gradient(linear,left 40%,left 120%,from(#575757),to(#5f5f5f));
 	background: -moz-linear-gradient(center bottom,#5f5f5f,#575757);
 }
@@ -345,7 +351,11 @@ div.thin > h3:first-child {
 	margin: 0 0 15px 15px;
 }
 
-textarea,input[type="text"],input[type="password"],.select {
+textarea,
+input[type="text"],
+input[type="search"],
+input[type="password"],
+.select {
 	width: 195px;
 	padding: 8px;
 	background: #fff;
@@ -360,7 +370,10 @@ textarea,input[type="text"],input[type="password"],.select {
 	-webkit-background-clip: padding-box;
 }
 
-textarea:focus,input[type="text"]:focus,input[type="password"]:focus {
+textarea:focus,
+input[type="text"]:focus,
+input[type="search"]:focus,
+input[type="password"]:focus {
 	-webkit-box-shadow: inset -1px 1px 3px rgba(0,0,0,0.15),0 0 5px rgba(0,140,180,0.5);
 	-moz-box-shadow: inset -1px 1px 3px rgba(0,0,0,0.15),0 0 5px rgba(0,140,180,0.5);
 }
@@ -373,7 +386,9 @@ textarea {
 	font-size: 10pt;
 }
 
-.sidebar input[type="text"],.sidebar textarea {
+.sidebar input[type="text"],
+.sidebar input[type="search"],
+.sidebar textarea {
 	width: 202px;
 }
 
@@ -1056,7 +1071,9 @@ ul#artistcomplete {
 	width: 55% !important;
 }
 
-form[action="user.php"] table textarea,form[action="user.php"] table input[type="text"] {
+form[action="user.php"] table textarea,
+form[action="user.php"] table input[type="text"],
+form[action="user.php"] table input[type="search"] {
 	-webkit-box-sizing: border-box;
 	-moz-box-sizing: border-box;
 }
@@ -1157,11 +1174,13 @@ li.graph .center_poll {
 	margin-top: -20px;
 }
 
-#inbox #searchbox input[type="text"] {
+#inbox #searchbox input[type="text"],
+#inbox #searchbox input[type="search"] {
 	margin-top: 10px;
 }
 
-#manage_collage_table input[type="text"] {
+#manage_collage_table input[type="text"],
+#manage_collage_table input[type="search"] {
 	width: 40px;
 }
 

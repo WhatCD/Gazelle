@@ -136,11 +136,15 @@ input {
 	cursor: hand;
 }
 
-input[type="text"] {
+input[type="text"],
+input[type="search"] {
 	cursor: text;
 }
 
-input, select, textarea {
+input,
+input[type="search"], /* override global.css */
+select,
+textarea {
 	font-family: Arial, sans-serif;
 	font-size: 1em;
 	border: 1px solid #323232;
@@ -151,7 +155,9 @@ textarea {
 	height: 100px;
 }
 
-input, textarea {
+input,
+input[type="search"], /* override global.css */
+textarea {
 	color: #878787;
 	padding: 3px;
 	background: #212121 url('images/inputbg.png') top left repeat-x;
@@ -413,26 +419,27 @@ ul#userinfo_username {
 /* SEARCH BARS */
 
 
-#searchbars input {
-background: transparent url('images/searchbox.png') top left no-repeat;
-border: 0 !important;
-height: 19px;
-width: 132px;
-margin: 0px 0px 0px -16px;
-padding: 4px 0px 0px 25px;
+#searchbars input,
+#searchbars input[type="search"] {
+	background: transparent url('images/searchbox.png') top left no-repeat;
+	border: 0 !important;
+	height: 19px;
+	width: 132px;
+	margin: 0px 0px 0px -16px;
+	padding: 4px 0px 0px 25px;
 }
 
 #searchbars {
-clear: both;
-width: 960px;
-position:absolute;
-top: 120px;
-height:23px;
-margin-left:20px;
+	clear: both;
+	width: 960px;
+	position: absolute;
+	top: 120px;
+	height: 23px;
+	margin-left: 20px;
 }
 
 #searchbars ul {
-	padding:0px 0px 0px 0px;
+	padding: 0px 0px 0px 0px;
 	margin: 0;
 	list-style: none;
 }
@@ -470,7 +477,7 @@ margin-left:20px;
 }
 
 *:first-child+html #searchbars ul li {
-	padding-right:10px !important;
+	padding-right: 10px !important;
 }
 
 #searchbars form {
@@ -718,7 +725,8 @@ margin-left:20px;
 	padding: 0;
 }
 
-#forums #content .thin .box form .box input[type="Text"]{
+#forums #content .thin .box form .box input[type="text"],
+#forums #content .thin .box form .box input[type="search"] {
 	font-size: 20px;
 	width: 500px;
 }
@@ -729,9 +737,13 @@ margin-left:20px;
 	padding: 0;
 }
 
-td.body {width:100%;}
+td.body {
+	width: 100%;
+}
 
-strong.quoteheader{color: #878787;}
+strong.quoteheader {
+	color: #878787;
+}
 
 /* Toolbox */
 .permission_container {
@@ -816,11 +828,11 @@ strong.quoteheader{color: #878787;}
 }
 
 #torrents .filter_torrents .submit span {
-	direction:ltr;
+	direction: ltr;
 }
 
 .torrent a {
-	font-weight:bold;
+	font-weight: bold;
 }
 
 .linkbox {
@@ -944,8 +956,11 @@ strong.quoteheader{color: #878787;}
 }
 
 #torrents #content .center .box form div input[type="text"],
+#torrents #content .center .box form div input[type="search"],
 #wiki #content .center .box form div input[type="text"],
-#artist #content .center .box form div input[type="text"] {
+#wiki #content .center .box form div input[type="search"],
+#artist #content .center .box form div input[type="text"],
+#artist #content .center .box form div input[type="search"] {
 	width: 500px !important;
 	margin-bottom: 10px;
 }
@@ -1214,7 +1229,9 @@ span.size10 { font-size:3em; }
 
 /* MISC */
 
-form textarea, form input {max-width:100%;}
+form textarea, form input {
+	max-width: 100%;
+}
 
 .r00 { color: #FF0000; }
 .r01 { color: #FF1300; }
@@ -1553,10 +1570,10 @@ h3 {
 }
 
 .OiNK input {
-	color:#999999;
-	padding:3px;
-	border:1px solid #b4b4b4 !important;
-	font-family:Arial,sans-serif;
+	color: #999999;
+	padding: 3px;
+	border: 1px solid #b4b4b4 !important;
+	font-family: Arial,sans-serif;
 }
 
 .OiNK #MySpacePlayer object {

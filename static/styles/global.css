@@ -715,3 +715,10 @@ tr.torrent .bookmark>a:after {
 #reportsv2 .manage_form img {
 	max-width: 616px;
 }
+
+/* make Safari treat <input type="search" /> as a regular text box */
+input[type="search"] {
+	-webkit-appearance: textfield;
+	/*font-size: medium;
+	background: #fff;*/
+}

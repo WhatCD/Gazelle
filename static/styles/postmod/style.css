@@ -1125,3 +1125,7 @@ div.sidebar #event_div {
 #reportsv2 .manage_form img {
 	max-width: 622px;
 }
+
+input[type="search"] {
+	font-size: 13px;
+}

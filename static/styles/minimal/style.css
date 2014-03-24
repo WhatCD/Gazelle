@@ -8,7 +8,10 @@ a:hover{color:#49D; text-decoration:underline}
 a img{border-style:none; position:relative; top:1px}
 p{margin:10px 0 5px 0}
 td p{margin:0}
-input, select, textarea{color:#F1F1F1; padding:3px; background:#262626; border:1px solid #9C9C9C; font-family:Arial,sans-serif; font-size:11px; }
+input,
+input[type="search"], /* to override global.css */
+select,
+textarea {color:#F1F1F1; padding:3px; background:#262626; border:1px solid #9C9C9C; font-family:Arial,sans-serif; font-size:11px; }
 input:focus, textarea:focus{border:1px solid #CCC}
 blockquote{background:transparent url(images/blockquote.png) repeat; padding:5px; margin:10px; color:#F1F1F1 !important}
 input[type="submit"]:focus, input[type="button"]:focus{background:#333}
@@ -217,7 +220,8 @@ table tr td{border:1px solid #757575}
 
 /* USER */
 table tr.colhead_dark td{background:#555; border:0}
-/*#user table input[type="text"]{width:98% !important}*/
+/*#user table input[type="text"],
+#user table input[type="search"] {width:98% !important}*/
 #user #styleurl{width:40% !important}
 #user table textarea{width:98% !important}
 #user table tr td.center strong{display:block}
@@ -296,7 +300,8 @@ strong.quoteheader {color: #f1f1f1;}
 
 #forums .forum_post ul{margin:5px 0 0 0; padding:0}
 #forums .forum_post li{margin:0 0 0 20px; padding:0}
-#forums #content .thin .box form .box input[type="Text"]{font-size:20px; width:500px}
+#forums #content .thin .box form .box input[type="text"],
+#forums #content .thin .box form .box input[type="search"] {font-size:20px; width:500px}
 #forums #content form .box{width:510px; margin:0 auto; padding:1ex; text-align:left; background-color:#404040}
 
 /* TORRENTS */
@@ -340,8 +345,11 @@ strong.quoteheader {color: #f1f1f1;}
 .torrent_table tr.group_torrent a:hover, #torrent_table tr.group_torrent a:hover{color:#007dc6}
 
 #torrents #content .center .box form div input[type="text"],
+#torrents #content .center .box form div input[type="search"],
 #wiki #content .center .box form div input[type="text"],
-#artist #content .center .box form div input[type="text"]{width:500px; margin-bottom:10px}
+#wiki #content .center .box form div input[type="search"],
+#artist #content .center .box form div input[type="text"],
+#artist #content .center .box form div input[type="search"] {width:500px; margin-bottom:10px}
 
 #torrents #content .center .box form div textarea,
 #wiki #content .center .box form div textarea,

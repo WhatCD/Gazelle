@@ -1,5 +1,8 @@
 CHANGE LOG
 
+2014-03-24 by alderaan
+Fix various CSS issues with input text boxes of type "search"
+
 2014-03-22 by alderaan
 Forum search: Rename "Username" to "Posted by" and add an HTML5 placeholder for the "posted by" text box
 
