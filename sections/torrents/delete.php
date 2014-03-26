@@ -286,11 +286,11 @@ foreach ($TypeList as $IType => $Data) {
 				<tr>
 					<td class="label"><strong>Extra</strong> log message:</td>
 					<td>
-						<input type="text" class="wide_input_text" name="log_message" id="log_message<?=$ReportID?>" />
+						<input type="text" name="log_message" id="log_message<?=$ReportID?>" size="40" />
 					</td>
 					<td class="label"><strong>Extra</strong> staff notes:</td>
 					<td>
-						<input type="text" class="wide_input_text" name="admin_message" id="admin_message<?=$ReportID?>" />
+						<input type="text" name="admin_message" id="admin_message<?=$ReportID?>" size="40" />
 					</td>
 				</tr>
 				<tr>
