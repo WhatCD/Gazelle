@@ -54,6 +54,9 @@ class Votes {
 	 * @return array (Upvotes, Total Votes)
 	 */
 	public static function get_group_votes($GroupID) {
+		if (!is_number($GroupID)) {
+			return array('Ups' => 0, 'Total' => 0);
+		}
 		$GroupVotes = G::$Cache->get_value("votes_$GroupID");
 		if ($GroupVotes === false) {
 			$QueryID = G::$DB->get_query_id();

@@ -11,11 +11,11 @@ if ($Top10 === false || isset($Top10[$GroupID])) {
 			SELECT v.GroupID, SUM(IF(v.Type='Up',1,0)) AS Ups, COUNT(1) AS Total
 			FROM (	SELECT UserID
 					FROM users_votes
-					WHERE GroupID = $GroupID
+					WHERE GroupID = '$GroupID'
 						AND Type='Up'
 				) AS a
 				JOIN users_votes AS v USING (UserID)
-			WHERE v.GroupID != $GroupID
+			WHERE v.GroupID != '$GroupID'
 			GROUP BY v.GroupID
 			HAVING Ups > 0");
 		$VotePairs = $DB->to_array('GroupID', MYSQL_ASSOC, false);
