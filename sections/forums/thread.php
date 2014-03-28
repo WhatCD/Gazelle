@@ -39,7 +39,6 @@ if (!isset($_GET['threadid']) || !is_number($_GET['threadid'])) {
 }
 
 
-
 if (isset($LoggedUser['PostsPerPage'])) {
 	$PerPage = $LoggedUser['PostsPerPage'];
 } else {

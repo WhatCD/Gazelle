@@ -98,7 +98,7 @@ class DonationsView {
 
 	public static function render_profile_rewards($EnabledRewards, $ProfileRewards) {
 		for ($i = 1; $i <= 4; $i++) {
-			if (isset($EnabledRewards['HasProfileInfo' . $i]) && $ProfileRewards['ProfileInfo' . $i]) {
+			if ($EnabledRewards['HasProfileInfo' . $i] && $ProfileRewards['ProfileInfo' . $i]) {
 ?>
 			<div class="box">
 				<div class="head" style="height: 13px;">
