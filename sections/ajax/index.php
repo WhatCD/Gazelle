@@ -157,6 +157,9 @@ switch ($_GET['action']) {
 	case 'clear_user_notification':
 		require(SERVER_ROOT . '/sections/ajax/clear_user_notification.php');
 		break;
+	case 'pushbullet_devices':
+		require(SERVER_ROOT . '/sections/ajax/pushbullet_devices.php');
+		break;
 	default:
 		// If they're screwing around with the query string
 		json_die("failure");

@@ -20,6 +20,9 @@ class NotificationsManagerView {
 	private static function render_push_settings() {
 		$PushService = self::$Settings['PushService'];
 		$PushOptions = unserialize(self::$Settings['PushOptions']);
+		if (empty($PushOptions['PushDevice'])) {
+			$PushOptions['PushDevice'] = '';
+		}
 		?>
 		<tr>
 			<td class="label"><strong>Push notifications</strong></td>
@@ -31,10 +34,15 @@ class NotificationsManagerView {
 <!--						No option 3, notifo died. -->
 					<option value="4"<? if ($PushService == 4) { ?> selected="selected"<? } ?>>Super Toasty</option>
 					<option value="5"<? if ($PushService == 5) { ?> selected="selected"<? } ?>>Pushover</option>
+					<option value="6"<? if ($PushService == 6) { ?> selected="selected"<? } ?>>PushBullet</option>
 				</select>
 				<div id="pushsettings" style="display: none;">
 					<label id="pushservice_title" for="pushkey">API key</label>
 					<input type="text" size="50" name="pushkey" id="pushkey" value="<?=display_str($PushOptions['PushKey'])?>" />
+					<label class="pushdeviceid" id="pushservice_device" for="pushdevice">Device ID</label>
+					<select class="pushdeviceid" name="pushdevice" id="pushdevice">
+						<option value="<?= display_str($PushOptions['PushDevice'])?>" selected="selected"><?= display_str($PushOptions['PushDevice'])?></option>
+					</select>
 					<br />
 					<a href="user.php?action=take_push&amp;push=1&amp;userid=<?=G::$LoggedUser['ID']?>&amp;auth=<?=G::$LoggedUser['AuthKey']?>" class="brackets">Test push</a>
 					<a href="wiki.php?action=article&amp;id=1017" class="brackets">View wiki guide</a>

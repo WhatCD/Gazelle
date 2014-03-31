@@ -52,6 +52,16 @@ class PushServer {
 			case 'pushover':
 				$this->push_pushover($JSON['user']['key'], $JSON['message']['title'], $JSON['message']['body'], $JSON['message']['url']);
 				break;
+			case 'pushbullet':
+				$this->push_pushbullet(
+					$JSON['user']['key'],
+					$JSON['user']['device'],// <strip>
+					$JSON['user']['userid'],
+					$JSON['user']['email'],//</strip>
+					$JSON['message']['title'],
+					$JSON['message']['body'],
+					$JSON['message']['url']
+				);
 			default:
 				break;
 		}
@@ -133,6 +143,44 @@ class PushServer {
 		curl_exec($ch);
 		curl_close($ch);
 		echo "Push sent to Pushover";
+	}
+
+	/**
+	 * Notify via pushbullet
+	 *
+	 * @param $UserKey User API key
+	 * @param $DeviceID device to push to <strip>
+	 * @param $UserID UserID to check IP for
+	 * @param $Email Last email gotten from pushbullet API. Used for anti-cheat.</strip>
+	 * @param $Title Notification title
+	 * @param $Message Notification message
+	 * @param $URL For compatibility with other command. Just gets appended.
+	 */
+	private function push_pushbullet($UserKey, $DeviceID, 
+		$Title, $Message, $URL) {
+		if (!empty($URL)) {
+			$Message .= ' ' . $URL;
+		}
+
+		curl_setopt_array($Curl = curl_init(), array(
+			CURLOPT_URL => 'https://api.pushbullet.com/api/pushes',
+			CURLOPT_POSTFIELDS => array(
+				'type' => 'note',
+				'title' => $Title,
+				'body' => $Message,
+				'device_iden' => $DeviceID
+			),
+			CURLOPT_USERPWD => $UserKey . ':',
+			CURLOPT_HTTPAUTH => CURLAUTH_BASIC,
+			CURLOPT_RETURNTRANSFER => True
+		));
+
+		$Result = curl_exec($Curl);
+		echo "Push sent to Pushbullet";
+		curl_close($Curl);
+
+		
+
 	}
 }
 

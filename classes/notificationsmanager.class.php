@@ -675,7 +675,12 @@ class NotificationsManager {
 			WHERE UserID = '$UserID'");
 
 		$PushService = (int) $_POST['pushservice'];
-		$PushOptions = db_string(serialize(array("PushKey" => $_POST['pushkey'])));
+		$PushOptionsArray = array("PushKey" => $_POST['pushkey']);
+		if ($PushService === 6) { //pushbullet
+			$PushOptionsArray['PushDevice'] = $_POST['pushdevice'];
+			
+		}
+		$PushOptions = db_string(serialize($PushOptionsArray));
 
 		if ($PushService != 0) {
 			G::$DB->query("
@@ -752,13 +757,23 @@ class NotificationsManager {
 					case '5':
 						$Service = "Pushover";
 						break;
+					case '6':
+						$Service = "PushBullet";
+						break;
 					default:
 						break;
 					}
 					if (!empty($Service) && !empty($PushOptions['PushKey'])) {
-						$JSON = json_encode(array("service" => strtolower($Service),
+						$Options = array("service" => strtolower($Service),
 										"user" => array("key" => $PushOptions['PushKey']),
-										"message" => array("title" => $Title, "body" => $Body, "url" => $URL)));
+										"message" => array("title" => $Title, "body" => $Body, "url" => $URL));
+
+						if ($Service === 'PushBullet') {
+							$Options["user"]["device"] = $PushOptions['PushDevice'];
+							
+						}
+
+						$JSON = json_encode($Options);
 						G::$DB->query("
 							INSERT INTO push_notifications_usage
 								(PushService, TimesUsed)
