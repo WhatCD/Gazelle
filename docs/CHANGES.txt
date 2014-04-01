@@ -1,5 +1,8 @@
 CHANGE LOG
 
+2014-03-31 by Ajax
+Pushbullet support for push notifications
+
 2014-03-25 by alderaan
 Remove class="wide_input_text" from the "extra log message" and "extra staff notes" text boxes on the Reports v2 and torrent deletion forms
 

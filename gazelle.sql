@@ -1041,6 +1041,12 @@ CREATE TABLE `staff_pm_responses` (
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB CHARSET utf8;
 
+CREATE TABLE `styles_backup` (
+  `UserID` int(10) DEFAULT NULL,
+  `StyleID` int(10) DEFAULT NULL,
+  `StyleURL` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB CHARSET utf8;
+
 CREATE TABLE `stylesheets` (
   `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `Name` varchar(255) NOT NULL,
