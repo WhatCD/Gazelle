@@ -353,6 +353,7 @@ div.thin > h3:first-child {
 
 textarea,
 input[type="text"],
+input[type="email"],
 input[type="search"],
 input[type="password"],
 .select {
@@ -372,6 +373,7 @@ input[type="password"],
 
 textarea:focus,
 input[type="text"]:focus,
+input[type="email"]:focus,
 input[type="search"]:focus,
 input[type="password"]:focus {
 	-webkit-box-shadow: inset -1px 1px 3px rgba(0,0,0,0.15),0 0 5px rgba(0,140,180,0.5);
@@ -387,6 +389,7 @@ textarea {
 }
 
 .sidebar input[type="text"],
+.sidebar input[type="email"],
 .sidebar input[type="search"],
 .sidebar textarea {
 	width: 202px;
@@ -1073,6 +1076,7 @@ ul#artistcomplete {
 
 form[action="user.php"] table textarea,
 form[action="user.php"] table input[type="text"],
+form[action="user.php"] table input[type="email"],
 form[action="user.php"] table input[type="search"] {
 	-webkit-box-sizing: border-box;
 	-moz-box-sizing: border-box;

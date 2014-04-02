@@ -360,7 +360,9 @@ $.fn.extend({
 
 	// Disable unset form elements to allow search URLs cleanups
 	disableUnset: function() {
-		$('input[value=""]:text, select[value=""]', this).disable();
+		$('input, select', this).filter(function() {
+			return $(this).val() === "";
+		}).disable();
 		return this;
 	},
 

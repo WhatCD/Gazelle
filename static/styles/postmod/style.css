@@ -850,30 +850,30 @@ tr.unreadpm {
 /* Layout (Permission Page) */
 
 .permission_head {
-	width:400px;
-	margin-left:auto;
-	margin-right:auto;
+	width: 400px;
+	margin-left: auto;
+	margin-right: auto;
 }
 
 .permissions {
-	width:930px;
-	margin-left:auto;
-	margin-right:auto;
+	width: 930px;
+	margin-left: auto;
+	margin-right: auto;
 }
 
 .permission_container {
 	float: left;
-	width:300px;
-	padding:5px;
+	width: 300px;
+	padding: 5px;
 }
 .permission_container input {
-	margin:0px 3px 5px 0px;
-	vertical-align:top;
+	margin: 0px 3px 5px 0px;
+	vertical-align: top;
 }
 
 .submit_container {
-	clear:both;
-	text-align:right;
+	clear: both;
+	text-align: right;
 }
 
 /* Layout (Invite tree) */
@@ -890,7 +890,8 @@ ul .invitetree {
 /*.thin .body a:hover, .thin .box a:hover, .thin .body a:focus, .thin .box a:focus { background: ; }*/
 
 .head a:hover, .colhead a:hover, .colhead_dark a:hover, .head a:focus, .colhead a:focus, .colhead_dark a:focus {
-	background: transparent !important; outline: 0
+	background: transparent !important;
+	outline: 0;
 }
 
 /* Layout (User options) */
@@ -901,13 +902,13 @@ ul .invitetree {
 
 /* Layout (MISC) */
 
-.poll{list-style:none; padding:10px; margin:5px}
-.poll li{clear:both}
-.poll .graph{padding:0 0 15px 0}
-.poll .graph span{display:block; height:19px; float:left}
-.poll .graph .left_poll{width:9px; background:url('images/poll_left.png') top left no-repeat}
-.poll .graph .center_poll{background:url('images/poll_middle.png') top left repeat-x}
-.poll .graph .right_poll{width:11px; background:url('images/poll_right.png') top left no-repeat}
+.poll { list-style: none; padding: 10px; margin: 5px; }
+.poll li { clear: both; }
+.poll .graph { padding: 0 0 15px 0; }
+.poll .graph span { display: block; height: 19px; float: left; }
+.poll .graph .left_poll { width: 9px; background: url('images/poll_left.png') top left no-repeat; }
+.poll .graph .center_poll { background: url('images/poll_middle.png') top left repeat-x; }
+.poll .graph .right_poll { width: 11px; background: url('images/poll_right.png') top left no-repeat; }
 
 .curtain {
 	position: fixed;
@@ -916,9 +917,9 @@ ul .invitetree {
 	width: 100%;
 	height: 100%;
 	background: #111 50% 0 no-repeat fixed;
-	z-index:1001;
+	z-index: 1001;
 	-moz-opacity: 0.9;
-	opacity:.90;
+	opacity: 0.90;
 	filter: alpha(opacity=90);
 }
 
@@ -930,7 +931,7 @@ ul .invitetree {
 	width: 90%;
 	height: 90%;
 	padding: 0px;
-	z-index:1002;
+	z-index: 1002;
 	overflow: auto;
 }
 
@@ -941,7 +942,7 @@ ul .invitetree {
 	z-index: -1;
 }
 
-input[type=button], input[type=submit] {
+input[type="button"], input[type="submit"] {
 	background: #111 url(images/alert-overlay.png) repeat-x;
 	display: inline-block;
 	padding: 3px 6px 4px;
@@ -959,8 +960,13 @@ input[type=button], input[type=submit] {
 	cursor: pointer;
 }
 
-input[type=button]:hover, input[type=submit]:hover	 { background-color: #000; color: #FFF; }
-input[type=button]:active , input[type=submit]:active { top: 1px; }
+input[type="button"]:hover, input[type="submit"]:hover {
+	background-color: #000;
+	color: #FFF;
+}
+input[type="button"]:active , input[type="submit"]:active {
+	top: 1px;
+}
 
 input[type="button"]:active, input[type="button"]:focus, input[type="submit"]:active, input[type="submit"]:focus {
 /*	background: #262626 url(images/load.gif) no-repeat center center; */
@@ -980,7 +986,7 @@ input[type="button"]:active, input[type="button"]:focus, input[type="submit"]:ac
 	cursor: pointer;
 }
 
-input[type=text], input[type="password"], input[type="search"] {
+input[type="text"], input[type="email"], input[type="password"], input[type="search"] {
 	background: #111 url(images/alert-overlay.png) repeat-x;
 	display: inline-block;
 	padding: 3px;
@@ -993,11 +999,32 @@ input[type=text], input[type="password"], input[type="search"] {
 	border-bottom: 1px solid #333;
 }
 
-input[type=text]:hover, input[type=text]:focus, input[type="search"]:hover, input[type="search"]:focus, input[type="password"]:hover, input[type="password"]:focus { background-color: #000; color: #FFF; }
-input[type=text]:active, input[type="search"]:active, input[type="password"]:active { top: 1px; }
+input[type="text"]:hover,
+input[type="text"]:focus,
+input[type="email"]:hover,
+input[type="email"]:focus,
+input[type="search"]:hover,
+input[type="search"]:focus,
+input[type="password"]:hover,
+input[type="password"]:focus {
+	background-color: #000;
+	color: #FFF;
+}
+input[type="text"]:active,
+input[type="email"]:active,
+input[type="search"]:active,
+input[type="password"]:active {
+	top: 1px;
+}
 
-input[disabled=disabled] { background: #4F4F4F url(images/alert-overlay.png) repeat-x; color: #DFDFDF; }
-input[disabled=disabled]:hover, input[disabled=disabled]:focus, input[disabled=disabled]:active { background-color: #4F4F4F; color: #DFDFDF; }
+input[disabled="disabled"] {
+	background: #4F4F4F url(images/alert-overlay.png) repeat-x;
+	color: #DFDFDF;
+}
+input[disabled="disabled"]:hover, input[disabled="disabled"]:focus, input[disabled="disabled"]:active {
+	background-color: #4F4F4F;
+	color: #DFDFDF;
+}
 
 /*
 textarea[disabled=disabled] { background: #4F4F4F; color: #DFDFDF; }

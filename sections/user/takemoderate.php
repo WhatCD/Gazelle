@@ -152,7 +152,7 @@ if (!check_perms('users_mod', $Cur['Class'])) {
 	die();
 }
 
-if (!empty($_POST['donor_points_submit']) && isset($_POST['donation_value']) && isset($_POST['donation_currency'])) {
+if (!empty($_POST['donor_points_submit']) && !empty($_POST['donation_value']) && is_number($_POST['donation_value'])) {
 	Donations::regular_donate($UserID, $_POST['donation_value'], "Add Points", $_POST['donation_reason'], $_POST['donation_currency']);
 } elseif (!empty($_POST['donor_values_submit'])) {
 	Donations::update_rank($UserID, $_POST['donor_rank'], $_POST['total_donor_rank'], $_POST['reason']);
