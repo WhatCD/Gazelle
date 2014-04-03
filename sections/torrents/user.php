@@ -490,6 +490,7 @@ foreach ($Categories as $CatKey => $CatName) {
 			</td>
 		</tr>
 <?
+	$PageSize = 0;
 	foreach ($TorrentsInfo as $TorrentID => $Info) {
 		list($GroupID, , $Time) = array_values($Info);
 
@@ -537,7 +538,7 @@ foreach ($Categories as $CatKey => $CatName) {
 						| <a href="reportsv2.php?action=report&amp;id=<?=$TorrentID?>" class="tooltip" title="Report">RP</a> ]
 					</span>
 					<? echo "$DisplayName\n"; ?>
-<?					Votes::vote_link($GroupID, $UserVotes[$GroupID]['Type']); ?>
+<?					Votes::vote_link($GroupID, isset($UserVotes[$GroupID]) ? $UserVotes[$GroupID]['Type'] : ''); ?>
 					<div class="tags"><?=$TorrentTags->format('torrents.php?type='.$Action.'&amp;userid='.$UserID.'&amp;tags=')?></div>
 				</div>
 			</td>

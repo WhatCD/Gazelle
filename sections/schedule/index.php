@@ -494,7 +494,7 @@ if ($Hour != $NextHour || $_GET['runhour'] || isset($argv[2])) {
 
 	if (count($Users) > 0) {
 		$Subject = 'Leeching Disabled';
-		$Message = 'You have downloaded more than 10 GiB while on Ratio Watch. Your leeching privileges have been disabled. Please reread the rules and refer to this guide on how to improve your ratio ' . site_url() . 'wiki.php?action=article&amp;id=110';
+		$Message = 'You have downloaded more than 10 GB while on Ratio Watch. Your leeching privileges have been disabled. Please reread the rules and refer to this guide on how to improve your ratio ' . site_url() . 'wiki.php?action=article&amp;id=110';
 		foreach ($Users as $TorrentPass => $UserID) {
 			Misc::send_pm($UserID, 0, $Subject, $Message);
 			Tracker::update_tracker('update_user', array('passkey' => $TorrentPass, 'can_leech' => '0'));
@@ -710,7 +710,7 @@ if (!$NoDaily && $Day != $NextDay || $_GET['runday']) {
 
 	// Put user on ratio watch if he doesn't meet the standards
 	sleep(10);
-	/*$DB->query("
+	$DB->query("
 		SELECT m.ID, m.Downloaded
 		FROM users_info AS i
 			JOIN users_main AS m ON m.ID = i.UserID
@@ -736,7 +736,7 @@ if (!$NoDaily && $Day != $NextDay || $_GET['runday']) {
 		$Cache->commit_transaction(0);
 		Misc::send_pm($UserID, 0, 'You have been put on Ratio Watch', "This happens when your ratio falls below the requirements we have outlined in the rules located [url=".site_url()."rules.php?p=ratio]here[/url].\n For information about ratio watch, click the link above.");
 		echo "Ratio watch on: $UserID\n";
-	}*/
+	}
 
 	sleep(5);
 

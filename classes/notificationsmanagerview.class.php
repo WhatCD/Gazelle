@@ -53,9 +53,7 @@ class NotificationsManagerView {
 
 	public static function render_settings($Settings) {
 		self::$Settings = $Settings;
-		if (check_perms("users_mod") || G::$LoggedUser['ExtraClasses'][DELTA_TEAM]) {
-			self::render_push_settings();
-		}
+		self::render_push_settings();
 ?>
 		<tr>
 			<td class="label">
@@ -143,7 +141,7 @@ class NotificationsManagerView {
 			Traditional
 		</label>
 <?		}
-		if ($Push && (check_perms("users_mod") || G::$LoggedUser['ExtraClasses'][DELTA_TEAM])) { ?>
+		if ($Push) { ?>
 		<label>
 			<input type="checkbox" name="notifications_<?=$Name?>_push" id="notifications_<?=$Name?>_push"<?=$PushChecked?> />
 			Push

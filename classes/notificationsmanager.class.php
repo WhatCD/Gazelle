@@ -801,7 +801,7 @@ class NotificationsManager {
 			SELECT UserID
 			FROM users_push_notifications
 			WHERE PushService != 0
-				AND UserID != '$LoggedUser[ID]'");
+				AND UserID != '" . G::$LoggedUser['ID']. "'");
 		$PushUsers = G::$DB->collect("UserID");
 		G::$DB->set_query_id($QueryID);
 		return $PushUsers;
