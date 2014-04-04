@@ -66,7 +66,7 @@ class NotificationsManager {
 		if ($AutoSkip) {
 			foreach ($this->Settings as $Key => $Value) {
 				// Skip disabled and traditional settings
-				if ($Value == self::OPT_DISABLED || $Value == self::OPT_TRADITIONAL) {
+				if ($Value == self::OPT_DISABLED || $this->is_traditional($Key)) {
 					$this->Skipped[$Key] = true;
 				}
 			}
@@ -645,24 +645,16 @@ class NotificationsManager {
 		}
 		$Update = array();
 		foreach (self::$Types as $Type) {
-			$Popup = array_key_exists("notifications_$Type" . '_popup', $Settings);
-			$Traditional = array_key_exists("notifications_$Type" . '_traditional', $Settings);
-			$Push = array_key_exists("notifications_$Type" . '_push', $Settings);
+			$Popup = array_key_exists("notifications_{$Type}_popup", $Settings);
+			$Traditional = array_key_exists("notifications_{$Type}_traditional", $Settings);
+			$Push = array_key_exists("notifications_{$Type}_push", $Settings);
 			$Result = self::OPT_DISABLED;
 			if ($Popup) {
-				$Result = self::OPT_POPUP;
-			}
-			if ($Traditional) {
-				$Result = self::OPT_TRADITIONAL;
-			}
-			if ($Push) {
-				$Result = self::OPT_POPUP;
-			}
-			if ($Popup && $Push) {
-				$Result = self::OPT_POPUP_PUSH;
-			}
-			if ($Traditional && $Push) {
-				$Result = self::OPT_TRADITIONAL_PUSH;
+				$Result = $Push ? self::OPT_POPUP_PUSH : self::OPT_POPUP;
+			} elseif ($Traditional) {
+				$Result = $Push ? self::OPT_TRADITIONAL_PUSH : self::OPT_TRADITIONAL;
+			} elseif ($Push) {
+				$Result = self::OPT_PUSH;
 			}
 			$Update[] = "$Type = $Result";
 		}
@@ -678,7 +670,6 @@ class NotificationsManager {
 		$PushOptionsArray = array("PushKey" => $_POST['pushkey']);
 		if ($PushService === 6) { //pushbullet
 			$PushOptionsArray['PushDevice'] = $_POST['pushdevice'];
-			
 		}
 		$PushOptions = db_string(serialize($PushOptionsArray));
 
@@ -700,7 +691,7 @@ class NotificationsManager {
 	}
 
 	public function is_traditional($Type) {
-		return $this->Settings[$Type] == self::OPT_TRADITIONAL;
+		return $this->Settings[$Type] == self::OPT_TRADITIONAL || $this->Settings[$Type] == self::OPT_TRADITIONAL_PUSH;
 	}
 
 	public function is_skipped($Type) {
@@ -708,7 +699,7 @@ class NotificationsManager {
 	}
 
 	public function use_noty() {
-		return in_array(self::OPT_POPUP, $this->Settings);
+		return in_array(self::OPT_POPUP, $this->Settings) || in_array(self::OPT_POPUP_PUSH, $this->Settings);
 	}
 
 	/**
@@ -720,7 +711,7 @@ class NotificationsManager {
 	 * @param string $URL url for the push notification to contain
 	 * @param string $Type what sort of push is it? PM, Rippy, News, etc
 	 */
-	public static function send_push($UserIDs, $Title, $Body, $URL = '', $Type = 'Global') {
+	public static function send_push($UserIDs, $Title, $Body, $URL = '', $Type = self::GLOBALNOTICE) {
 		if (!is_array($UserIDs)) {
 			$UserIDs = array($UserIDs);
 		}
@@ -731,8 +722,7 @@ class NotificationsManager {
 				SELECT
 					p.PushService, p.PushOptions
 				FROM users_notifications_settings AS n
-				JOIN users_push_notifications AS p
-				ON n.UserID = p.UserID
+					JOIN users_push_notifications AS p ON n.UserID = p.UserID
 				WHERE n.UserID = '$UserID'
 				AND p.PushService != 0";
 			if ($Type != self::GLOBALNOTICE) {
