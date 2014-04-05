@@ -909,6 +909,7 @@ CREATE TABLE `sphinx_requests_delta` (
   `LastVote` int(12) unsigned DEFAULT NULL,
   `CategoryID` tinyint(4) DEFAULT NULL,
   `Title` varchar(255) DEFAULT NULL,
+  `TagList` varchar(728) NOT NULL DEFAULT '',
   `Year` int(4) DEFAULT NULL,
   `ArtistList` varchar(2048) DEFAULT NULL,
   `ReleaseType` tinyint(2) DEFAULT NULL,
