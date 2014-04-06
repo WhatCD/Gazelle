@@ -404,11 +404,11 @@ class Format {
 	/**
 	 * Convenience function to echo out selected="selected" and checked="checked" so you don't have to.
 	 *
-	 * @param $Name the name of the option in the select (or field in $Array)
-	 * @param $Value the value that the option must be for the option to be marked as selected or checked
-	 * @param $Attribute The value returned/echoed is $Attribute="$Attribute" with a leading space
-	 * @param $Array The array the option is in, defaults to GET.
-	 * @return
+	 * @param string $Name the name of the option in the select (or field in $Array)
+	 * @param mixed $Value the value that the option must be for the option to be marked as selected or checked
+	 * @param string $Attribute The value returned/echoed is $Attribute="$Attribute" with a leading space
+	 * @param array $Array The array the option is in, defaults to GET.
+	 * @return void
 	 */
 	public static function selected($Name, $Value, $Attribute = 'selected', $Array = array()) {
 		if (empty($Array)) {

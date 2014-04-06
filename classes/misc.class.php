@@ -367,7 +367,7 @@ class Misc {
 	/**
 	 * Given an array of tags, return an array of their IDs.
 	 *
-	 * @param arary $TagNames
+	 * @param array $TagNames
 	 * @return array IDs
 	 */
 	public static function get_tags($TagNames) {

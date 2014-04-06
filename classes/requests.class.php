@@ -7,15 +7,24 @@ class Requests {
 	 */
 	public static function update_sphinx_requests($RequestID) {
 		$QueryID = G::$DB->get_query_id();
+
+		G::$DB->query("
+			SELECT REPLACE(t.Name, '.', '_')
+			FROM tags AS t
+				JOIN requests_tags AS rt ON t.ID = rt.TagID
+			WHERE rt.RequestID = $RequestID");
+		$TagList = G::$DB->collect(0, false);
+		$TagList = db_string(implode(' ', $TagList));
+
 		G::$DB->query("
 			REPLACE INTO sphinx_requests_delta (
-				ID, UserID, TimeAdded, LastVote, CategoryID, Title,
+				ID, UserID, TimeAdded, LastVote, CategoryID, Title, TagList,
 				Year, ReleaseType, CatalogueNumber, RecordLabel, BitrateList,
 				FormatList, MediaList, LogCue, FillerID, TorrentID,
 				TimeFilled, Visible, Votes, Bounty)
 			SELECT
 				ID, r.UserID, UNIX_TIMESTAMP(TimeAdded) AS TimeAdded,
-				UNIX_TIMESTAMP(LastVote) AS LastVote, CategoryID, Title,
+				UNIX_TIMESTAMP(LastVote) AS LastVote, CategoryID, Title, '$TagList',
 				Year, ReleaseType, CatalogueNumber, RecordLabel, BitrateList,
 				FormatList, MediaList, LogCue, FillerID, TorrentID,
 				UNIX_TIMESTAMP(TimeFilled) AS TimeFilled, Visible,
@@ -233,4 +242,3 @@ class Requests {
 	}
 
 }
-?>

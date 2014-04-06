@@ -147,6 +147,7 @@ if (!$Blog = $Cache->get_value('blog')) {
 		SELECT
 			b.ID,
 			um.Username,
+			b.UserID,
 			b.Title,
 			b.Body,
 			b.Time,
@@ -156,7 +157,7 @@ if (!$Blog = $Cache->get_value('blog')) {
 		ORDER BY Time DESC
 		LIMIT 20");
 	$Blog = $DB->to_array();
-	$Cache->cache_value('Blog', $Blog, 1209600);
+	$Cache->cache_value('blog', $Blog, 1209600);
 }
 
 if ($LoggedUser['LastReadBlog'] < $Blog[0][0]) {
@@ -171,11 +172,11 @@ if ($LoggedUser['LastReadBlog'] < $Blog[0][0]) {
 }
 
 foreach ($Blog as $BlogItem) {
-	list($BlogID, $Author, $Title, $Body, $BlogTime, $ThreadID) = $BlogItem;
+	list($BlogID, $Author, $AuthorID, $Title, $Body, $BlogTime, $ThreadID) = $BlogItem;
 ?>
 	<div id="blog<?=$BlogID?>" class="box blog_post">
 		<div class="head">
-			<strong><?=$Title?></strong> - posted <?=time_diff($BlogTime);?> by <?=$Author?>
+			<strong><?=$Title?></strong> - posted <?=time_diff($BlogTime);?> by <a href="user.php?id=<?=$AuthorID?>"><?=$Author?></a>
 <?	if (check_perms('admin_manage_blog')) { ?>
 			- <a href="blog.php?action=editblog&amp;id=<?=$BlogID?>" class="brackets">Edit</a>
 			<a href="blog.php?action=deleteblog&amp;id=<?=$BlogID?>&amp;auth=<?=$LoggedUser['AuthKey']?>" class="brackets">Delete</a>

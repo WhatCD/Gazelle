@@ -194,23 +194,6 @@ if (!empty($_GET['search'])) {
 				$EnableNegation = true;
 			}
 		}
-		$QueryParts = array();
-		if (!$EnableNegation && !empty($SearchWords['exclude'])) {
-			$SearchWords['include'] = array_merge($SearchWords['include'], $SearchWords['exclude']);
-			unset($SearchWords['exclude']);
-		}
-		foreach ($SearchWords['include'] as $Word) {
-			$QueryParts[] = Sphinxql::sph_escape_string($Word);
-		}
-		if (!empty($SearchWords['exclude'])) {
-			foreach ($SearchWords['exclude'] as $Word) {
-				$QueryParts[] = '!' . Sphinxql::sph_escape_string(substr($Word, 1));
-			}
-		}
-		if (!empty($QueryParts)) {
-			$SearchString = implode(' ', $QueryParts);
-			$SphQL->where_match($SearchString, '*', false);
-		}
 	}
 }
 
@@ -222,29 +205,27 @@ if (!isset($_GET['tags_type']) || $_GET['tags_type'] === '1') {
 	$_GET['tags_type'] = '0';
 }
 if (!empty($_GET['tags'])) {
+	$SearchTags = array('include' => array(), 'exclude' => array());
 	$Tags = explode(',', $_GET['tags']);
-	$TagNames = $TagsExclude = array();
-	// Remove illegal characters from the given tag names
 	foreach ($Tags as $Tag) {
-		$Tag = ltrim($Tag);
-		$Exclude = ($Tag[0] === '!');
-		$Tag = Misc::sanitize_tag($Tag);
-		if (!empty($Tag)) {
-			$TagNames[] = $Tag;
-			$TagsExclude[$Tag] = $Exclude;
+		$Tag = trim($Tag);
+		if ($Tag[0] === '!' && strlen($Tag) >= 2) {
+			if (strpos($Tag, '!', 1) === false) {
+				$SearchTags['exclude'][] = $Tag;
+			} else {
+				$SearchTags['include'][] = $Tag;
+				$EnableNegation = true;
+			}
+		} elseif ($Tag !== '') {
+			$SearchTags['include'][] = $Tag;
+			$EnableNegation = true;
 		}
 	}
-	$AllNegative = !in_array(false, $TagsExclude, true);
-	$Tags = Misc::get_tags($TagNames);
 
-	// Replace the ! characters that sanitize_tag removed
-	if ($TagType === 1 || $AllNegative) {
-		foreach ($TagNames as &$TagName) {
-			if ($TagsExclude[$TagName]) {
-				$TagName = "!$TagName";
-			}
-		}
-		unset($TagName);
+	$TagFilter = Tags::tag_filter_sph($SearchTags, $EnableNegation, $TagType);
+
+	if (!empty($TagFilter['predicate'])) {
+		$SphQL->where_match($TagFilter['predicate'], 'taglist', false);
 	}
 } elseif (!isset($_GET['tags_type']) || $_GET['tags_type'] !== '0') {
 	$_GET['tags_type'] = 1;
@@ -252,13 +233,24 @@ if (!empty($_GET['tags'])) {
 	$_GET['tags_type'] = 0;
 }
 
-// 'All' tags
-if ($TagType === 1 && !empty($Tags)) {
-	foreach ($Tags as $TagID => $TagName) {
-		$SphQL->where('tagid', $TagID, $TagsExclude[$TagName]);
+if (isset($SearchWords)) {
+	$QueryParts = array();
+	if (!$EnableNegation && !empty($SearchWords['exclude'])) {
+		$SearchWords['include'] = array_merge($SearchWords['include'], $SearchWords['exclude']);
+		unset($SearchWords['exclude']);
 	}
-} elseif (!empty($Tags)) {
-	$SphQL->where('tagid', array_keys($Tags), $AllNegative);
+	foreach ($SearchWords['include'] as $Word) {
+		$QueryParts[] = Sphinxql::sph_escape_string($Word);
+	}
+	if (!empty($SearchWords['exclude'])) {
+		foreach ($SearchWords['exclude'] as $Word) {
+			$QueryParts[] = '!' . Sphinxql::sph_escape_string(substr($Word, 1));
+		}
+	}
+	if (!empty($QueryParts)) {
+		$SearchString = implode(' ', $QueryParts);
+		$SphQL->where_match($SearchString, '*', false);
+	}
 }
 
 if (!empty($_GET['filter_cat'])) {

@@ -97,6 +97,7 @@ if (($Blog = $Cache->get_value('blog')) === false) {
 		SELECT
 			b.ID,
 			um.Username,
+			b.UserID,
 			b.Title,
 			b.Body,
 			b.Time,
@@ -117,7 +118,7 @@ if (count($Blog) < 5) {
 	$Limit = 5;
 }
 for ($i = 0; $i < $Limit; $i++) {
-	list($BlogID, $Author, $Title, $Body, $BlogTime, $ThreadID) = $Blog[$i];
+	list($BlogID, $Author, $AuthorID, $Title, $Body, $BlogTime, $ThreadID) = $Blog[$i];
 ?>
 				<li>
 					<?=($i + 1)?>. <a href="blog.php#blog<?=$BlogID?>"><?=$Title?></a>

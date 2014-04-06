@@ -195,23 +195,6 @@ if (!empty($_GET['search'])) {
 				$EnableNegation = true;
 			}
 		}
-		$QueryParts = array();
-		if (!$EnableNegation && !empty($SearchWords['exclude'])) {
-			$SearchWords['include'] = array_merge($SearchWords['include'], $SearchWords['exclude']);
-			unset($SearchWords['exclude']);
-		}
-		foreach ($SearchWords['include'] as $Word) {
-			$QueryParts[] = Sphinxql::sph_escape_string($Word);
-		}
-		if (!empty($SearchWords['exclude'])) {
-			foreach ($SearchWords['exclude'] as $Word) {
-				$QueryParts[] = '!' . Sphinxql::sph_escape_string(substr($Word, 1));
-			}
-		}
-		if (!empty($QueryParts)) {
-			$SearchString = implode(' ', $QueryParts);
-			$SphQL->where_match($SearchString, '*', false);
-		}
 	}
 }
 
@@ -224,43 +207,54 @@ if (!isset($_GET['tags_type']) || $_GET['tags_type'] === '1') {
 }
 
 if (!empty($_GET['tags'])) {
-	$Tags = explode(',', $_GET['tags']);
-	$TagNames = $TagsExclude = array();
-	// Remove illegal characters from the given tag names
+	$SearchTags = array('include' => array(), 'exclude' => array());
+	$Tags = explode(',', str_replace('.', '_', $_GET['tags']));
 	foreach ($Tags as $Tag) {
-		$Tag = ltrim($Tag);
-		$Exclude = ($Tag[0] === '!');
-		$Tag = Misc::sanitize_tag($Tag);
-		if (!empty($Tag)) {
-			$TagNames[] = $Tag;
-			$TagsExclude[$Tag] = $Exclude;
-		}
-	}
-	$AllNegative = !in_array(false, $TagsExclude, true);
-	$Tags = Misc::get_tags($TagNames);
-
-	// Replace the ! characters that sanitize_tag removed
-	if ($TagType === 1 || $AllNegative) {
-		foreach ($TagNames as &$TagName) {
-			if ($TagsExclude[$TagName]) {
-				$TagName = "!$TagName";
+		$Tag = trim($Tag);
+		if ($Tag[0] === '!' && strlen($Tag) >= 2) {
+			if (strpos($Tag, '!', 1) === false) {
+				$SearchTags['exclude'][] = $Tag;
+			} else {
+				$SearchTags['include'][] = $Tag;
+				$EnableNegation = true;
 			}
+		} elseif ($Tag !== '') {
+			$SearchTags['include'][] = $Tag;
+			$EnableNegation = true;
 		}
-		unset($TagName);
 	}
+
+	$TagFilter = Tags::tag_filter_sph($SearchTags, $EnableNegation, $TagType);
+	$TagNames = $TagFilter['input'];
+
+	if (!empty($TagFilter['predicate'])) {
+		$SphQL->where_match($TagFilter['predicate'], 'taglist', false);
+	}
+
 } elseif (!isset($_GET['tags_type']) || $_GET['tags_type'] !== '0') {
 	$_GET['tags_type'] = 1;
 } else {
 	$_GET['tags_type'] = 0;
 }
 
-// 'All' tags
-if ($TagType === 1 && !empty($Tags)) {
-	foreach ($Tags as $TagID => $TagName) {
-		$SphQL->where('tagid', $TagID, $TagsExclude[$TagName]);
+if (isset($SearchWords)) {
+	$QueryParts = array();
+	if (!$EnableNegation && !empty($SearchWords['exclude'])) {
+		$SearchWords['include'] = array_merge($SearchWords['include'], $SearchWords['exclude']);
+		unset($SearchWords['exclude']);
 	}
-} elseif (!empty($Tags)) {
-	$SphQL->where('tagid', array_keys($Tags), $AllNegative);
+	foreach ($SearchWords['include'] as $Word) {
+		$QueryParts[] = Sphinxql::sph_escape_string($Word);
+	}
+	if (!empty($SearchWords['exclude'])) {
+		foreach ($SearchWords['exclude'] as $Word) {
+			$QueryParts[] = '!' . Sphinxql::sph_escape_string(substr($Word, 1));
+		}
+	}
+	if (!empty($QueryParts)) {
+		$SearchString = implode(' ', $QueryParts);
+		$SphQL->where_match($SearchString, '*', false);
+	}
 }
 
 if (!empty($_GET['filter_cat'])) {
@@ -382,7 +376,7 @@ View::show_header($Title, 'requests');
 			<tr id="tagfilter">
 				<td class="label">Tags (comma-separated):</td>
 				<td>
-					<input type="search" name="tags" id="tags" size="60" value="<?=(!empty($TagNames) ? display_str(implode(', ', $TagNames)) : '') ?>"<? Users::has_autocomplete_enabled('other'); ?> />&nbsp;
+					<input type="search" name="tags" id="tags" size="60" value="<?=!empty($TagNames) ? display_str($TagNames) : ''?>"<? Users::has_autocomplete_enabled('other'); ?> />&nbsp;
 					<input type="radio" name="tags_type" id="tags_type0" value="0"<? Format::selected('tags_type', 0, 'checked')?> /><label for="tags_type0"> Any</label>&nbsp;&nbsp;
 					<input type="radio" name="tags_type" id="tags_type1" value="1"<? Format::selected('tags_type', 1, 'checked')?> /><label for="tags_type1"> All</label>
 				</td>

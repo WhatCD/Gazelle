@@ -1,5 +1,11 @@
 CHANGE LOG
 
+2014-04-06 by hateradio
+Add wildcard support to taglist in request search
+
+2014-04-05 by DutchDude
+Make blog post author name link to author profile
+
 2014-03-31 by Ajax
 Pushbullet support for push notifications
 

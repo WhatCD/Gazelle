@@ -261,94 +261,21 @@ if (!empty($_GET['searchstr'])) {
 
 // Tag list
 if (!empty($SearchWords['taglist'])) {
-	//Get tag aliases.
-	$TagAliases = $Cache->get_value('tag_aliases_search');
-	if ($TagAliases === false) {
-		$DB->query('
-			SELECT ID, BadTag, AliasTag
-			FROM tag_aliases
-			ORDER BY BadTag');
-		$TagAliases = $DB->to_array(false, MYSQLI_ASSOC, false);
-		//Unify tag aliases to be in_this_format as tags not in.this.format
-		array_walk_recursive($TagAliases, create_function('&$val', '$val = preg_replace("/\./","_", $val);'));
-		//Clean up the array for smaller cache size
-		foreach ($TagAliases as &$TagAlias) {
-			foreach (array_keys($TagAlias) as $Key) {
-				if (is_numeric($Key)) {
-					unset($TagAlias[$Key]);
-				}
-			}
-		}
-		$Cache->cache_value('tag_aliases_search', $TagAliases, 3600 * 24 * 7); // cache for 7 days
-	}
+	$_GET['tags_type'] = (!isset($_GET['tags_type']) || $_GET['tags_type'] == 1) ? '1' : '0';
+	$TagType = (int)$_GET['tags_type'];
+
 	//Get tags
 	$Tags = $SearchWords['taglist'];
-	//Replace bad tags with tag aliases
-	$End = count($Tags['include']);
-	for ($i = 0; $i < $End; $i++) {
-		foreach ($TagAliases as $TagAlias) {
-			if ($Tags['include'][$i] === $TagAlias['BadTag']) {
-				$Tags['include'][$i] = $TagAlias['AliasTag'];
-				break;
-			}
-		}
-	}
-	$End = count($Tags['exclude']);
-	for ($i = 0; $i < $End; $i++) {
-		foreach ($TagAliases as $TagAlias) {
-			if (substr($Tags['exclude'][$i], 1) === $TagAlias['BadTag']) {
-				$Tags['exclude'][$i] = '!'.$TagAlias['AliasTag'];
-				break;
-			}
-		}
-	}
-	//Only keep unique entries after unifying tag standard
-	$Tags['include'] = array_unique($Tags['include']);
-	$Tags['exclude'] = array_unique($Tags['exclude']);
-	$TagListString = implode(', ', array_merge($Tags['include'], $Tags['exclude']));
-	if (!$EnableNegation && !empty($Tags['exclude'])) {
-		$Tags['include'] = array_merge($Tags['include'], $Tags['exclude']);
-		unset($Tags['exclude']);
-	}
-	foreach ($Tags['include'] as &$Tag) {
-		$Tag = Sphinxql::sph_escape_string($Tag);
-	}
-	if (!empty($Tags['exclude'])) {
-		foreach ($Tags['exclude'] as &$Tag) {
-			$Tag = '!'.Sphinxql::sph_escape_string(substr($Tag, 1));
-		}
-	}
 
-	$QueryParts = array();
-	// 'All' tags
-	if (!isset($_GET['tags_type']) || $_GET['tags_type'] == 1) {
-		$_GET['tags_type'] = '1';
-		$Tags = array_merge($Tags['include'], $Tags['exclude']);
-		if (!empty($Tags)) {
-			$QueryParts[] = implode(' ', $Tags);
-		}
-	}
-	// 'Any' tags
-	else {
-		$_GET['tags_type'] = '0';
-		if (!empty($Tags['include'])) {
-			$QueryParts[] = '( '.implode(' | ', $Tags['include']).' )';
-		}
-		if (!empty($Tags['exclude'])) {
-			$QueryParts[] = implode(' ', $Tags['exclude']);
-		}
-	}
-	if (!empty($QueryParts)) {
-		$SphQL->where_match(implode(' ', $QueryParts), 'taglist', false);
-		$SphQLTor->where_match(implode(' ', $QueryParts), 'taglist', false);
+	$TagFilter = Tags::tag_filter_sph($Tags, $EnableNegation, $TagType);
+	if (!empty($TagFilter['predicate'])) {
+		$SphQL->where_match($TagFilter['predicate'], 'taglist', false);
+		$SphQLTor->where_match($TagFilter['predicate'], 'taglist', false);
 	}
 	unset($SearchWords['taglist']);
 }
 elseif (!isset($_GET['tags_type'])) {
 	$_GET['tags_type'] = '1';
-}
-if (!isset($TagListString)) {
-	$TagListString = "";
 }
 
 foreach ($SearchWords as $Search => $Words) {
