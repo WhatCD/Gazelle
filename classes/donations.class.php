@@ -776,7 +776,7 @@ Sincerely,
 
 [*]Pick something that hasn\'t been chosen. You can tell if a pick has been used previously by looking at the collages it\'s in.
 [*]Complete the enclosed form carefully and completely.
-[*]Reply to this PM with the completed form.
+[*]Send a [url='.site_url().'staffpm.php]Staff PM[/url] with the completed form. Title this PM "Special Rank User Pick".
 [important][align=center]**The following form must be used. Do not edit the BBCode. Reply to this message with the completed form.**[/align][/important]
 
 [quote][align=center][size=10]SUBMISSION FORM[/size]
@@ -805,7 +805,7 @@ Sincerely,
 
 [b][size=5][user]<NAME>[/user]\'s Special Donor Pick[/size][/b]
 
-[img=Album Cover URL]
+[img]Album Cover URL[/img]
 
 [b]Artist Name - Album Title[/b]
 
@@ -836,9 +836,9 @@ Sincerely,
 [#]Track 09
 [#]Track 10
 
-[b]Website:[/b] Artist Website / Info Page / Fan Site Link Here
+[b]Web site:[/b] Artist Web Site / Info Page / Fan Site Link Here
 
-[b]Review:[/b] [quote]Put your forum post review here. This review can be any length. You can write it yourself or source it from the net. Please try to include a source if you don\'t write your own review. If your review is too long, it will be included, but put into hide tags by the Staff Team formatting the thread.[/quote][/code][/quote]
+[b]Review:[/b] [quote]Put your forum post review here. This review can be any length, but please be reasonable. You can write it yourself or source it from the Internet. Please try to include a source if you don\'t write your own review. If your review is too long, it will be included but put into "hide" tags by the person formatting the thread.[/quote][/code][/quote]
 [hide=Completed Submission Form (Example)][align=center][size=10][u]FRONT PAGE[/u][/size][/align]
 
 
@@ -848,9 +848,9 @@ Sincerely,
 
 [b]Genre:[/b] Post-Punk, Rock, Experimental
 
-[b]Torrents:[/b] http://what.cd/torrents.php?id=649629
+[b]Torrents:[/b] https://what.cd/torrents.php?id=649629
 
-[b]Review:[/b] [quote=Mutant Sounds]Stumblebum idiot savant songform fragmentation that vacillates between moments of delirious jerry-rigged inspiration and passages that border on the insufferably sophomoric, brought to you by this batch of DIY rabble rousers whose stance and attitude (complete with DIY manifestos on the back cover) aligned them strongly at the time with the likes of The Desperate Bicycles. Loosely yoked to a whole network of willfully rinky dink art damage, Nag and Bendle (2/3 of The Door And The Window) also participated in The 49 Americans, a group with a similar propensity for inspired faux naif art brut whimsy and Mark Perry (the other 1/3) was of course the leader of Alternative TV, whose NWW list included group The Good Missionaries also traffic in much the same sort of abstruse fuckery.[/quote][/code][/quote]
+[b]Review:[/b] [quote=Mutant Sounds]Stumblebum idiot savant songform fragmentation that vacillates between moments of delirious jerry-rigged inspiration and passages that border on the insufferably sophomoric, brought to you by this batch of DIY rabble rousers whose stance and attitude (complete with DIY manifestos on the back cover) aligned them strongly at the time with the likes of The Desperate Bicycles. Loosely yoked to a whole network of willfully rinky dink art damage, Nag and Bendle (2/3 of The Door And The Window) also participated in The 49 Americans, a group with a similar propensity for inspired faux naif art brut whimsy and Mark Perry (the other 1/3) was of course the leader of Alternative TV, whose NWW list included group The Good Missionaries also traffic in much the same sort of abstruse fuckery.[/quote]
 
 
 
@@ -861,15 +861,15 @@ Sincerely,
 
 [b][size=5][user]DixieFlatline[/user]\'s Special Donor Pick[/size][/b]
 
-[img=http://i.imgur.com/wXdQd.jpg]
+[img]https://i.imgur.com/wXdQd.jpg[/img]
 
 [b]The Door and The Window - Detailed Twang[/b]
 
 [b]Genre:[/b] Post-Punk, Rock, Experimental
 
-[b]Torrents:[/b] http://what.cd/torrents.php?id=649629
+[b]Torrents:[/b] https://what.cd/torrents.php?id=649629
 
-[b]Release Info[/b]
+[b]Release Info:[/b]
 [*][u]Release Date[/u]: 1980 (Reissue: 2003)
 [*][u]Tracks[/u]: 12 (Reissue: 23)
 [*][u]Length[/u]: 1:09:11
@@ -905,7 +905,7 @@ Sincerely,
 [#]The Number One Entertainer (3:38)
 [#]C.C.H. (4:19)
 
-[b]Website:[/b] http://www.wikipedia.org
+[b]Web site:[/b] https://www.wikipedia.org
 
 [b]Review:[/b] [quote=Mutant Sounds]Stumblebum idiot savant songform fragmentation that vacillates between moments of delirious jerry-rigged inspiration and passages that border on the insufferably sophomoric, brought to you by this batch of DIY rabble rousers whose stance and attitude (complete with DIY manifestos on the back cover) aligned them strongly at the time with the likes of The Desperate Bicycles. Loosely yoked to a whole network of willfully rinky dink art damage, Nag and Bendle (2/3 of The Door And The Window) also participated in The 49 Americans, a group with a similar propensity for inspired faux naif art brut whimsy and Mark Perry (the other 1/3) was of course the leader of Alternative TV, whose NWW list included group The Good Missionaries also traffic in much the same sort of abstruse fuckery.[/quote][/hide]
 

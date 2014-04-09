@@ -797,7 +797,7 @@ if (!$NoDaily && $Day != $NextDay || $_GET['runday']) {
 		$Cache->begin_transaction("user_info_heavy_$UserID");
 		$Cache->update_row(false, array('RatioWatchDownload' => 0, 'CanLeech' => 0));
 		$Cache->commit_transaction(0);
-		Misc::send_pm($UserID, 0, 'Your downloading rights have been disabled', "As you did not raise your ratio in time, your downloading rights have been revoked. You will not be able to download any torrents until your ratio is above your new required ratio.");
+		Misc::send_pm($UserID, 0, 'Your downloading privileges have been disabled', "As you did not raise your ratio in time, your downloading privileges have been revoked. You will not be able to download any torrents until your ratio is above your new required ratio.");
 		echo "Ratio watch disabled: $UserID\n";
 	}
 

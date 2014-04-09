@@ -55,9 +55,7 @@ class PushServer {
 			case 'pushbullet':
 				$this->push_pushbullet(
 					$JSON['user']['key'],
-					$JSON['user']['device'],// <strip>
-					$JSON['user']['userid'],
-					$JSON['user']['email'],//</strip>
+					$JSON['user']['device'],
 					$JSON['message']['title'],
 					$JSON['message']['body'],
 					$JSON['message']['url']
@@ -149,9 +147,7 @@ class PushServer {
 	 * Notify via pushbullet
 	 *
 	 * @param $UserKey User API key
-	 * @param $DeviceID device to push to <strip>
-	 * @param $UserID UserID to check IP for
-	 * @param $Email Last email gotten from pushbullet API. Used for anti-cheat.</strip>
+	 * @param $DeviceID device to push to
 	 * @param $Title Notification title
 	 * @param $Message Notification message
 	 * @param $URL For compatibility with other command. Just gets appended.

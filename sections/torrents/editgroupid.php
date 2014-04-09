@@ -29,7 +29,7 @@ if (empty($_POST['confirm'])) {
 		WHERE ID = $OldGroupID");
 	if (!$DB->has_results()) {
 		//Trying to move to an empty group? I think not!
-		set_message('That group does not exist!');
+		set_message('The destination torrent group does not exist!');
 		header('Location: '.$_SERVER['HTTP_REFERER']);
 		die();
 	}
@@ -40,7 +40,7 @@ if (empty($_POST['confirm'])) {
 		WHERE ID = $GroupID");
 	list($CategoryID, $NewName) = $DB->next_record();
 	if ($Categories[$CategoryID - 1] != 'Music') {
-		error('Target must be a music group.');
+		error('Destination torrent group must be in the "Music" category.');
 	}
 
 	$Artists = Artists::get_artists(array($OldGroupID, $GroupID));
@@ -49,7 +49,7 @@ if (empty($_POST['confirm'])) {
 ?>
 	<div class="thin">
 		<div class="header">
-			<h2>Change Group Confirm!</h2>
+			<h2>Torrent Group ID Change Confirmation</h2>
 		</div>
 		<div class="box pad">
 			<form class="confirm_form" name="torrent_group" action="torrents.php" method="post">
@@ -76,9 +76,10 @@ if (empty($_POST['confirm'])) {
 } else {
 	authorize();
 
-	$DB->query("UPDATE torrents
-				SET	GroupID = '$GroupID'
-				WHERE ID = $TorrentID");
+	$DB->query("
+		UPDATE torrents
+		SET	GroupID = '$GroupID'
+		WHERE ID = $TorrentID");
 
 	// Delete old torrent group if it's empty now
 	$DB->query("
@@ -91,7 +92,8 @@ if (empty($_POST['confirm'])) {
 		$DB->query("
 			UPDATE comments
 			SET PageID = '$GroupID'
-			WHERE Page = 'torrents' AND PageID = '$OldGroupID'");
+			WHERE Page = 'torrents'
+				AND PageID = '$OldGroupID'");
 		$Cache->delete_value("torrent_comments_{$GroupID}_catalogue_0");
 		$Cache->delete_value("torrent_comments_$GroupID");
 		Torrents::delete_group($OldGroupID);

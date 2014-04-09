@@ -29,12 +29,12 @@ if ($Length !== 'verbal') {
 	$Time = (int)$Length * (7 * 24 * 60 * 60);
 	Tools::warn_user($AuthorID, $Time, "$URL - $Reason");
 	$Subject = 'You have received a warning';
-	$PrivateMessage = "You have received a $Length week warning for [url=$URL]this comment.[/url]\n\n$PrivateMessage";
+	$PrivateMessage = "You have received a $Length week warning for [url=$URL]this comment[/url].\n\n[quote]{$PrivateMessage}[/quote]";
 	$WarnTime = time_plus($Time);
 	$AdminComment = date('Y-m-d') . " - Warned until $WarnTime by " . $LoggedUser['Username'] . "\nReason: $URL - $Reason\n\n";
 } else {
 	$Subject = 'You have received a verbal warning';
-	$PrivateMessage = "You have received a verbal warning for [url=$URL]this comment.[/url]\n\n$PrivateMessage";
+	$PrivateMessage = "You have received a verbal warning for [url=$URL]this comment[/url].\n\n[quote]{$PrivateMessage}[/quote]";
 	$AdminComment = date('Y-m-d') . ' - Verbally warned by ' . $LoggedUser['Username'] . " for $URL\nReason: $Reason\n\n";
 	Tools::update_user_notes($AuthorID, $AdminComment);
 }
