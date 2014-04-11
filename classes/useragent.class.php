@@ -82,6 +82,7 @@ class UserAgent {
 		'win95'				=> 'Windows 95',
 		'win16'				=> 'Windows 3.1',
 		//'windows'			=> 'Windows',
+		'cros'				=> 'Chrome OS',
 		//OS X
 		'os x'				=> 'Mac OS X',
 		'macintosh'			=> 'Mac OS X',
