@@ -643,6 +643,18 @@ tr.torrent .bookmark>a:after {
 	margin-bottom: 0;
 }
 
+.field_div .label,
+.submit_div .label {
+	float: left;
+	padding: 0 5px;
+	text-align: right;
+	width: 150px;
+}
+.field_div .input,
+.submit_div .input {
+	padding: 0 5px;
+}
+
 .small_label {
 	text-align: right;
 	width: auto;

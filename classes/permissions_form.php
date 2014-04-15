@@ -69,6 +69,7 @@ $PermissionsArray = array(
 	'users_view_keys' => 'Can view passkeys.',
 	'users_view_ips' => 'Can view IP addresses.',
 	'users_view_email' => 'Can view email addresses.',
+	'users_invite_notes' => 'Can add a staff note when inviting someone.',
 	'users_override_paranoia' => 'Can override paranoia.',
 	'users_logout' => 'Can log users out (old?).',
 	'users_make_invisible' => 'Can make users invisible.',
@@ -199,6 +200,7 @@ function permissions_form() {
 					display_perm('users_view_keys', 'Can view passkeys');
 					display_perm('users_view_ips', 'Can view IP addresses');
 					display_perm('users_view_email', 'Can view email addresses');
+					display_perm('users_invite_notes', 'Can add a staff note when inviting someone.');
 					display_perm('users_override_paranoia', 'Can override paranoia');
 					display_perm('users_make_invisible', 'Can make users invisible');
 					display_perm('users_logout', 'Can log users out');

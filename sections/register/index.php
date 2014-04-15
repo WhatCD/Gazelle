@@ -68,14 +68,14 @@ if (!empty($_REQUEST['confirm'])) {
 
 			if ($_REQUEST['invite']) {
 				$DB->query("
-					SELECT InviterID, Email
+					SELECT InviterID, Email, Reason
 					FROM invites
 					WHERE InviteKey = '".db_string($_REQUEST['invite'])."'");
 				if (!$DB->has_results()) {
 					$Err = 'Invite does not exist.';
 					$InviterID = 0;
 				} else {
-					list($InviterID, $InviteEmail) = $DB->next_record();
+					list($InviterID, $InviteEmail, $InviteReason) = $DB->next_record(MYSQLI_NUM, false);
 				}
 			} else {
 				$InviterID = 0;
@@ -124,11 +124,14 @@ if (!empty($_REQUEST['confirm'])) {
 			list($StyleID) = $DB->next_record();
 			$AuthKey = Users::make_secret();
 
+			if ($InviteReason !== '') {
+				$InviteReason = db_string(sqltime()." - $InviteReason");
+			}
 			$DB->query("
 				INSERT INTO users_info
-					(UserID, StyleID, AuthKey, Inviter, JoinDate)
+					(UserID, StyleID, AuthKey, Inviter, JoinDate, AdminComment)
 				VALUES
-					('$UserID', '$StyleID', '".db_string($AuthKey)."', '$InviterID', '".sqltime()."')");
+					('$UserID', '$StyleID', '".db_string($AuthKey)."', '$InviterID', '".sqltime()."', '$InviteReason')");
 
 			$DB->query("
 				INSERT INTO users_history_ips
@@ -142,7 +145,6 @@ if (!empty($_REQUEST['confirm'])) {
 					('$UserID')");
 
 
-
 			$DB->query("
 				INSERT INTO users_history_emails
 					(UserID, Email, Time, IP)
@@ -154,7 +156,7 @@ if (!empty($_REQUEST['confirm'])) {
 					INSERT INTO users_history_emails
 						(UserID, Email, Time, IP)
 					VALUES
-						('$UserID', '$InviteEmail', '".sqltime()."', '".db_string($_SERVER['REMOTE_ADDR'])."')");
+						('$UserID', '".db_string($InviteEmail)."', '".sqltime()."', '".db_string($_SERVER['REMOTE_ADDR'])."')");
 			}
 
 

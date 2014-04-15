@@ -18,7 +18,6 @@ if (isset($_GET['userid']) && check_perms('users_view_invites')) {
 
 	$UserID = $LoggedUser['ID'];
 	$Sneaky = false;
-
 }
 
 list($UserID, $Username, $PermissionID) = array_values(Users::user_info($UserID));
@@ -142,21 +141,25 @@ if (!$Sneaky
 		<p>Remember that you are responsible for ALL invitees, and your account and/or privileges may be disabled due to your invitees' actions. You should know the person you're inviting. If you aren't familiar enough with the user to trust them, we suggest not inviting them.</p>
 		<p><em>Do not send an invite if you have not read or do not understand the information above.</em></p>
 	</div>
-	<div class="box pad">
-		<form class="send_form" name="invite" action="user.php" method="post">
+	<div class="box box2">
+		<form class="send_form pad" name="invite" action="user.php" method="post">
 			<input type="hidden" name="action" value="take_invite" />
 			<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
-			<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
-			<table cellpadding="6" cellspacing="1" border="0" class="layout border" width="100%">
-				<tr>
-					<td class="label">Email address:</td>
-					<td>
-						<input type="email" name="email" size="60" />
-						<input type="submit" value="Invite" />
-					</td>
-				</tr>
-
-			</table>
+			<div class="field_div">
+				<div class="label">Email address:</div>
+				<div class="input">
+					<input type="email" name="email" size="60" />
+					<input type="submit" value="Invite" />
+				</div>
+			</div>
+<?	if (check_perms('users_invite_notes')) { ?>
+			<div class="field_div">
+				<div class="label">Staff Note:</div>
+				<div class="input">
+					<input type="text" name="reason" size="60" maxlength="255" />
+				</div>
+			</div>
+<?	} ?>
 		</form>
 	</div>
 

@@ -573,7 +573,7 @@ body:not(#requests):not(#friends) .box h2 {
 	border-bottom: 0;
 }
 
-.label {
+td.label {
 	width: 16%;
 	border-right: 1px solid #e6e6e6;
 }

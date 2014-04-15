@@ -39,6 +39,7 @@ $Username = $LoggedUser['Username'];
 $SiteName = SITE_NAME;
 $SiteURL = site_url();
 $InviteExpires = time_plus(60 * 60 * 24 * 3); // 3 days
+$InviteReason = check_perms('users_invite_notes') ? db_string($_POST['reason']) : '';
 
 //MultiInvite
 if (strpos($Email, '|') !== false && check_perms('site_send_unlimited_invites')) {
@@ -86,9 +87,9 @@ EOT;
 
 	$DB->query("
 		INSERT INTO invites
-			(InviterID, InviteKey, Email, Expires)
+			(InviterID, InviteKey, Email, Expires, Reason)
 		VALUES
-			('$LoggedUser[ID]', '$InviteKey', '".db_string($CurEmail)."', '$InviteExpires')");
+			('$LoggedUser[ID]', '$InviteKey', '".db_string($CurEmail)."', '$InviteExpires', '$InviteReason')");
 
 	if (!check_perms('site_send_unlimited_invites')) {
 		$DB->query("
