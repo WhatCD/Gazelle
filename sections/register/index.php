@@ -79,6 +79,8 @@ if (!empty($_REQUEST['confirm'])) {
 				}
 			} else {
 				$InviterID = 0;
+				$InviteEmail = $_REQUEST['email'];
+				$InviteReason = '';
 			}
 		}
 
