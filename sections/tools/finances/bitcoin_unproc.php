@@ -50,11 +50,12 @@ foreach ($AllDonations as $Address => $Amount) {
 <?
 if (!empty($NewDonations)) {
 	foreach (DonationsBitcoin::get_userids(array_keys($NewDonations)) as $Address => $UserID) {
+		$DonationEUR = Donations::currency_exchange($NewDonations[$Address], 'BTC');
 ?>
 		<tr>
 			<td><?=$Address?></td>
 			<td><?=Users::format_username($UserID, true, false, false)?></td>
-			<td><?=$NewDonations[$Address]?></td>
+			<td><?=$NewDonations[$Address]?> (<?="$DonationEUR EUR"?>)</td>
 			<td><?=$AllDonations[$Address]?></td>
 			<td><?=(int)Donations::get_rank($UserID)?></td>
 			<td><?=(int)Donations::get_special_rank($UserID)?></td>
