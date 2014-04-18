@@ -272,12 +272,13 @@ function CheckYear() {
 	if (media == "---" || media == "Vinyl" || media == "Soundboard" || media == "Cassette") {
 		media = "old";
 	}
-	var x = $('#year').raw();
-	if (x.value < 1982 && x.value != '' && media != "old" && !$('#unknown').raw().checked) {
+	var year = $('#year').val();
+	var unknown = $('#unknown').prop('checked');
+	if (year < 1982 && year != '' && media != "old" && !unknown) {
 		$('#yearwarning').gshow();
 		$('#remaster').raw().checked = true;
 		$('#remaster_true').gshow();
-	} else if ($('#unknown').raw().checked) {
+	} else if (unknown) {
 		$('#remaster').raw().checked = true;
 		$('#yearwarning').ghide();
 		$('#remaster_true').gshow();
