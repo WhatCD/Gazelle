@@ -48,9 +48,10 @@ class Comments {
 	 * Edit a comment
 	 * @param int $PostID
 	 * @param string $NewBody
+	 * @param bool $SendPM If true, send a PM to the author of the comment informing him about the edit
 	 * @todo move permission check out of here/remove hardcoded error(404)
 	 */
-	public static function edit($PostID, $NewBody) {
+	public static function edit($PostID, $NewBody, $SendPM = false) {
 		$QueryID = G::$DB->get_query_id();
 
 		G::$DB->query("
@@ -102,6 +103,15 @@ class Comments {
 			VALUES ('$Page', $PostID, " . G::$LoggedUser['ID'] . ", '" . sqltime() . "', '" . db_string($OldBody) . "')");
 
 		G::$DB->set_query_id($QueryID);
+
+		if ($SendPM && G::$LoggedUser['ID'] != $AuthorID) {
+			// Send a PM to the user to notify them of the edit
+			$PMSubject = "Your comment #$PostID has been edited";
+			$PMurl = site_url()."comments.php?action=jump&postid=$PostID";
+			$ProfLink = '[url='.site_url().'user.php?id='.G::$LoggedUser['ID'].']'.G::$LoggedUser['Username'].'[/url]';
+			$PMBody = "One of your comments has been edited by $ProfLink: [url]{$PMurl}[/url]";
+			Misc::send_pm($AuthorID, 0, $PMSubject, $PMBody);
+		}
 
 		return true; // TODO: this should reflect whether or not the update was actually successful, e.g. by checking G::$DB->affected_rows after the UPDATE query
 	}

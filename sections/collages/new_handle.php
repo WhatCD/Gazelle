@@ -27,7 +27,7 @@ if ($P['category'] > 0 || check_perms('site_collages_renamepersonal')) {
 		$i++;
 	}
 }
-$Val->SetFields('description', '1', 'string', 'The description must be at least 10 characters', array('maxlength' => 65535, 'minlength' => 10));
+$Val->SetFields('description', '1', 'string', 'The description must be between 10 and 65535 characters', array('maxlength' => 65535, 'minlength' => 10));
 
 $Err = $Val->ValidateForm($_POST);
 

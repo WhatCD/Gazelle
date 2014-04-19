@@ -81,6 +81,7 @@ switch ($_GET['feed']) {
 				SELECT
 					b.ID,
 					um.Username,
+					b.UserID,
 					b.Title,
 					b.Body,
 					b.Time,
@@ -93,7 +94,7 @@ switch ($_GET['feed']) {
 			$Cache->cache_value('Blog', $Blog, 1209600);
 		}
 		foreach ($Blog as $BlogItem) {
-			list($BlogID, $Author, $Title, $Body, $BlogTime, $ThreadID) = $BlogItem;
+			list($BlogID, $Author, $AuthorID, $Title, $Body, $BlogTime, $ThreadID) = $BlogItem;
 			if ($ThreadID) {
 				echo $Feed->item($Title, Text::strip_bbcode($Body), "forums.php?action=viewthread&amp;threadid=$ThreadID", SITE_NAME.' Staff', '', '', $BlogTime);
 			} else {

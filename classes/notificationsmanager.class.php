@@ -464,6 +464,7 @@ class NotificationsManager {
 					SELECT
 						b.ID,
 						um.Username,
+						b.UserID,
 						b.Title,
 						b.Body,
 						b.Time,

@@ -194,6 +194,7 @@ function Save_Edit(postid) {
 			$('#bar' + postid).raw().innerHTML = "";
 			$('#preview' + postid).raw().innerHTML = response;
 			$('#editbox' + postid).ghide();
+			$('#pmbox' + postid).ghide();
 		});
 	}
 }
