@@ -15,10 +15,11 @@ And join <?=BOT_DISABLED_CHAN?><br /><br />
 <script type="text/javascript">
 function toggle_visibility(id) {
 	var e = document.getElementById(id);
-	if (e.style.display == 'block')
+	if (e.style.display == 'block') {
 		e.style.display = 'none';
-	else
+	} else {
 		e.style.display = 'block';
+	}
 }
 </script>
 
@@ -32,11 +33,12 @@ If you do not have access to an IRC client, you can use the WebIRC interface pro
 Please use your <?=SITE_NAME?> username.
 </p>
 <br />
-<form class="confirm_form" name="chat" action="" method="post">
-	<input type="text" name="username" width="20" />
+<form class="confirm_form" name="chat" action="https://mibbit.com/" target="_blank" method="pre">
+	<input type="text" name="nick" width="20" />
+	<input type="hidden" name="channel" value="<?=BOT_DISABLED_CHAN?>" />
+	<input type="hidden" name="server" value="<?=BOT_SERVER?>" />
 	<input type="submit" name="submit" value="Join WebIRC" />
 </form>
-
 <?
 } else {
 	$Nick = $_POST['username'];

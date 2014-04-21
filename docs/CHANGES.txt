@@ -1,5 +1,8 @@
 CHANGE LOG
 
+2014-04-20 by SevenNationArmy
+Replace old IRC applet with Mibbit
+
 2014-04-09 by alderaan
 Rename and reword the labels and tooltips for some profile settings for torrent grouping and release types. These should no longer be misleading or wholly incorrect.
 
