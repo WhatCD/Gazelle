@@ -90,6 +90,8 @@ if (!$CoverArt) {
 	}
 }
 
+// Comments (must be loaded before View::show_header so that subscriptions and quote notifications are handled properly)
+list($NumComments, $Page, $Thread, $LastRead) = Comments::load('torrents', $GroupID);
 
 // Start output
 View::show_header($Title, 'browse,comments,torrent,bbcode,recommend,cover_art,subscriptions');
@@ -904,8 +906,6 @@ include(SERVER_ROOT.'/sections/torrents/voter_picks.php');
 		</div>
 <?
 // --- Comments ---
-
-list($NumComments, $Page, $Thread, $LastRead) = Comments::load('torrents', $GroupID);
 $Pages = Format::get_pages($Page, $NumComments, TORRENT_COMMENTS_PER_PAGE, 9, '#comments');
 ?>
 	<div id="torrent_comments">

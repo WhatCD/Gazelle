@@ -476,6 +476,9 @@ $TorrentDisplayList = ob_get_clean();
 
 //----------------- End building list and getting stats
 
+// Comments (must be loaded before View::show_header so that subscriptions and quote notifications are handled properly)
+list($NumComments, $Page, $Thread, $LastRead) = Comments::load('artist', $ArtistID);
+
 View::show_header($Name, 'browse,requests,bbcode,comments,voting,recommend,subscriptions');
 ?>
 <div class="thin">
@@ -795,11 +798,11 @@ if ($NumRequests > 0) {
 			if ($CategoryName == 'Music') {
 				$ArtistForm = Requests::get_artists($RequestID);
 				$ArtistLink = Artists::display_artists($ArtistForm, true, true);
-				$FullName = $ArtistLink."<a href=\"requests.php?action=view&amp;id=$RequestID\">$Title [$Request[Year]]</a>";
+				$FullName = $ArtistLink."<a href=\"requests.php?action=view&amp;id=$RequestID\"><span dir=\"ltr\">$Title</span> [$Request[Year]]</a>";
 			} elseif ($CategoryName == 'Audiobooks' || $CategoryName == 'Comedy') {
-				$FullName = "<a href=\"requests.php?action=view&amp;id=$RequestID\">$Title [$Request[Year]]</a>";
+				$FullName = "<a href=\"requests.php?action=view&amp;id=$RequestID\"><span dir=\"ltr\">$Title</span> [$Request[Year]]</a>";
 			} else {
-				$FullName = "<a href=\"requests.php?action=view&amp;id=$RequestID\">$Title</a>";
+				$FullName = "<a href=\"requests.php?action=view&amp;id=$RequestID\" dir=\"ltr\">$Title</a>";
 			}
 
 			if (!empty($Tags[$RequestID])) {
@@ -948,8 +951,6 @@ if (defined('LASTFM_API_KEY')) {
 }
 
 // --- Comments ---
-
-list($NumComments, $Page, $Thread, $LastRead) = Comments::load('artist', $ArtistID);
 $Pages = Format::get_pages($Page, $NumComments, TORRENT_COMMENTS_PER_PAGE, 9, '#comments');
 
 ?>

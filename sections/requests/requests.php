@@ -583,11 +583,11 @@ View::show_header($Title, 'requests');
 		if ($CategoryName === 'Music') {
 			$ArtistForm = Requests::get_artists($RequestID);
 			$ArtistLink = Artists::display_artists($ArtistForm, true, true);
-			$FullName = "$ArtistLink<a href=\"requests.php?action=view&amp;id=$RequestID\">$Request[Title] [$Request[Year]]</a>";
+			$FullName = "$ArtistLink<a href=\"requests.php?action=view&amp;id=$RequestID\"><span dir=\"ltr\">$Request[Title]</span> [$Request[Year]]</a>";
 		} elseif ($CategoryName === 'Audiobooks' || $CategoryName === 'Comedy') {
-			$FullName = "<a href=\"requests.php?action=view&amp;id=$RequestID\">$Request[Title] [$Request[Year]]</a>";
+			$FullName = "<a href=\"requests.php?action=view&amp;id=$RequestID\"><span dir=\"ltr\">$Request[Title]</span> [$Request[Year]]</a>";
 		} else {
-			$FullName = "<a href=\"requests.php?action=view&amp;id=$RequestID\">$Request[Title]</a>";
+			$FullName = "<a href=\"requests.php?action=view&amp;id=$RequestID\" dir=\"ltr\">$Request[Title]</a>";
 		}
 		$Tags = $Request['Tags'];
 ?>

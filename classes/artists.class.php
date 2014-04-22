@@ -202,7 +202,7 @@ class Artists {
 		if ($MakeLink && !$Escape) {
 			error('Invalid parameters to Artists::display_artist()');
 		} elseif ($MakeLink) {
-			return '<a href="artist.php?id='.$Artist['id'].'">'.display_str($Artist['name']).'</a>';
+			return '<a href="artist.php?id='.$Artist['id'].'" dir="ltr">'.display_str($Artist['name']).'</a>';
 		} elseif ($Escape) {
 			return display_str($Artist['name']);
 		} else {

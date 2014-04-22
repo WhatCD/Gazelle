@@ -34,9 +34,9 @@ if ($CategoryName === 'Music') {
 	$ArtistLink = Artists::display_artists($ArtistForm, true, true);
 
 	if ($IsFilled) {
-		$DisplayLink = "$ArtistLink<a href=\"torrents.php?torrentid=$Request[TorrentID]\">$Request[Title]</a> [$Request[Year]]";
+		$DisplayLink = "$ArtistLink<a href=\"torrents.php?torrentid=$Request[TorrentID]\" dir=\"ltr\">$Request[Title]</a> [$Request[Year]]";
 	} else {
-		$DisplayLink = $ArtistLink.$Request['Title']." [$Request[Year]]";
+		$DisplayLink = $ArtistLink.'<span dir="ltr">'.$Request['Title']."</span> [$Request[Year]]";
 	}
 	$FullName = $ArtistName.$Request['Title']." [$Request[Year]]";
 
@@ -58,9 +58,9 @@ if ($CategoryName === 'Music') {
 
 } elseif ($CategoryName === 'Audiobooks' || $CategoryName === 'Comedy') {
 	$FullName = "$Request[Title] [$Request[Year]]";
-	$DisplayLink = "$Request[Title] [$Request[Year]]";
+	$DisplayLink = "<span dir=\"ltr\">$Request[Title]</span> [$Request[Year]]";
 } else {
-	$FullName = $DisplayLink = $Request['Title'];
+	$FullName = $DisplayLink = "<span dir=\"ltr\">$Request[Title]</span>";
 }
 
 //Votes time
@@ -69,6 +69,9 @@ $VoteCount = count($RequestVotes['Voters']);
 $ProjectCanEdit = (check_perms('project_team') && !$IsFilled && ($Request['CategoryID'] === '0' || ($CategoryName === 'Music' && $Request['Year'] === '0')));
 $UserCanEdit = (!$IsFilled && $LoggedUser['ID'] === $Request['UserID'] && $VoteCount < 2);
 $CanEdit = ($UserCanEdit || $ProjectCanEdit || check_perms('site_moderate_requests'));
+
+// Comments (must be loaded before View::show_header so that subscriptions and quote notifications are handled properly)
+list($NumComments, $Page, $Thread, $LastRead) = Comments::load('requests', $RequestID);
 
 View::show_header("View request: $FullName", 'comments,requests,bbcode,subscriptions');
 
@@ -438,9 +441,6 @@ $google_url = 'https://www.google.com/search?tbm=shop&amp;q=' . "$encoded_artist
 <?=				Text::full_format($Request['Description']);?>
 			</div>
 		</div>
-<?
-list($NumComments, $Page, $Thread, $LastRead) = Comments::load('requests', $RequestID);
-?>
 	<div id="request_comments">
 		<div class="linkbox">
 			<a name="comments"></a>
