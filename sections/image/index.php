@@ -1,11 +1,8 @@
 <?
-// Main image proxy page
-// The image proxy does not use script_start.php. Its code, instead, resides entirely in image.php in the document root
-// Bear this in mind when you try to use script_start functions.
-
 if (!check_perms('site_proxy_images')) {
 	img_error('forbidden');
 }
+
 $URL = isset($_GET['i']) ? htmlspecialchars_decode($_GET['i']) : null;
 
 if (!extension_loaded('openssl') && strtoupper($URL[4]) == 'S') {
@@ -129,14 +126,9 @@ if (isset($_GET['type']) && isset($_GET['userid'])) {
 	}
 }
 
-/*
-TODO: solve this properly for photoshop output images which prepend shit to the image file. skip it or strip it
 if (!isset($FileType)) {
 	img_error('timeout');
 }
-*/
-if (isset($FileType)) {
-	header("Content-type: image/$FileType");
-}
+
+header("Content-type: image/$FileType");
 echo $Data;
-?>

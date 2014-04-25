@@ -60,7 +60,8 @@ if ($CategoryName === 'Music') {
 	$FullName = "$Request[Title] [$Request[Year]]";
 	$DisplayLink = "<span dir=\"ltr\">$Request[Title]</span> [$Request[Year]]";
 } else {
-	$FullName = $DisplayLink = "<span dir=\"ltr\">$Request[Title]</span>";
+	$FullName = $Request['Title'];
+	$DisplayLink = "<span dir=\"ltr\">$Request[Title]</span>";
 }
 
 //Votes time
