@@ -2,7 +2,7 @@
 if (empty($_GET['id']) || !is_number($_GET['id']) || (!empty($_GET['preview']) && !is_number($_GET['preview']))) {
 	error(404);
 }
-$UserID = $_GET['id'];
+$UserID = (int)$_GET['id'];
 $Preview = isset($_GET['preview']) ? $_GET['preview'] : 0;
 if ($UserID == $LoggedUser['ID']) {
 	$OwnProfile = true;
