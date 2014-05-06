@@ -545,7 +545,6 @@ if ($AdvancedSearch) {
 	$HideAdvanced = ' hidden';
 }
 
-
 View::show_header('Browse Torrents', 'browse');
 
 ?>

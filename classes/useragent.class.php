@@ -26,6 +26,7 @@ class UserAgent {
 		'chromeframe'		=> 'Chrome Frame',
 		'x-clock'			=> 'Chrome Frame',
 		'MSIE'				=> 'Internet Explorer',
+		'Trident'			=> 'Internet Explorer',
 		//Firefox versions
 		'Shiretoko'			=> 'Firefox (Experimental)',
 		'Minefield'			=> 'Firefox (Experimental)',
