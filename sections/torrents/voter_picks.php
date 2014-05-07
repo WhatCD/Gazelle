@@ -46,7 +46,11 @@ if (count($Top10) > 0) {
 
 	$Groups = Torrents::get_groups($Top10Groups, true, true, false);
 	$i = 0;
-	foreach ($Groups as $MatchGroupID => $MatchGroup) {
+	foreach ($Top10Groups as $MatchGroupID) {
+		if (!isset($Groups[$MatchGroupID])) {
+			continue;
+		}
+		$MatchGroup = $Groups[$MatchGroupID];
 		$i++;
 		$Str = Artists::display_artists($MatchGroup['ExtendedArtists']).'<a href="torrents.php?id='.$MatchGroupID.'">'.$MatchGroup['Name'].'</a>';
 ?>

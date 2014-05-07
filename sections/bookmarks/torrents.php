@@ -36,8 +36,12 @@ $TorrentTable = '';
 $NumGroups = 0;
 $ArtistCount = array();
 
-list(, $CollageDataList, $TorrentList) = Users::get_bookmarks($UserID);
-foreach ($TorrentList as $GroupID => $Group) {
+list($GroupIDs, $CollageDataList, $TorrentList) = Users::get_bookmarks($UserID);
+foreach ($GroupIDs as $GroupID) {
+	if (!isset($TorrentList[$GroupID])) {
+		continue;
+	}
+	$Group = $TorrentList[$GroupID];
 	extract(Torrents::array_group($Group));
 	list(, $Sort, $AddedTime) = array_values($CollageDataList[$GroupID]);
 

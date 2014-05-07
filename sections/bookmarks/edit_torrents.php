@@ -26,7 +26,7 @@ View::show_header('Organize Bookmarks', 'browse,jquery-ui,jquery.tablesorter,sor
 
 $EditType = isset($_GET['type']) ? $_GET['type'] : 'torrents';
 
-list(, $CollageDataList, $TorrentList) = Users::get_bookmarks($UserID);
+list(, $CollageDataList, $TorrentList) = Users::get_bookmarks($UserID); // TODO: $TorrentList might not have the correct order, use the $GroupIDs instead
 
 $TT = new MASS_USER_TORRENTS_TABLE_VIEW($TorrentList, $CollageDataList, $EditType, 'Organize Torrent Bookmarks');
 $TT->render_all();

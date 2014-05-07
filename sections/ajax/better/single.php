@@ -19,7 +19,11 @@ if (($GroupIDs = $Cache->get_value('better_single_groupids')) === false) {
 $Results = Torrents::get_groups(array_keys($GroupIDs));
 
 $JsonResults = array();
-foreach ($Results as $GroupID => $Group) {
+foreach ($GroupIDs as $GroupID) {
+	if (!isset($Results[$GroupID])) {
+		continue;
+	}
+	$Group = $Results[$GroupIDs];
 	extract(Torrents::array_group($Group));
 	$FlacID = $GroupIDs[$GroupID]['TorrentID'];
 

@@ -424,14 +424,14 @@ if ($Uploaded != $Cur['Uploaded'] && $Uploaded != $_POST['OldUploaded'] && (chec
 	|| (check_perms('users_edit_own_ratio') && $UserID == $LoggedUser['ID']))) {
 		$UpdateSet[] = "Uploaded = '$Uploaded'";
 		$EditSummary[] = "uploaded changed from ".Format::get_size($Cur['Uploaded']).' to '.Format::get_size($Uploaded);
-		$Cache->delete_value("users_stats_$UserID");
+		$Cache->delete_value("user_stats_$UserID");
 }
 
 if ($Downloaded != $Cur['Downloaded'] && $Downloaded != $_POST['OldDownloaded'] && (check_perms('users_edit_ratio')
 	|| (check_perms('users_edit_own_ratio') && $UserID == $LoggedUser['ID']))) {
 		$UpdateSet[] = "Downloaded = '$Downloaded'";
 		$EditSummary[] = "downloaded changed from ".Format::get_size($Cur['Downloaded']).' to '.Format::get_size($Downloaded);
-		$Cache->delete_value("users_stats_$UserID");
+		$Cache->delete_value("user_stats_$UserID");
 }
 
 if ($FLTokens != $Cur['FLTokens'] && (check_perms('users_edit_ratio') || (check_perms('users_edit_own_ratio') && $UserID == $LoggedUser['ID']))) {
@@ -714,8 +714,8 @@ if ($MergeStatsFrom && check_perms('users_edit_ratio')) {
 		$UpdateSet[] = "Uploaded = Uploaded + '$MergeUploaded'";
 		$UpdateSet[] = "Downloaded = Downloaded + '$MergeDownloaded'";
 		$EditSummary[] = 'stats merged from '.site_url()."user.php?id=$MergeID ($MergeStatsFrom) (previous stats: Uploaded: ".Format::get_size($Cur['Uploaded']).', Downloaded: '.Format::get_size($Cur['Downloaded']).', Ratio: '.Format::get_ratio($Cur['Uploaded'], $Cur['Downloaded']).')';
-		$Cache->delete_value("users_stats_$UserID");
-		$Cache->delete_value("users_stats_$MergeID");
+		$Cache->delete_value("user_stats_$UserID");
+		$Cache->delete_value("user_stats_$MergeID");
 	}
 }
 

@@ -97,7 +97,11 @@ if (!$NumResults) {
 		$Artists = Artists::get_artists($GroupIDs);
 		$Number = 0;
 
-		foreach ($TorrentList as $GroupID => $Group) {
+		foreach ($GroupIDs as $GroupID) {
+			if (!isset($TorrentList[$GroupID])) {
+				continue;
+			}
+			$Group = $TorrentList[$GroupID];
 			extract(Torrents::array_group($Group));
 
 			$DisplayName = '';

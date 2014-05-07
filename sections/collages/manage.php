@@ -80,7 +80,11 @@ View::show_header("Manage collage: $Name", 'jquery-ui,jquery.tablesorter,sort');
 <?
 
 	$Number = 0;
-	foreach ($TorrentList as $GroupID => $Group) {
+	foreach ($GroupIDs as $GroupID) {
+		if (!isset($TorrentList[$GroupID])) {
+			continue;
+		}
+		$Group = $TorrentList[$GroupID];
 		extract(Torrents::array_group($Group));
 		list(, $UserID, $Username, $Sort, $CatNum) = array_values($CollageDataList[$GroupID]);
 

@@ -91,7 +91,7 @@ switch ($_GET['feed']) {
 				ORDER BY Time DESC
 				LIMIT 20");
 			$Blog = $DB->to_array();
-			$Cache->cache_value('Blog', $Blog, 1209600);
+			$Cache->cache_value('blog', $Blog, 1209600);
 		}
 		foreach ($Blog as $BlogItem) {
 			list($BlogID, $Author, $AuthorID, $Title, $Body, $BlogTime, $ThreadID) = $BlogItem;

@@ -45,7 +45,7 @@ class Requests {
 			WHERE ID = $RequestID");
 		G::$DB->set_query_id($QueryID);
 
-		G::$Cache->delete_value("requests_$RequestID");
+		G::$Cache->delete_value("request_$RequestID");
 	}
 
 

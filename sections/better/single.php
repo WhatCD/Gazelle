@@ -29,7 +29,11 @@ View::show_header('Single seeder FLACs');
 			<td>Torrent</td>
 		</tr>
 <?
-foreach ($Results as $GroupID => $Group) {
+foreach ($GroupIDs as $GroupID) {
+	if (!isset($Results[$GroupID])) {
+		continue;
+	}
+	$Group = $Results[$GroupID];
 	extract(Torrents::array_group($Group));
 	$TorrentTags = new Tags($TagList);
 
