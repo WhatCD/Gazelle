@@ -1,10 +1,10 @@
 <?
-if (($GroupIDs = $Cache->get_value('better_single_groupids')) === false) {
+if (($Results = $Cache->get_value('better_single_groupids')) === false) {
 	$DB->query("
 		SELECT
 			t.ID AS TorrentID,
 			t.GroupID AS GroupID
-		FROM xbt_files_users AS	x
+		FROM xbt_files_users AS x
 			JOIN torrents AS t ON t.ID=x.fid
 		WHERE t.Format='FLAC'
 		GROUP BY x.fid
@@ -12,11 +12,11 @@ if (($GroupIDs = $Cache->get_value('better_single_groupids')) === false) {
 		ORDER BY t.LogScore DESC, t.Time ASC
 		LIMIT 30");
 
-	$GroupIDs = $DB->to_array('GroupID');
-	$Cache->cache_value('better_single_groupids', $GroupIDs, 30 * 60);
+	$Results = $DB->to_pair('GroupID', 'TorrentID', false);
+	$Cache->cache_value('better_single_groupids', $Results, 30 * 60);
 }
 
-$Results = Torrents::get_groups(array_keys($GroupIDs));
+$Groups = Torrents::get_groups(array_keys($Results));
 
 View::show_header('Single seeder FLACs');
 ?>
@@ -29,11 +29,11 @@ View::show_header('Single seeder FLACs');
 			<td>Torrent</td>
 		</tr>
 <?
-foreach ($GroupIDs as $GroupID) {
-	if (!isset($Results[$GroupID])) {
+foreach ($Results as $GroupID => $FlacID) {
+	if (!isset($Groups[$GroupID])) {
 		continue;
 	}
-	$Group = $Results[$GroupID];
+	$Group = $Groups[$GroupID];
 	extract(Torrents::array_group($Group));
 	$TorrentTags = new Tags($TagList);
 
@@ -44,7 +44,6 @@ foreach ($GroupIDs as $GroupID) {
 	} else {
 		$DisplayName = '';
 	}
-	$FlacID = $GroupIDs[$GroupID]['TorrentID'];
 
 	$DisplayName .= "<a href=\"torrents.php?id=$GroupID&amp;torrentid=$FlacID\" class=\"tooltip\" title=\"View torrent\" dir=\"ltr\">$GroupName</a>";
 	if ($GroupYear > 0) {

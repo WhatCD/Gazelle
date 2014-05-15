@@ -83,7 +83,7 @@ class CACHE extends Memcache {
 		if (!$this->set($Key, $Value, 0, $Duration)) {
 			trigger_error("Cache insert failed for key $Key");
 		}
-		if (array_key_exists($Key, $this->CacheHits)) {
+		if ($this->InternalCache && array_key_exists($Key, $this->CacheHits)) {
 			$this->CacheHits[$Key] = $Value;
 		}
 		$this->Time += (microtime(true) - $StartTime) * 1000;
@@ -100,7 +100,7 @@ class CACHE extends Memcache {
 	public function replace_value($Key, $Value, $Duration = 2592000) {
 		$StartTime = microtime(true);
 		$this->replace($Key, $Value, false, $Duration);
-		if (array_key_exists($Key, $this->CacheHits)) {
+		if ($this->InternalCache && array_key_exists($Key, $this->CacheHits)) {
 			$this->CacheHits[$Key] = $Value;
 		}
 		$this->Time += (microtime(true) - $StartTime) * 1000;

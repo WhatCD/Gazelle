@@ -828,6 +828,7 @@ CREATE TABLE `sphinx_delta` (
   `FileList` mediumtext,
   `Description` text,
   `VoteScore` float NOT NULL DEFAULT '0',
+  `LastChanged` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`ID`),
   KEY `GroupID` (`GroupID`)
 ) ENGINE=MyISAM CHARSET utf8;

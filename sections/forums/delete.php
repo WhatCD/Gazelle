@@ -28,6 +28,10 @@ $DB->query("
 			)
 	GROUP BY t.ID");
 list($TopicID, $ForumID, $Pages, $Page, $StickyPostID) = $DB->next_record();
+if (!$TopicID) {
+	// Post is deleted or thread doesn't exist
+	error(0); // This is evil, but the ajax call doesn't check the response
+}
 
 // $Pages = number of pages in the thread
 // $Page = which page the post is on

@@ -1275,6 +1275,7 @@ if (!$NoDaily && $Day != $NextDay || $_GET['runday']) {
 					($HistoryID, $i, $TorrentID, '" . db_string($TitleString) . "', '" . db_string($TagString) . "')");
 			$i++;
 		} //foreach ($Top10 as $Torrent)
+
 		// Send warnings to uploaders of torrents that will be deleted this week
 		$DB->query("
 			SELECT
