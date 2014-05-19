@@ -322,6 +322,10 @@ if ($Hour != $NextHour || $_GET['runhour'] || isset($argv[2])) {
 		$UserIDs = $DB->collect('ID');
 
 		if (count($UserIDs) > 0) {
+			$DB->query("
+				UPDATE users_main
+				SET PermissionID = ".$L['To']."
+				WHERE ID IN(".implode(',', $UserIDs).')');
 			foreach ($UserIDs as $UserID) {
 				/*$Cache->begin_transaction("user_info_$UserID");
 				$Cache->update_row(false, array('PermissionID' => $L['To']));
@@ -336,10 +340,6 @@ if ($Hour != $NextHour || $_GET['runhour'] || isset($argv[2])) {
 					WHERE UserID = $UserID");
 				Misc::send_pm($UserID, 0, 'You have been promoted to '.Users::make_class_string($L['To']), 'Congratulations on your promotion to '.Users::make_class_string($L['To'])."!\n\nTo read more about ".SITE_NAME."'s user classes, read [url=".site_url()."wiki.php?action=article&amp;name=userclasses]this wiki article[/url].");
 			}
-			$DB->query("
-				UPDATE users_main
-				SET PermissionID = ".$L['To']."
-				WHERE ID IN(".implode(',', $UserIDs).')');
 		}
 
 		// Demote users with less than the required uploads
@@ -366,6 +366,10 @@ if ($Hour != $NextHour || $_GET['runhour'] || isset($argv[2])) {
 		$UserIDs = $DB->collect('ID');
 
 		if (count($UserIDs) > 0) {
+			$DB->query("
+				UPDATE users_main
+				SET PermissionID = ".$L['From']."
+				WHERE ID IN(".implode(',', $UserIDs).')');
 			foreach ($UserIDs as $UserID) {
 				/*$Cache->begin_transaction("user_info_$UserID");
 				$Cache->update_row(false, array('PermissionID' => $L['From']));
@@ -380,10 +384,6 @@ if ($Hour != $NextHour || $_GET['runhour'] || isset($argv[2])) {
 					WHERE UserID = $UserID");
 				Misc::send_pm($UserID, 0, 'You have been demoted to '.Users::make_class_string($L['From']), "You now only qualify for the \"".Users::make_class_string($L['From'])."\" user class.\n\nTo read more about ".SITE_NAME."'s user classes, read [url=".site_url()."wiki.php?action=article&amp;name=userclasses]this wiki article[/url].");
 			}
-			$DB->query("
-				UPDATE users_main
-				SET PermissionID = ".$L['From']."
-				WHERE ID IN(".implode(',', $UserIDs).')');
 		}
 	}
 
@@ -470,9 +470,9 @@ if ($Hour != $NextHour || $_GET['runhour'] || isset($argv[2])) {
 		FROM users_info
 		WHERE Warned < '$sqltime'");
 	while (list($UserID) = $DB->next_record()) {
-			$Cache->begin_transaction("user_info_$UserID");
-			$Cache->update_row(false, array('Warned' => '0000-00-00 00:00:00'));
-			$Cache->commit_transaction(2592000);
+		$Cache->begin_transaction("user_info_$UserID");
+		$Cache->update_row(false, array('Warned' => '0000-00-00 00:00:00'));
+		$Cache->commit_transaction(2592000);
 	}
 
 	$DB->query("
@@ -827,6 +827,7 @@ if (!$NoDaily && $Day != $NextDay || $_GET['runday']) {
 		$Body = "Hi $Username,\n\nIt has been almost 4 months since you used your account at ".site_url().". This is an automated email to inform you that your account will be disabled in 10 days if you do not sign in.";
 		Misc::send_email($Email, 'Your '.SITE_NAME.' account is about to be disabled', $Body);
 	}
+
 	$DB->query("
 		SELECT um.ID
 		FROM users_info AS ui
@@ -839,7 +840,6 @@ if (!$NoDaily && $Day != $NextDay || $_GET['runday']) {
 			AND um.Enabled != '2'
 			AND ul.UserID IS NULL
 		GROUP BY um.ID");
-
 	if ($DB->has_results()) {
 		Tools::disable_users($DB->collect('ID'), 'Disabled for inactivity.', 3);
 	}
@@ -878,22 +878,15 @@ if (!$NoDaily && $Day != $NextDay || $_GET['runday']) {
 
 	//------------- Demote users --------------------------------------------//
 	sleep(10);
-	$DB->query('
+	$Query = $DB->query('
 		SELECT ID
 		FROM users_main
 		WHERE PermissionID IN('.POWER.', '.ELITE.', '.TORRENT_MASTER.')
 			AND Uploaded / Downloaded < 0.95
 			OR PermissionID IN('.POWER.', '.ELITE.', '.TORRENT_MASTER.')
 			AND Uploaded < 25 * 1024 * 1024 * 1024');
-
 	echo "demoted 1\n";
 
-	while (list($UserID) = $DB->next_record()) {
-		$Cache->begin_transaction("user_info_$UserID");
-		$Cache->update_row(false, array('PermissionID' => MEMBER));
-		$Cache->commit_transaction(2592000);
-		Misc::send_pm($UserID, 0, 'You have been demoted to '.Users::make_class_string(MEMBER), "You now only meet the requirements for the \"".Users::make_class_string(MEMBER)."\" user class.\n\nTo read more about ".SITE_NAME."'s user classes, read [url=".site_url()."wiki.php?action=article&amp;name=userclasses]this wiki article[/url].");
-	}
 	$DB->query('
 		UPDATE users_main
 		SET PermissionID = '.MEMBER.'
@@ -901,25 +894,37 @@ if (!$NoDaily && $Day != $NextDay || $_GET['runday']) {
 			AND Uploaded / Downloaded < 0.95
 			OR PermissionID IN('.POWER.', '.ELITE.', '.TORRENT_MASTER.')
 			AND Uploaded < 25 * 1024 * 1024 * 1024');
+	$DB->set_query_id($Query);
+	while (list($UserID) = $DB->next_record()) {
+		/*$Cache->begin_transaction("user_info_$UserID");
+		$Cache->update_row(false, array('PermissionID' => MEMBER));
+		$Cache->commit_transaction(2592000);*/
+		$Cache->delete_value("user_info_$UserID");
+		$Cache->delete_value("user_info_heavy_$UserID");
+		Misc::send_pm($UserID, 0, 'You have been demoted to '.Users::make_class_string(MEMBER), "You now only meet the requirements for the \"".Users::make_class_string(MEMBER)."\" user class.\n\nTo read more about ".SITE_NAME."'s user classes, read [url=".site_url()."wiki.php?action=article&amp;name=userclasses]this wiki article[/url].");
+	}
 	echo "demoted 2\n";
 
-	$DB->query('
+	$Query = $DB->query('
 		SELECT ID
 		FROM users_main
 		WHERE PermissionID IN('.MEMBER.', '.POWER.', '.ELITE.', '.TORRENT_MASTER.')
 			AND Uploaded / Downloaded < 0.65');
 	echo "demoted 3\n";
-	while (list($UserID) = $DB->next_record()) {
-		$Cache->begin_transaction("user_info_$UserID");
-		$Cache->update_row(false, array('PermissionID' => USER));
-		$Cache->commit_transaction(2592000);
-		Misc::send_pm($UserID, 0, 'You have been demoted to '.Users::make_class_string(USER), "You now only meet the requirements for the \"".Users::make_class_string(USER)."\" user class.\n\nTo read more about ".SITE_NAME."'s user classes, read [url=".site_url()."wiki.php?action=article&amp;name=userclasses]this wiki article[/url].");
-	}
 	$DB->query('
 		UPDATE users_main
 		SET PermissionID = '.USER.'
 		WHERE PermissionID IN('.MEMBER.', '.POWER.', '.ELITE.', '.TORRENT_MASTER.')
 			AND Uploaded / Downloaded < 0.65');
+	$DB->set_query_id($Query);
+	while (list($UserID) = $DB->next_record()) {
+		/*$Cache->begin_transaction("user_info_$UserID");
+		$Cache->update_row(false, array('PermissionID' => USER));
+		$Cache->commit_transaction(2592000);*/
+		$Cache->delete_value("user_info_$UserID");
+		$Cache->delete_value("user_info_heavy_$UserID");
+		Misc::send_pm($UserID, 0, 'You have been demoted to '.Users::make_class_string(USER), "You now only meet the requirements for the \"".Users::make_class_string(USER)."\" user class.\n\nTo read more about ".SITE_NAME."'s user classes, read [url=".site_url()."wiki.php?action=article&amp;name=userclasses]this wiki article[/url].");
+	}
 	echo "demoted 4\n";
 
 	//------------- Lock old threads ----------------------------------------//
