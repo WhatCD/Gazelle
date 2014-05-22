@@ -830,7 +830,8 @@ CREATE TABLE `sphinx_delta` (
   `VoteScore` float NOT NULL DEFAULT '0',
   `LastChanged` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`ID`),
-  KEY `GroupID` (`GroupID`)
+  KEY `GroupID` (`GroupID`),
+  KEY `Size` (`Size`)
 ) ENGINE=MyISAM CHARSET utf8;
 
 CREATE TABLE `sphinx_hash` (
