@@ -141,24 +141,20 @@ class Format {
 	 * Gets the query string of the current page, minus the parameters in $Exclude
 	 *
 	 * @param array $Exclude Query string parameters to leave out, or blank to include all parameters.
-	 * @return An HTML sanatized query string
+	 * @param bool $Escape Whether to return a string prepared for HTML output
+	 * @return An optionally HTML sanatized query string
 	 */
-	public static function get_url($Exclude = false) {
+	public static function get_url($Exclude = false, $Escape = true) {
 		if ($Exclude !== false) {
-			$QueryItems = array();
+			$Separator = $Escape ? '&amp;' : '&';
+			$QueryItems = NULL;
 			parse_str($_SERVER['QUERY_STRING'], $QueryItems);
-
-			foreach ($QueryItems AS $Key => $Val) {
-				if (!in_array(strtolower($Key), $Exclude)) {
-					$Query[$Key] = $Val;
-				}
+			foreach ($Exclude as $Key) {
+				unset($QueryItems[$Key]);
 			}
-			if (empty($Query)) {
-				return;
-			}
-			return display_str(http_build_query($Query));
+			return http_build_query($QueryItems, '', $Separator);
 		} else {
-			return display_str($_SERVER['QUERY_STRING']);
+			return $Escape ? display_str($_SERVER['QUERY_STRING']) : $_SERVER['QUERY_STRING'];
 		}
 	}
 
