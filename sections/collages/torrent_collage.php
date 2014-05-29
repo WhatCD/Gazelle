@@ -116,9 +116,13 @@ foreach ($GroupIDs as $GroupID) {
 				<td colspan="5">
 					<strong><?=$DisplayName?></strong>
 <?		if (Bookmarks::has_bookmarked('torrent', $GroupID)) { ?>
+					<span class="remove_bookmark float_right">
 						<a style="float: right;" href="#" id="bookmarklink_torrent_<?=$GroupID?>" class="remove_bookmark brackets" onclick="Unbookmark('torrent', <?=$GroupID?>, 'Bookmark'); return false;">Remove bookmark</a>
+					</span>
 <?		} else { ?>
+					<span class="add_bookmark float_right">
 						<a style="float: right;" href="#" id="bookmarklink_torrent_<?=$GroupID?>" class="add_bookmark brackets" onclick="Bookmark('torrent', <?=$GroupID?>, 'Remove bookmark'); return false;">Bookmark</a>
+					</span>
 <?
 		}
 		Votes::vote_link($GroupID, $UserVote);

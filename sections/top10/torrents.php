@@ -554,15 +554,17 @@ function generate_torrent_table($Caption, $Tag, $Details, $Limit) {
 				<span><a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download" class="brackets tooltip">DL</a></span>
 
 				<strong><?=$DisplayName?></strong> <?=$ExtraInfo?><? if ($Reported) { ?> - <strong class="torrent_label tl_reported">Reported</strong><? } ?>
-				<span class="bookmark" style="float: right;">
 <?
 		if ($IsBookmarked) {
 ?>
-					<a href="#" id="bookmarklink_torrent_<?=$GroupID?>" class="remove_bookmark brackets" onclick="Unbookmark('torrent', <?=$GroupID?>, 'Bookmark'); return false;">Remove bookmark</a>
-<?		} else { ?>
-					<a href="#" id="bookmarklink_torrent_<?=$GroupID?>" class="add_bookmark brackets" onclick="Bookmark('torrent', <?=$GroupID?>, 'Remove bookmark'); return false;">Bookmark</a>
-<?		} ?>
+				<span class="remove_bookmark float_right">
+					<a href="#" id="bookmarklink_torrent_<?=$GroupID?>" class="bookmarklink_torrent_<?=$GroupID?> brackets" onclick="Unbookmark('torrent', <?=$GroupID?>, 'Bookmark'); return false;">Remove bookmark</a>
 				</span>
+<?		} else { ?>
+				<span class="add_bookmark float_right">
+					<a href="#" id="bookmarklink_torrent_<?=$GroupID?>" class="bookmarklink_torrent_<?=$GroupID?> brackets" onclick="Bookmark('torrent', <?=$GroupID?>, 'Remove bookmark'); return false;">Bookmark</a>
+				</span>
+<?		} ?>
 				<div class="tags"><?=$TorrentTags->format()?></div>
 			</div>
 		</td>

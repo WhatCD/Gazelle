@@ -399,9 +399,13 @@ foreach ($Importances as $Group) {
 					<div class="group_info clear">
 						<strong><?=$DisplayName?></strong>
 <?	if (Bookmarks::has_bookmarked('torrent', $GroupID)) { ?>
-						<a style="float: right;" href="#" id="bookmarklink_torrent_<?=$GroupID?>" class="remove_bookmark brackets" onclick="Unbookmark('torrent', <?=$GroupID?>, 'Bookmark'); return false;">Remove bookmark</a>
+						<span class="remove_bookmark float_right">
+							<a style="float: right;" href="#" id="bookmarklink_torrent_<?=$GroupID?>" class="brackets" onclick="Unbookmark('torrent', <?=$GroupID?>, 'Bookmark'); return false;">Remove bookmark</a>
+						</span>
 <?	} else { ?>
-						<a style="float: right;" href="#" id="bookmarklink_torrent_<?=$GroupID?>" class="add_bookmark brackets" onclick="Bookmark('torrent', <?=$GroupID?>, 'Remove bookmark'); return false;">Bookmark</a>
+						<span class="add_bookmark float_right">
+							<a style="float: right;" href="#" id="bookmarklink_torrent_<?=$GroupID?>" class="brackets" onclick="Bookmark('torrent', <?=$GroupID?>, 'Remove bookmark'); return false;">Bookmark</a>
+						</span>
 <?	}
 	$VoteType = isset($UserVotes[$GroupID]['Type']) ? $UserVotes[$GroupID]['Type'] : '';
 	Votes::vote_link($GroupID, $VoteType);

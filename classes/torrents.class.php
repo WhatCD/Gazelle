@@ -523,6 +523,7 @@ class Torrents {
 
 		G::$Cache->delete_value("torrents_details_$GroupID");
 		G::$Cache->delete_value("torrent_group_$GroupID");
+		G::$Cache->delete_value("torrent_group_light_$GroupID");
 
 		$ArtistInfo = Artists::get_artist($GroupID);
 		foreach ($ArtistInfo as $Importances => $Importance) {

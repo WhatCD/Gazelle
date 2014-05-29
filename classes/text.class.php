@@ -138,6 +138,8 @@ class Text {
 	 * @return string
 	 */
 	public static function full_format($Str, $OutputTOC = true, $Min = 3) {
+		global $Debug;
+		$Debug->set_flag('BBCode start');
 		$Str = display_str($Str);
 		self::$Headlines = array();
 
@@ -166,6 +168,7 @@ class Text {
 			$HTML = self::parse_toc($Min) . $HTML;
 		}
 
+		$Debug->set_flag('BBCode end');
 		return $HTML;
 	}
 
@@ -277,6 +280,7 @@ class Text {
 		$Len = strlen($Str);
 		$Array = array();
 		$ArrayPos = 0;
+		$StrLC = strtolower($Str);
 
 		while ($i < $Len) {
 			$Block = '';
@@ -393,7 +397,7 @@ class Text {
 				// Every time we find an internal open tag of the same type, search for the next close tag
 				// (as the first close tag won't do - it's been opened again)
 				do {
-					$CloseTag = stripos($Str, "[/$TagName]", $CloseTag + 1);
+					$CloseTag = strpos($StrLC, "[/$TagName]", $CloseTag + 1);
 					if ($CloseTag === false) {
 						$CloseTag = $Len;
 						break;

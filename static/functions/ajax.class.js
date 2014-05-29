@@ -116,26 +116,15 @@ var ajax = {
 };
 //Bookmarks
 function Bookmark(type, id, newName) {
-	if (window.location.pathname.indexOf('top10.php') != -1 || window.location.search.indexOf('?action=notify') != -1) {
-		var oldName = $('#bookmarklink_' + type + '_' + id).raw().innerHTML;
-		ajax.get("bookmarks.php?action=add&type=" + type + "&auth=" + authkey + "&id=" + id, function() {
-			var bookmarklinks = $('#bookmarklink_' + type + '_' + id);
-			for (var i = 0; i < bookmarklinks.results(); i++) {
-				$(bookmarklinks[i].parentNode.parentNode.parentNode).add_class('bookmarked');
-				bookmarklinks[i].onclick = function() { Unbookmark(type, id, oldName); return false; };
-				bookmarklinks[i].innerHTML = newName;
-				bookmarklinks[i].title = 'Remove bookmark';
-			}
+	var bmLinks = $('#bookmarklink_' + type + '_' + id + ', .bookmarklink_' + type + '_' + id);
+	var oldName = bmLinks.html();
+	ajax.get("bookmarks.php?action=add&type=" + type + "&auth=" + authkey + "&id=" + id, function() {
+		bmLinks.parent('.remove_bookmark, .add_bookmark').toggleClass('add_bookmark remove_bookmark');
+		bmLinks.html(newName).attr('title', 'Remove bookmark').removeAttr('onclick').off('click').click(function() {
+			Unbookmark(type, id, oldName);
+			return false;
 		});
-	} else {
-		var lnk = $('#bookmarklink_' + type + '_' + id).raw();
-		var oldName = lnk.innerHTML;
-		ajax.get("bookmarks.php?action=add&type=" + type + "&auth=" + authkey + "&id=" + id, function() {
-			lnk.onclick = function() { Unbookmark(type, id, oldName); return false; };
-			lnk.innerHTML = newName;
-			lnk.title = 'Remove bookmark';
-		});
-	}
+	});
 }
 
 function Unbookmark(type, id, newName) {
@@ -145,24 +134,15 @@ function Unbookmark(type, id, newName) {
 			$('.groupid_' + id).remove();
 			$('.bookmark_' + id).remove();
 		});
-	} else if (window.location.pathname.indexOf('top10.php') != -1 || window.location.search.indexOf('?action=notify') != -1) {
-		var oldName = $('#bookmarklink_' + type + '_' + id).raw().innerHTML;
-		ajax.get("bookmarks.php?action=remove&type=" + type + "&auth=" + authkey + "&id=" + id, function() {
-			var bookmarklinks = $('#bookmarklink_' + type + '_' + id);
-			for (var i = 0; i < bookmarklinks.results(); i++) {
-				$(bookmarklinks[i].parentNode.parentNode.parentNode).remove_class('bookmarked');
-				bookmarklinks[i].onclick = function() { Bookmark(type, id, oldName); return false; };
-				bookmarklinks[i].innerHTML = newName;
-				bookmarklinks[i].title = 'Add bookmark';
-			}
-		});
 	} else {
-		var lnk = $('#bookmarklink_' + type + '_' + id).raw();
-		var oldName = lnk.innerHTML;
+		var bmLinks = $('#bookmarklink_' + type + '_' + id + ', .bookmarklink_' + type + '_' + id);
+		var oldName = bmLinks.html();
 		ajax.get("bookmarks.php?action=remove&type=" + type + "&auth=" + authkey + "&id=" + id, function() {
-			lnk.onclick = function() { Bookmark(type, id, oldName); return false; };
-			lnk.innerHTML = newName;
-			lnk.title = 'Add bookmark';
+			bmLinks.parent('.remove_bookmark, .add_bookmark').toggleClass('add_bookmark remove_bookmark');
+			bmLinks.html(newName).attr('title', 'Add bookmark').removeAttr('onclick').off('click').click(function() {
+				Bookmark(type, id, oldName);
+				return false;
+			});
 		});
 	}
 }

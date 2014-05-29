@@ -219,9 +219,13 @@ foreach ($TopVotes as $GroupID => $Group) {
 
 							<strong><?=$DisplayName?></strong> <!--<?Votes::vote_link($GroupID, $UserVote);?>-->
 <?		if ($IsBookmarked) { ?>
-							<span class="bookmark" style="float: right;"><a href="#" class="bookmarklink_torrent_<?=$GroupID?> brackets remove_bookmark" onclick="Unbookmark('torrent', <?=$GroupID?>, 'Bookmark'); return false;">Remove bookmark</a></span>
+							<span class="remove_bookmark float_right">
+								<a href="#" class="bookmarklink_torrent_<?=$GroupID?> brackets" onclick="Unbookmark('torrent', <?=$GroupID?>, 'Bookmark'); return false;">Remove bookmark</a>
+							</span>
 <?		} else { ?>
-							<span class="bookmark" style="float: right;"><a href="#" class="bookmarklink_torrent_<?=$GroupID?> brackets add_bookmark" onclick="Bookmark('torrent', <?=$GroupID?>, 'Remove bookmark'); return false;">Bookmark</a></span>
+							<span class="add_bookmark float_right">
+								<a href="#" class="bookmarklink_torrent_<?=$GroupID?> brackets" onclick="Bookmark('torrent', <?=$GroupID?>, 'Remove bookmark'); return false;">Bookmark</a>
+							</span>
 <?		} ?>
 							<div class="tags"><?=$TorrentTags->format()?></div>
 

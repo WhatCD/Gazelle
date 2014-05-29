@@ -314,11 +314,13 @@ if (empty($Results)) {
 					<? if ($Result['UnRead']) {
 					echo '<strong class="new">New!</strong>';
 					} ?>
-					<span class="bookmark" style="float: right;">
 <?				if (Bookmarks::has_bookmarked('torrent', $GroupID)) { ?>
-						<a href="#" id="bookmarklink_torrent_<?=$GroupID?>" class="remove_bookmark" onclick="Unbookmark('torrent', <?=$GroupID?>, 'Bookmark'); return false;">Remove bookmark</a>
+					<span class="remove_bookmark float_right">
+						<a href="#" id="bookmarklink_torrent_<?=$GroupID?>" class="brackets" onclick="Unbookmark('torrent', <?=$GroupID?>, 'Bookmark'); return false;">Remove bookmark</a>
+					</span>
 <?				} else { ?>
-						<a href="#" id="bookmarklink_torrent_<?=$GroupID?>" class="add_bookmark" onclick="Bookmark('torrent', <?=$GroupID?>, 'Remove bookmark'); return false;">Bookmark</a>
+					<span class="add_bookmark float_right">
+						<a href="#" id="bookmarklink_torrent_<?=$GroupID?>" class="brackets" onclick="Bookmark('torrent', <?=$GroupID?>, 'Remove bookmark'); return false;">Bookmark</a>
 <?				} ?>
 					</span>
 				</div>
