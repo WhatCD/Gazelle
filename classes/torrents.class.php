@@ -2,6 +2,7 @@
 class Torrents {
 	const FILELIST_DELIM = 0xF7; // Hex for &divide; Must be the same as phrase_boundary in sphinx.conf!
 	const SNATCHED_UPDATE_INTERVAL = 3600; // How often we want to update users' snatch lists
+	const SNATCHED_UPDATE_AFTERDL = 300; // How long after a torrent download we want to update a user's snatch lists
 
 	/**
 	 * Function to get data and torrents for an array of GroupIDs. Order of keys doesn't matter
@@ -807,9 +808,14 @@ class Torrents {
 			&& G::$LoggedUser['CanLeech'] == '1');
 	}
 
-
-	public static function has_snatched($TorrentID, $AllUsers = false) {
-		if (!$AllUsers && (empty(G::$LoggedUser) || !G::$LoggedUser['ShowSnatched'])) {
+	/**
+	 * Build snatchlists and check if a torrent has been snatched
+	 * if a user has the 'ShowSnatched' option enabled
+	 * @param int $TorrentID
+	 * @return bool
+	 */
+	public static function has_snatched($TorrentID) {
+		if (empty(G::$LoggedUser) || !G::$LoggedUser['ShowSnatched']) {
 			return false;
 		}
 
@@ -817,11 +823,16 @@ class Torrents {
 		$Buckets = 64;
 		$LastBucket = $Buckets - 1;
 		$BucketID = $TorrentID & $LastBucket;
-		static $SnatchedTorrents = array(), $LastUpdate = 0;
+		static $SnatchedTorrents = array(), $UpdateTime = array();
 
 		if (empty($SnatchedTorrents)) {
 			$SnatchedTorrents = array_fill(0, $Buckets, false);
-			$LastUpdate = G::$Cache->get_value("users_snatched_{$UserID}_lastupdate") ?: 0;
+			$UpdateTime = G::$Cache->get_value("users_snatched_{$UserID}_time");
+			if ($UpdateTime === false) {
+				$UpdateTime = array(
+					'last' => 0,
+					'next' => 0);
+			}
 		} elseif (isset($SnatchedTorrents[$BucketID][$TorrentID])) {
 			return true;
 		}
@@ -832,16 +843,16 @@ class Torrents {
 			$CurTime = time();
 			// This bucket hasn't been checked before
 			$CurSnatchedTorrents = G::$Cache->get_value("users_snatched_{$UserID}_$BucketID", true);
-			if ($CurSnatchedTorrents === false || $CurTime - $LastUpdate > self::SNATCHED_UPDATE_INTERVAL) {
+			if ($CurSnatchedTorrents === false || $CurTime > $UpdateTime['next']) {
 				$Updated = array();
 				$QueryID = G::$DB->get_query_id();
-				if ($CurSnatchedTorrents === false || $LastUpdate == 0) {
+				if ($CurSnatchedTorrents === false || $UpdateTime['last'] == 0) {
 					for ($i = 0; $i < $Buckets; $i++) {
 						$SnatchedTorrents[$i] = array();
 					}
 					// Not found in cache. Since we don't have a suitable index, it's faster to update everything
 					G::$DB->query("
-						SELECT fid, tstamp AS TorrentID
+						SELECT fid
 						FROM xbt_snatched
 						WHERE uid = '$UserID'");
 					while (list($ID) = G::$DB->next_record(MYSQLI_NUM, false)) {
@@ -857,7 +868,7 @@ class Torrents {
 						SELECT fid
 						FROM xbt_snatched
 						WHERE uid = '$UserID'
-							AND tstamp >= $LastUpdate");
+							AND tstamp >= $UpdateTime[last]");
 					while (list($ID) = G::$DB->next_record(MYSQLI_NUM, false)) {
 						$CurBucketID = $ID & $LastBucket;
 						if ($SnatchedTorrents[$CurBucketID] === false) {
@@ -876,11 +887,30 @@ class Torrents {
 						G::$Cache->cache_value("users_snatched_{$UserID}_$i", $SnatchedTorrents[$i], 0);
 					}
 				}
-				G::$Cache->cache_value("users_snatched_{$UserID}_lastupdate", $CurTime, 0);
-				$LastUpdate = $CurTime;
+				$UpdateTime['last'] = $CurTime;
+				$UpdateTime['next'] = $CurTime + self::SNATCHED_UPDATE_INTERVAL;
+				G::$Cache->cache_value("users_snatched_{$UserID}_time", $UpdateTime, 0);
 			}
 		}
 		return isset($CurSnatchedTorrents[$TorrentID]);
+	}
+
+	/**
+	 * Change the schedule for when the next update to a user's cached snatch list should be performed.
+	 * By default, the change will only be made if the new update would happen sooner than the current
+	 * @param int $Time Seconds until the next update
+	 * @param bool $Force Whether to accept changes that would push back the update
+	 */
+	public static function set_snatch_update_time($UserID, $Time, $Force = false) {
+		if (!$UpdateTime = G::$Cache->get_value("users_snatched_{$UserID}_time")) {
+			return;
+		}
+		$NextTime = time() + $Time;
+		if ($Force || $NextTime < $UpdateTime['next']) {
+			// Skip if the change would delay the next update
+			$UpdateTime['next'] = $NextTime;
+			G::$Cache->cache_value("users_snatched_{$UserID}_time", $UpdateTime, 0);
+		}
 	}
 
 	// Some constants for self::display_string's $Mode parameter
