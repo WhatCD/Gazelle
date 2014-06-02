@@ -469,7 +469,7 @@ Your torrent was reported because the bitrates of one or more audio files had be
 				),
 				'resolve_options' => array(
 					'upload' => '0',
-					'warn' => '1',
+					'warn' => '2',
 					'delete' => '1',
 					'pm' => '[rule]2.1.11[/rule]. Music ripped from the radio (Satellite or FM), television, the web, or podcasts are not allowed.
 The only allowable media formats are CD, DVD, Vinyl, Soundboard, SACD, DAT, Cassette, WEB, and Blu-ray.'

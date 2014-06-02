@@ -45,6 +45,8 @@ if (isset($_GET['pp'])) {
 	$PerPage = POSTS_PER_PAGE;
 }
 
+
+
 //---------- Get some data to start processing
 
 // Thread information, constant across all pages
@@ -241,6 +243,9 @@ $JsonPosts = array();
 foreach ($Thread as $Key => $Post) {
 	list($PostID, $AuthorID, $AddedTime, $Body, $EditedUserID, $EditedTime) = array_values($Post);
 	list($AuthorID, $Username, $PermissionID, $Paranoia, $Artist, $Donor, $Warned, $Avatar, $Enabled, $UserTitle) = array_values(Users::user_info($AuthorID));
+
+	
+
 	$UserInfo = Users::user_info($EditedUserID);
 	$JsonPosts[] = array(
 		'postId' => (int)$PostID,
