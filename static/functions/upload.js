@@ -31,7 +31,7 @@ function Format() {
 	}
 
  	if ($('#format').raw().options[$('#format').raw().selectedIndex].value == 'AAC') {
-		$('#format_warning').raw().innerHTML = 'Lossy AAC torrents may only be uploaded when they represent exclusive content not currently available in any other format. <a href="rules.php?p=upload#r2.1.24">(2.1.24)</a>';
+		$('#format_warning').raw().innerHTML = 'AAC torrents may only be uploaded if they represent editions unavailable on What.CD in any other format sourced from the same medium and edition <a href="rules.php?p=upload#r2.1.24">(2.1.24)</a>';
 	} else {
 		$('#format_warning').raw().innerHTML = '';
 	}
