@@ -182,6 +182,15 @@ class CACHE extends Memcache {
 		$this->Time += (microtime(true) - $StartTime) * 1000;
 	}
 
+	public function decrement_value($Key, $Value = 1) {
+		$StartTime = microtime(true);
+		$NewVal = $this->decrement($Key, $Value);
+		if (isset($this->CacheHits[$Key])) {
+			$this->CacheHits[$Key] = $NewVal;
+		}
+		$this->Time += (microtime(true) - $StartTime) * 1000;
+	}
+
 	//---------- memcachedb functions ----------//
 
 	public function begin_transaction($Key) {
