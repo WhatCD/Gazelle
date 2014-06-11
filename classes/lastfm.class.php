@@ -171,6 +171,12 @@ class LastFM {
 		if (!defined('LASTFM_API_KEY')) {
 			return false;
 		}
+		$RecentFailsKey = 'lastfm_api_fails';
+		$RecentFails = (int)G::$Cache->get_value($RecentFailsKey);
+		if ($RecentFails > 5) {
+			// Take a break if last.fm's API is down/nonfunctional
+			return false;
+		}
 		$Url = LASTFM_API_URL . $Method;
 		if (is_array($Args)) {
 			foreach ($Args as $Key => $Value) {
@@ -180,11 +186,16 @@ class LastFM {
 
 			$Curl = curl_init();
 			curl_setopt($Curl, CURLOPT_HEADER, 0);
-			curl_setopt($Curl, CURLOPT_CONNECTTIMEOUT, 30);
+			curl_setopt($Curl, CURLOPT_TIMEOUT, 3);
 			curl_setopt($Curl, CURLOPT_RETURNTRANSFER, 1);
 			curl_setopt($Curl, CURLOPT_URL, $Url);
 			$Return = curl_exec($Curl);
+			$Errno = curl_errno($Curl);
 			curl_close($Curl);
+			if ($Errno) {
+				G::$Cache->cache_value($RecentFailsKey, $RecentFails + 1, 1800);
+				return false;
+			}
 			return json_decode($Return, true);
 		}
 	}
