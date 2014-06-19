@@ -13,7 +13,7 @@ shell_exec('wget http://geolite.maxmind.com/download/geoip/database/GeoLiteCity_
 shell_exec('unzip GeoLiteCity-latest.zip');
 shell_exec('rm GeoLiteCity-latest.zip');
 
-if (($Locations = file("GeoLiteCity_".date('Ym')."01/GeoLiteCity-Location.csv", FILE_IGNORE_NEW_LINES)) === false) {
+if (($Locations = file("GeoLiteCity_".date('Ym')."03/GeoLiteCity-Location.csv", FILE_IGNORE_NEW_LINES)) === false) {
 	error('Download or extraction of maxmind database failed');
 }
 array_shift($Locations);
@@ -32,7 +32,7 @@ foreach ($Locations as $Location) {
 echo 'There are '.count($CountryIDs).' CountryIDs';
 echo '<br />';
 
-if (($Blocks = file("GeoLiteCity_".date('Ym')."01/GeoLiteCity-Blocks.csv", FILE_IGNORE_NEW_LINES)) === false) {
+if (($Blocks = file("GeoLiteCity_".date('Ym')."03/GeoLiteCity-Blocks.csv", FILE_IGNORE_NEW_LINES)) === false) {
 	echo 'Error';
 }
 array_shift($Blocks);
