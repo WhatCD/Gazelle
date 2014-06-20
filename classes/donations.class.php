@@ -757,7 +757,7 @@ class Donations {
 		} else {
 			$String = "[*][b]You Contributed:[/b] $DonationAmount $Currency";
 		}
-
+		$CurrentRank = $CurrentRank == 5 ? 4 : $CurrentRank;
 		return 'Thank you for your generosity and support. It\'s users like you who make all of this possible. What follows is a brief description of your transaction:
 ' . $String . '
 [*][b]You Received:[/b] ' . $ReceivedRank . ' Donor Point' . ($ReceivedRank == 1 ? '' : 's') . '
