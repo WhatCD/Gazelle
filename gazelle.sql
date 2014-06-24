@@ -1819,8 +1819,8 @@ CREATE TABLE `xbt_snatched` (
   `fid` int(11) NOT NULL,
   `IP` varchar(15) NOT NULL,
   KEY `fid` (`fid`),
-  KEY `uid` (`uid`),
-  KEY `tstamp` (`tstamp`)
+  KEY `tstamp` (`tstamp`),
+  KEY `uid_tstamp` (`uid`,`tstamp`)
 ) ENGINE=InnoDB CHARSET utf8;
 
 CREATE DEFINER=`root`@`localhost` FUNCTION `binomial_ci`(p int, n int) RETURNS float
