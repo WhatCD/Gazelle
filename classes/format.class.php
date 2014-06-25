@@ -142,15 +142,19 @@ class Format {
 	 *
 	 * @param array $Exclude Query string parameters to leave out, or blank to include all parameters.
 	 * @param bool $Escape Whether to return a string prepared for HTML output
+	 * @param bool $Sort Whether to sort the parameters by key
 	 * @return An optionally HTML sanatized query string
 	 */
-	public static function get_url($Exclude = false, $Escape = true) {
+	public static function get_url($Exclude = false, $Escape = true, $Sort = false) {
 		if ($Exclude !== false) {
 			$Separator = $Escape ? '&amp;' : '&';
 			$QueryItems = NULL;
 			parse_str($_SERVER['QUERY_STRING'], $QueryItems);
 			foreach ($Exclude as $Key) {
 				unset($QueryItems[$Key]);
+			}
+			if ($Sort) {
+				ksort($QueryItems);
 			}
 			return http_build_query($QueryItems, '', $Separator);
 		} else {

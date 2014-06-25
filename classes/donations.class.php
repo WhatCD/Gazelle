@@ -28,10 +28,7 @@ class Donations {
 		"To all my Barbies out there who date Benjamin Franklin, George Washington, Abraham Lincoln, you'll be better off in life. Get that money."
 		);
 
-
 	private static $IsSchedule = false;
-	
-
 
 	public static function regular_donate($UserID, $DonationAmount, $Source, $Reason, $Currency = "EUR") {
 		self::donate($UserID, array(
@@ -48,10 +45,10 @@ class Donations {
 		$QueryID = G::$DB->get_query_id();
 
 		G::$DB->query("
-				SELECT 1
-				FROM users_main
-				WHERE ID = '$UserID'
-				LIMIT 1");
+			SELECT 1
+			FROM users_main
+			WHERE ID = '$UserID'
+			LIMIT 1");
 		if (G::$DB->has_results()) {
 			G::$Cache->InternalCache = false;
 			foreach ($Args as &$Arg) {
@@ -72,28 +69,27 @@ class Donations {
 
 			// Legacy donor, should remove at some point
 			G::$DB->query("
-					UPDATE users_info
-					SET Donor = '1'
-					WHERE UserID = '$UserID'");
+				UPDATE users_info
+				SET Donor = '1'
+				WHERE UserID = '$UserID'");
 			// Give them the extra invite
 			$ExtraInvite = G::$DB->affected_rows();
 
 			// A staff member is directly manipulating donor points
-			if ($Manipulation == "Direct") {
+			if (isset($Manipulation) && $Manipulation === "Direct") {
 				$DonorPoints = $Rank;
 				$AdjustedRank = $Rank >= MAX_EXTRA_RANK ? MAX_EXTRA_RANK : $Rank;
 				G::$DB->query("
 					INSERT INTO users_donor_ranks
 						(UserID, Rank, TotalRank, DonationTime, RankExpirationTime)
 					VALUES
-						('$UserID', '$AdjustedRank', '$TotalRank', '$Date', '$Date')
+						('$UserID', '$AdjustedRank', '$TotalRank', '$Date', NOW())
 					ON DUPLICATE KEY UPDATE
 						Rank = '$AdjustedRank',
 						TotalRank = '$TotalRank',
 						DonationTime = '$Date',
-						RankExpirationTime = '$Date'");
-			}
-			else {
+						RankExpirationTime = NOW()");
+			} else {
 				// Donations from the store get donor points directly, no need to calculate them
 				if ($Source == "Store Parser") {
 					$ConvertedPrice = self::currency_exchange($Amount * $Price, $Currency);
@@ -117,12 +113,12 @@ class Donations {
 					INSERT INTO users_donor_ranks
 						(UserID, Rank, TotalRank, DonationTime, RankExpirationTime)
 					VALUES
-						('$UserID', '$AdjustedRank', '$DonorPoints', '$Date', '$Date')
+						('$UserID', '$AdjustedRank', '$DonorPoints', '$Date', NOW())
 					ON DUPLICATE KEY UPDATE
 						Rank = '$AdjustedRank',
 						TotalRank = TotalRank + '$DonorPoints',
 						DonationTime = '$Date',
-						RankExpirationTime = '$Date'");
+						RankExpirationTime = NOW()");
 			}
 			// Donor cache key is outdated
 			G::$Cache->delete_value("donor_info_$UserID");
@@ -166,7 +162,7 @@ class Donations {
 				INSERT INTO donations
 					(UserID, Amount, Source, Reason, Currency, Email, Time, AddedBy, Rank, TotalRank)
 				VALUES
-					('$UserID', '$ConvertedPrice', '$Source', '$Reason', '$Currency', '$Email', '$Date', '$AddedBy', '$DonorPoints', '$TotalRank')");
+					('$UserID', '$ConvertedPrice', '$Source', '$Reason', '$Currency', '', '$Date', '$AddedBy', '$DonorPoints', '$TotalRank')");
 
 
 			// Clear their user cache keys because the users_info values has been modified
@@ -192,15 +188,15 @@ class Donations {
 			if ($TotalRank < 10) {
 				$SpecialRank = 0;
 			}
-			if ($TotalRank >= 10) {
+			if ($SpecialRank < 1 && $TotalRank >= 10) {
 				Misc::send_pm($UserID, 0, "You've Reached Special Donor Rank #1! You've Earned: One User Pick. Details Inside.", self::get_special_rank_one_pm());
 				$SpecialRank = 1;
 			}
-			if ($TotalRank >= 20) {
+			if ($SpecialRank < 2 && $TotalRank >= 20) {
 				Misc::send_pm($UserID, 0, "You've Reached Special Donor Rank #2! You've Earned: The Double-Avatar. Details Inside.", self::get_special_rank_two_pm());
 				$SpecialRank = 2;
 			}
-			if ($TotalRank >= 50) {
+			if ($SpecialRank < 3 && $TotalRank >= 50) {
 				Misc::send_pm($UserID, 0, "You've Reached Special Donor Rank #3! You've Earned: Diamond Rank. Details Inside.", self::get_special_rank_three_pm());
 				$SpecialRank = 3;
 			}
@@ -229,7 +225,8 @@ class Donations {
 			FROM users_donor_ranks
 			WHERE Rank > 1
 				AND SpecialRank != 3
-				AND RankExpirationTime < NOW() - INTERVAL 32 DAY");
+				AND RankExpirationTime < NOW() - INTERVAL 766 HOUR");
+				// 2 hours less than 32 days to account for schedule run times
 
 		if (G::$DB->record_count() > 0) {
 			$UserIDs = array();
@@ -314,13 +311,19 @@ class Donations {
 		if ($DonorInfo === false) {
 			$QueryID = G::$DB->get_query_id();
 			G::$DB->query("
-				SELECT Rank, SpecialRank, TotalRank, DonationTime
+				SELECT
+					Rank,
+					SpecialRank,
+					TotalRank,
+					DonationTime,
+					RankExpirationTime + INTERVAL 766 HOUR
 				FROM users_donor_ranks
 				WHERE UserID = '$UserID'");
+				// 2 hours less than 32 days to account for schedule run times
 			if (G::$DB->has_results()) {
-				list($Rank, $SpecialRank, $TotalRank, $DonationTime) = G::$DB->next_record(MYSQLI_NUM, false);
+				list($Rank, $SpecialRank, $TotalRank, $DonationTime, $ExpireTime) = G::$DB->next_record(MYSQLI_NUM, false);
 			} else {
-				$Rank = $SpecialRank = $TotalRank = $DonationTime = 0;
+				$Rank = $SpecialRank = $TotalRank = $DonationTime = $ExpireTime = 0;
 			}
 			if (Permissions::is_mod($UserID)) {
 				$Rank = MAX_EXTRA_RANK;
@@ -343,6 +346,7 @@ class Donations {
 				'SRank' => (int)$SpecialRank,
 				'TotRank' => (int)$TotalRank,
 				'Time' => $DonationTime,
+				'ExpireTime' => $ExpireTime,
 				'Rewards' => $Rewards);
 			G::$Cache->cache_value("donor_info_$UserID", $DonorInfo, 0);
 		}
@@ -609,8 +613,8 @@ class Donations {
 		$DonorInfo = self::get_donor_info($UserID);
 		if ($DonorInfo['SRank'] == MAX_SPECIAL_RANK || $DonorInfo['Rank'] == 1) {
 			$Return = 'Never';
-		} elseif ($DonorInfo['Time']) {
-			$ExpireTime = strtotime($DonorInfo['Time']) + 2764800;
+		} elseif ($DonorInfo['ExpireTime']) {
+			$ExpireTime = strtotime($DonorInfo['ExpireTime']);
 			if ($ExpireTime - time() < 60) {
 				$Return = 'Soon';
 			} else {
@@ -752,21 +756,20 @@ class Donations {
 		if ($Currency != 'BTC') {
 			$DonationAmount = number_format($DonationAmount, 2);
 		}
-		if ($Source == 'Store Parser') {
-			$String = "[*][b]You Contributed:[/b] $DonationAmount $Currency";
-		} else {
-			$String = "[*][b]You Contributed:[/b] $DonationAmount $Currency";
+		if ($CurrentRank >= MAX_RANK) {
+			$CurrentRank = MAX_RANK - 1;
+		} elseif ($CurrentRank == 5) {
+			$CurrentRank = 4;
 		}
-		$CurrentRank = $CurrentRank == 5 ? 4 : $CurrentRank;
-		return 'Thank you for your generosity and support. It\'s users like you who make all of this possible. What follows is a brief description of your transaction:
-' . $String . '
-[*][b]You Received:[/b] ' . $ReceivedRank . ' Donor Point' . ($ReceivedRank == 1 ? '' : 's') . '
-[*][b]Your Donor Rank:[/b] Donor Rank # ' . $CurrentRank . '
+		return "Thank you for your generosity and support. It's users like you who make all of this possible. What follows is a brief description of your transaction:
+[*][b]You Contributed:[/b] $DonationAmount $Currency
+[*][b]You Received:[/b] $ReceivedRank Donor Point".($ReceivedRank == 1 ? '' : 's')."
+[*][b]Your Donor Rank:[/b] Donor Rank # $CurrentRank
 Once again, thank you for your continued support of the site.
 
 Sincerely,
 
-'.SITE_NAME.' Staff
+".SITE_NAME.' Staff
 
 [align=center][If you have any questions or concerns, please [url='.site_url().'staffpm.php]send a Staff PM[/url].]';
 	}

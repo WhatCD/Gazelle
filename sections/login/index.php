@@ -191,7 +191,7 @@ else {
 
 	// Function to log a user's login attempt
 	function log_attempt($UserID) {
-		global $DB, $Cache, $AttemptID, $Attempts, $Bans, $BannedUntil, $Time, $UserID;
+		global $DB, $Cache, $AttemptID, $Attempts, $Bans, $BannedUntil;
 		$IPStr = $_SERVER['REMOTE_ADDR'];
 		$IPA = substr($IPStr, 0, strcspn($IPStr, '.'));
 		$IP = Tools::ip_to_unsigned($IPStr);
