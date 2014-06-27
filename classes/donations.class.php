@@ -322,6 +322,12 @@ class Donations {
 				// 2 hours less than 32 days to account for schedule run times
 			if (G::$DB->has_results()) {
 				list($Rank, $SpecialRank, $TotalRank, $DonationTime, $ExpireTime) = G::$DB->next_record(MYSQLI_NUM, false);
+				if ($DonationTime === null) {
+					$DonationTime = 0;
+				}
+				if ($ExpireTime === null) {
+					$ExpireTime = 0;
+				}
 			} else {
 				$Rank = $SpecialRank = $TotalRank = $DonationTime = $ExpireTime = 0;
 			}
