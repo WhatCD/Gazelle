@@ -761,7 +761,7 @@ class NotificationsManager {
 
 						if ($Service === 'PushBullet') {
 							$Options["user"]["device"] = $PushOptions['PushDevice'];
-							
+
 						}
 
 						$JSON = json_encode($Options);
@@ -772,7 +772,7 @@ class NotificationsManager {
 								('$Service', 1)
 							ON DUPLICATE KEY UPDATE
 								TimesUsed = TimesUsed + 1");
-						
+
 						$PushServerSocket = fsockopen("127.0.0.1", 6789);
 						fwrite($PushServerSocket, $JSON);
 						fclose($PushServerSocket);

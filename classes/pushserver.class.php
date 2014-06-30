@@ -152,7 +152,7 @@ class PushServer {
 	 * @param $Message Notification message
 	 * @param $URL For compatibility with other command. Just gets appended.
 	 */
-	private function push_pushbullet($UserKey, $DeviceID, 
+	private function push_pushbullet($UserKey, $DeviceID,
 		$Title, $Message, $URL) {
 		if (!empty($URL)) {
 			$Message .= ' ' . $URL;
@@ -175,7 +175,7 @@ class PushServer {
 		echo "Push sent to Pushbullet";
 		curl_close($Curl);
 
-		
+
 
 	}
 }

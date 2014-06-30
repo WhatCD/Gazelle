@@ -859,7 +859,7 @@ tr.peer_list td {
 }
 
 .hide {
-	display:none;
+	display: none;
 }
 
 
@@ -888,7 +888,7 @@ ul.poll li.graph {
 	height: 28px;
 	background: url('https://what.cd/static/styles/postmod/images/show.png') no-repeat center center;
 	-moz-opacity: 0.5;
-	opacity:.50;
+	opacity: 0.50;
 	filter: alpha(opacity=50);
 }
 
@@ -897,7 +897,7 @@ ul.poll li.graph {
 	height: 28px;
 	background: url('https://what.cd/static/styles/postmod/images/hide.png') no-repeat center center;
 	-moz-opacity: 0.5;
-	opacity:.50;
+	opacity: 0.50;
 	filter: alpha(opacity=50);
 }
 
@@ -913,13 +913,13 @@ ul.poll li.graph {
 }
 
 .filter_torrents {
-	width:750px;
-	margin:auto;
+	width: 750px;
+	margin: auto;
 }
 
 .filter_torrents .submit {
-	text-align:right;
-	padding-top:5px;
+	text-align: right;
+	padding-top: 5px;
 }
 
 #content form.search_form + .torrent_table {
@@ -1112,9 +1112,9 @@ ul .invitetree {
 	width: 100%;
 	height: 100%;
 	background: #111 50% 0 no-repeat fixed;
-	z-index:1001;
+	z-index: 1001;
 	-moz-opacity: 0.9;
-	opacity:.90;
+	opacity: 0.90;
 	filter: alpha(opacity=90);
 }
 
@@ -1126,7 +1126,7 @@ ul .invitetree {
 	width: 90%;
 	height: 90%;
 	padding: 0px;
-	z-index:1002;
+	z-index: 1002;
 	overflow: auto;
 }
 
@@ -1165,7 +1165,7 @@ input[type=text], input[type="password"] {
 	border-width: 1px;
 }
 
-#quickpost input[type=text], .box_search input[type=text], #AddArtists input[type=text], .add_torrent_container input[type=text], .add_torrent_container input[type=text], .box_addtag input[type=text], .pad .search_form input[type=text], .edit_form input[type=text], .rename_form input[type=text], .merge_form  input[type=text], #compose input[type=text], .add_form input[type=text]{
+#quickpost input[type=text], .box_search input[type=text], #AddArtists input[type=text], .add_torrent_container input[type=text], .add_torrent_container input[type=text], .box_addtag input[type=text], .pad .search_form input[type=text], .edit_form input[type=text], .rename_form input[type=text], .merge_form  input[type=text], #compose input[type=text], .add_form input[type=text] {
 	background: #fff;
 	border: 1px solid #bbbbbb;
 	color: #000000

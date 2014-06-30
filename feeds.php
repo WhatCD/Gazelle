@@ -6,12 +6,12 @@
 /*------------------------------------------------------*/
 /********************************************************/
 
-// Lets prevent people from clearing feeds
+// Let's prevent people from clearing feeds
 if (isset($_GET['clearcache'])) {
 	unset($_GET['clearcache']);
 }
 
-require 'classes/config.php'; // The config contains all site wide configuration information as well as memcached rules
+require 'classes/config.php'; // The config contains all site-wide configuration information as well as memcached rules
 
 require(SERVER_ROOT.'/classes/misc.class.php'); // Require the misc class
 require(SERVER_ROOT.'/classes/cache.class.php'); // Require the caching class
@@ -27,7 +27,7 @@ function is_number($Str) {
 	if ($Str < 0) {
 		return false;
 	}
-	// We're converting input to a int, then string and comparing to original
+	// We're converting input to an int, then string, and comparing to the original
 	return ($Str == strval(intval($Str)) ? true : false);
 }
 
