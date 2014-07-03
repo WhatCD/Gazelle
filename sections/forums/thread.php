@@ -37,8 +37,6 @@ if (!isset($_GET['threadid']) || !is_number($_GET['threadid'])) {
 	$ThreadID = $_GET['threadid'];
 }
 
-
-
 if (isset($LoggedUser['PostsPerPage'])) {
 	$PerPage = $LoggedUser['PostsPerPage'];
 } else {
@@ -430,7 +428,6 @@ foreach ($Thread as $Key => $Post) {
 	list($PostID, $AuthorID, $AddedTime, $Body, $EditedUserID, $EditedTime, $EditedUsername) = array_values($Post);
 	list($AuthorID, $Username, $PermissionID, $Paranoia, $Artist, $Donor, $Warned, $Avatar, $Enabled, $UserTitle) = array_values(Users::user_info($AuthorID));
 
-	
 ?>
 <table class="forum_post wrap_overflow box vertical_margin<?
 	if (((!$ThreadInfo['IsLocked'] || $ThreadInfo['IsSticky'])

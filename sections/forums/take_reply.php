@@ -42,6 +42,7 @@ if ($_POST['body'] === '' || !isset($_POST['body'])) {
 
 $Body = $_POST['body'];
 
+
 if (!empty($LoggedUser['DisablePosting'])) {
 	error('Your posting privileges have been removed.');
 }
@@ -64,6 +65,9 @@ if (!Forums::check_forumperm($ForumID, 'Write') || $LoggedUser['DisablePosting']
 if (isset($_POST['subscribe']) && Subscriptions::has_subscribed($TopicID) === false) {
 	Subscriptions::subscribe($TopicID);
 }
+
+
+
 
 //Now lets handle the special case of merging posts, we can skip bumping the thread and all that fun
 if ($ThreadInfo['LastPostAuthorID'] == $LoggedUser['ID'] && ((!check_perms('site_forums_double_post') && !in_array($ForumID, $ForumsDoublePost)) || isset($_POST['merge']))) {

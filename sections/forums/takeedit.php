@@ -33,6 +33,7 @@ $Key = $_POST['key'];
 $SQLTime = sqltime();
 $DoPM = isset($_POST['pm']) ? $_POST['pm'] : 0;
 
+
 // Mainly
 $DB->query("
 	SELECT
@@ -54,6 +55,8 @@ $DB->query("
 		JOIN forums AS f ON t.ForumID = f.ID
 	WHERE p.ID = '$PostID'");
 list($OldBody, $AuthorID, $TopicID, $IsLocked, $ForumID, $MinClassWrite, $Page) = $DB->next_record();
+
+
 
 // Make sure they aren't trying to edit posts they shouldn't
 // We use die() here instead of error() because whatever we spit out is displayed to the user in the box where his forum post is
