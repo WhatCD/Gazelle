@@ -108,25 +108,6 @@ Your torrent was reported because it contained material from the DNU list or fro
 					'delete' => '1',
 					'pm' => '[rule]h2.2[/rule]. Your torrent was reported because it was trumped by another torrent.'
 				)
-			),
-			'private_trump' => array(
-				'priority' => 21,
-				'reason' => '1',
-				'title' => 'Private Flag Trump',
-				'report_messages' => array(
-					'Please make sure you are reporting the torrent <strong class="important_text">which has been trumped</strong> and should be deleted, not the torrent that you think should remain on site.'
-				),
-
-				'report_fields' => array(
-					'sitelink' => '1'
-				),
-
-				'resolve_options' => array(
-					'upload' => '0',
-					'warn' => '0',
-					'delete' => '1',
-					'pm' => ''
-				)
 			)
 		),
 
