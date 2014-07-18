@@ -52,7 +52,15 @@ $DB->set_query_id($Result);
 while (list($PeerUserID, $Size, $Active, $Connectable, $Uploaded, $Remaining, $UserAgent) = $DB->next_record()) {
 ?>
 	<tr>
+<?
+	if (check_perms('users_mod')) {
+?>
+		<td><?=Users::format_username($PeerUserID, false, false, false)?></td>
+<?	} else {
+?>
 		<td>Peer</td>
+<?	}
+?>
 		<td><?=($Active) ? '<span style="color: green;">Yes</span>' : '<span style="color: red;">No</span>' ?></td>
 		<td><?= ($Connectable) ? '<span style="color: green;">Yes</span>' : '<span style="color: red;">No</span>' ?></td>
 		<td class="number_column"><?=Format::get_size($Uploaded) ?></td>
