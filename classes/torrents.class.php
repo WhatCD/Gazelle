@@ -513,7 +513,7 @@ class Torrents {
 				RemasterRecordLabel, RemasterCatalogueNumber, FileList, VoteScore, ArtistName)
 			SELECT
 				t.ID, g.ID, Name, TagList, Year, CategoryID, UNIX_TIMESTAMP(t.Time), ReleaseType,
-				RecordLabel, CatalogueNumber, VanityHouse, Size >> 10 AS Size, Snatched, Seeders,
+				RecordLabel, CatalogueNumber, VanityHouse, Size, Snatched, Seeders,
 				Leechers, LogScore, CAST(Scene AS CHAR), CAST(HasLog AS CHAR), CAST(HasCue AS CHAR),
 				CAST(FreeTorrent AS CHAR), Media, Format, Encoding, Description,
 				RemasterYear, RemasterTitle, RemasterRecordLabel, RemasterCatalogueNumber,
