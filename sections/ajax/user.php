@@ -171,7 +171,7 @@ if (check_paranoia_here(array('uploaded', 'downloaded', 'uploads+', 'requestsfil
 }
 
 // Community section
-if (check_paranoia_here(array('snatched', 'snatched+'))) {
+if (check_paranoia_here('snatched+')) {
 $DB->query("
 	SELECT COUNT(x.uid), COUNT(DISTINCT x.fid)
 	FROM xbt_snatched AS x
@@ -180,7 +180,7 @@ $DB->query("
 list($Snatched, $UniqueSnatched) = $DB->next_record();
 }
 
-if (check_paranoia_here(array('torrentcomments', 'torrentcomments+'))) {
+if (check_paranoia_here('torrentcomments+')) {
 	$DB->query("
 		SELECT COUNT(ID)
 		FROM comments
@@ -189,7 +189,7 @@ if (check_paranoia_here(array('torrentcomments', 'torrentcomments+'))) {
 	list($NumComments) = $DB->next_record();
 }
 
-if (check_paranoia_here(array('collages', 'collages+'))) {
+if (check_paranoia_here('collages+')) {
 	$DB->query("
 		SELECT COUNT(ID)
 		FROM collages
@@ -198,7 +198,7 @@ if (check_paranoia_here(array('collages', 'collages+'))) {
 	list($NumCollages) = $DB->next_record();
 }
 
-if (check_paranoia_here(array('collagecontribs', 'collagecontribs+'))) {
+if (check_paranoia_here('collagecontribs+')) {
 	$DB->query("
 		SELECT COUNT(DISTINCT ct.CollageID)
 		FROM collages_torrents AS ct
@@ -208,7 +208,7 @@ if (check_paranoia_here(array('collagecontribs', 'collagecontribs+'))) {
 	list($NumCollageContribs) = $DB->next_record();
 }
 
-if (check_paranoia_here(array('uniquegroups', 'uniquegroups+'))) {
+if (check_paranoia_here('uniquegroups+')) {
 	$DB->query("
 		SELECT COUNT(DISTINCT GroupID)
 		FROM torrents
@@ -216,7 +216,7 @@ if (check_paranoia_here(array('uniquegroups', 'uniquegroups+'))) {
 	list($UniqueGroups) = $DB->next_record();
 }
 
-if (check_paranoia_here(array('perfectflacs', 'perfectflacs+'))) {
+if (check_paranoia_here('perfectflacs+')) {
 	$DB->query("
 		SELECT COUNT(ID)
 		FROM torrents
