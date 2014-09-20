@@ -56,6 +56,8 @@ if ($CategoryName == 'Music') {
 	$JsonMusicInfo = null;
 }
 
+$TagList = explode('|', $TorrentDetails['GROUP_CONCAT(DISTINCT tags.Name SEPARATOR \'|\')']);
+
 $JsonTorrentDetails = array(
 	'wikiBody'        => Text::full_format($TorrentDetails['WikiBody']),
 	'wikiImage'       => $TorrentDetails['WikiImage'],
@@ -70,7 +72,8 @@ $JsonTorrentDetails = array(
 	'time'            => $TorrentDetails['Time'],
 	'vanityHouse'     => ($TorrentDetails['VanityHouse'] == 1),
 	'isBookmarked'    => Bookmarks::has_bookmarked('torrent', $GroupID),
-	'musicInfo'       => $JsonMusicInfo
+	'musicInfo'       => $JsonMusicInfo,
+	'tags'            => $TagList
 );
 
 $JsonTorrentList = array();

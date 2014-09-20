@@ -173,7 +173,7 @@ function generate_torrent_json($Caption, $Tag, $Details, $Limit) {
 			'groupId' => (int)$GroupID,
 			'artist' => $TruncArtist,
 			'groupName' => $GroupName,
-			'groupCategory' => (int)$GroupCategory,
+			'groupCategory' => (int)$GroupCategoryID,
 			'groupYear' => (int)$GroupYear,
 			'remasterTitle' => $RemasterTitle,
 			'format' => $Format,
@@ -189,6 +189,8 @@ function generate_torrent_json($Caption, $Tag, $Details, $Limit) {
 			'leechers' => (int)$Leechers,
 			'data' => (int)$Data,
 			'size' => (int)$Size,
+			'wikiImage' => $WikiImage,
+			'releaseType' => $ReleaseType,
 		);
 	}
 
