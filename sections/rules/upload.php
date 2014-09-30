@@ -97,8 +97,16 @@ View::show_header('Uploading Rules', 'rules');
 					<strong>Seed complete copies of your uploads.</strong> Do not upload a torrent unless you intend to seed until there are at least 1.0 distributed copies. Seeding past this minimum is strongly encouraged.
 				</li>
 				<li id="r1.1.5"><a href="#h1.1"><strong>&uarr;_</strong></a> <a href="#r1.1.5">1.1.5.</a>
-					<strong>No advertisements.</strong> Do not advertise other sites or groups in torrent descriptions, torrent directories, torrent file names, or torrent contents. We have no advertising and neither should you. Exceptions: Additional information about an artist, album, or band is acceptable, and is not considered advertising. Also, .nfo files in scene releases are not considered advertising.
+					<strong>No advertising or personal credits.</strong> Providing artist, album, label, or retailer information is not considered advertising.
 				</li>
+				<ul>
+					<li id="r1.1.5.1"><a href="#h1.1.5"><strong>&uarr;_</strong></a> <a href="#r1.1.5.1">1.1.5.1</a>
+						<strong>Do not advertise sites, groups, or persons in torrent contents (e.g., folder names, file names, or file tags).</strong> Exceptions: untouched scene uploads are exempt from this rule. For analog uploads, ripper credits may be included in a lineage text file, in a folder name, or in an optional file tag field (e.g. "comment" or "ripped by"), but never in a required tag field).
+					</li>
+					<li id="r1.1.5.2"><a href="#h1.1.5"><strong>&uarr;_</strong></a> <a href="#r1.1.5.2">1.1.5.2</a>
+						<strong>Do not advertise sites, groups, or persons in torrent descriptions.</strong> Exception: torrent source information (e.g. ripper, scene group, or original uploader credit) is allowed in torrent descriptions.
+					</li>
+				</ul>
 				<li id="r1.1.6"><a href="#h1.1"><strong>&uarr;_</strong></a> <a href="#r1.1.6">1.1.6.</a>
 					<strong>Archived files in uploads are not allowed.</strong> Exceptions: The sections that allow archived files (e.g., zip, rar, iso, etc.) are the following:
 					<ul>
@@ -142,24 +150,21 @@ View::show_header('Uploading Rules', 'rules');
 		<div class="box pad" style="padding: 10px 10px 10px 20px;">
 			<ul>
 				<li id="r1.3.1"><a href="#h1.3"><strong>&uarr;_</strong></a> <a href="#r1.3.1">1.3.1.</a>
-					<strong>Do not add irrelevant credits to your torrent.</strong> Your name is credited to the upload; there's no need to add it anywhere else.
-				</li>
-				<li id="r1.3.2"><a href="#h1.3"><strong>&uarr;_</strong></a> <a href="#r1.3.2">1.3.2.</a>
 					<strong>You may give credit to the release group (optional).</strong> If you really want to give credit to the release group, mention the full release name, including group name, in the Release description section only. Do not add this information to the Album description section.
 				</li>
-				<li id="r1.3.3"><a href="#h1.3"><strong>&uarr;_</strong></a> <a href="#r1.3.3">1.3.3.</a>
+				<li id="r1.3.2"><a href="#h1.3"><strong>&uarr;_</strong></a> <a href="#r1.3.2">1.3.2.</a>
 					<strong>No NFO art pasted in the album description.</strong> Unedited NFOs are allowed within the specific torrent Release description - not in the Album page description. If you must include some information from the NFO in the Album description or Release description, include only the tracklist, album notes, and other essential information. Specific encoding settings belong in the Release description.
 				</li>
-				<li id="r1.3.4"><a href="#h1.3"><strong>&uarr;_</strong></a> <a href="#r1.3.4">1.3.4.</a>
+				<li id="r1.3.3"><a href="#h1.3"><strong>&uarr;_</strong></a> <a href="#r1.3.3">1.3.3.</a>
 					<strong>Use the actual album title on the <a href="upload.php">upload page</a>; do not use the scene-given title.</strong> Naming your album_titles_like_this or your.albums.like.this is not allowed. Use the actual release title and artist. Do not use the title from the torrent folder or NFO for the scene release.
 				</li>
-				<li id="r1.3.5"><a href="#h1.3"><strong>&uarr;_</strong></a> <a href="#r1.3.5">1.3.5.</a>
+				<li id="r1.3.4"><a href="#h1.3"><strong>&uarr;_</strong></a> <a href="#r1.3.4">1.3.4.</a>
 					<strong>Scene releases must be complete (as released) to use the Scene label.</strong> If you've changed the tags, unpacked the archive, removed any files, split the tracks, or altered the track naming, then it is no longer a scene release. It should not be labeled as such. If any of these changes has taken place, file names should not include any reference to the release group (see <a href="#r1.1.5">1.1.5</a>, <a href="#r2.3.2">2.3.2</a>, and <a href="#r2.3.11">2.3.11</a>).
 				</li>
-				<li id="r1.3.6"><a href="#h1.3"><strong>&uarr;_</strong></a> <a href="#r1.3.6">1.3.6.</a>
+				<li id="r1.3.5"><a href="#h1.3"><strong>&uarr;_</strong></a> <a href="#r1.3.5">1.3.5.</a>
 					<strong>No protected archives.</strong> Archived releases must not be password protected.
 				</li>
-				<li id="r1.3.7"><a href="#h1.3"><strong>&uarr;_</strong></a> <a href="#r1.3.7">1.3.7.</a>
+				<li id="r1.3.6"><a href="#h1.3"><strong>&uarr;_</strong></a> <a href="#r1.3.6">1.3.6.</a>
 					<strong>Scene releases in each torrent category must conform to the rules specified for their respective sections.</strong> For example, music scene releases must adhere to the music quality and formatting rules no matter how the original files were released. If the scene archives were password protected, you cannot upload them to this site unmodified. Exceptions: You may upload scene releases that originally do not fit in the rules if you can make the necessary changes within the rules. However, these modified uploads must not be labeled as scene.
 				</li>
 			</ul>
