@@ -342,7 +342,7 @@ $Data = array(array($Name, $Image, $Body, $NumSimilar, $SimilarArray, array(), a
 
 $Cache->cache_value($Key, $Data, 3600);
 
-json_die("success", array(
+json_print("success", array(
 	'id' => (int)$ArtistID,
 	'name' => $Name,
 	'notificationsEnabled' => $notificationsEnabled,

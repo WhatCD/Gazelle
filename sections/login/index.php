@@ -30,21 +30,22 @@ if (isset($_REQUEST['act']) && $_REQUEST['act'] == 'recover') {
 	// Recover password
 	if (!empty($_REQUEST['key'])) {
 		// User has entered a new password, use step 2
+
 		$DB->query("
 			SELECT
 				m.ID,
 				m.Email,
 				m.ipcc,
 				i.ResetExpires
-			FROM users_main AS m
+			FROM users_main as m
 				INNER JOIN users_info AS i ON i.UserID = m.ID
 			WHERE i.ResetKey = '".db_string($_REQUEST['key'])."'
 				AND i.ResetKey != ''
 				AND m.Enabled = '1'");
 		list($UserID, $Email, $Country, $Expires) = $DB->next_record();
-
 		if ($UserID && strtotime($Expires) > time()) {
-			// If the user has requested a password change, and his key has not expired
+
+		// If the user has requested a password change, and his key has not expired
 			$Validate->SetFields('password', '1', 'regex', 'You entered an invalid password. A strong password is 8 characters or longer, contains at least 1 lowercase and uppercase letter, contains at least a number or symbol', array('regex' => '/(?=^.{8,}$)(?=.*[^a-zA-Z])(?=.*[A-Z])(?=.*[a-z]).*$/'));
 			$Validate->SetFields('verifypassword', '1', 'compare', 'Your passwords did not match.', array('comparefield' => 'password'));
 

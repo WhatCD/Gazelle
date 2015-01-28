@@ -11,6 +11,7 @@ class Top10View {
 			<a href="top10.php?type=tags" class="brackets"><?=self::get_selected_link("Tags", $Selected == "tags")?></a>
 			<a href="top10.php?type=votes" class="brackets"><?=self::get_selected_link("Favorites", $Selected == "votes")?></a>
 			<a href="top10.php?type=donors" class="brackets"><?=self::get_selected_link("Donors", $Selected == "donors")?></a>
+			
 		</div>
 <?
 	}

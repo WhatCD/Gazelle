@@ -118,4 +118,4 @@ foreach ($TorrentList as $Torrent) {
 	);
 }
 
-json_die("success", array('group' => $JsonTorrentDetails, 'torrents' => $JsonTorrentList));
+json_print("success", array('group' => $JsonTorrentDetails, 'torrents' => $JsonTorrentList));

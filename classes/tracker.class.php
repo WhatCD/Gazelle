@@ -130,6 +130,8 @@ class Tracker {
 			if ($Sleep) {
 				sleep($Sleep);
 			}
+			$Sleep = 6;
+
 			// Send request
 			$File = fsockopen(TRACKER_HOST, TRACKER_PORT, $ErrorNum, $ErrorString);
 			if ($File) {
@@ -140,7 +142,6 @@ class Tracker {
 				}
 			} else {
 				$Err = "Failed to fsockopen() - $ErrorNum - $ErrorString";
-				$Sleep = 6;
 				continue;
 			}
 

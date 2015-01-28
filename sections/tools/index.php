@@ -168,14 +168,13 @@ switch ($_REQUEST['action']) {
 		$DB->query("
 			INSERT INTO news (UserID, Title, Body, Time)
 			VALUES ('$LoggedUser[ID]', '".db_string($_POST['title'])."', '".db_string($_POST['body'])."', '".sqltime()."')");
+		$Cache->delete_value('news_latest_id');
+		$Cache->delete_value('news_latest_title');
+		$Cache->delete_value('news');
 
 
 
 		NotificationsManager::send_push(NotificationsManager::get_push_enabled_users(), $_POST['title'], $_POST['body'], site_url() . 'index.php', NotificationsManager::NEWS);
-
-		$Cache->delete_value('news_latest_id');
-		$Cache->delete_value('news_latest_title');
-		$Cache->delete_value('news');
 
 		header('Location: index.php');
 		break;

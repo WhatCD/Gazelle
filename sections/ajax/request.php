@@ -112,7 +112,7 @@ $JsonTags = array();
 foreach ($Request['Tags'] as $Tag) {
 	$JsonTags[] = $Tag;
 }
-json_die('success', array(
+json_print('success', array(
 	'requestId' => (int)$RequestID,
 	'requestorId' => (int)$Request['UserID'],
 	'requestorName' => $Requestor['Username'],

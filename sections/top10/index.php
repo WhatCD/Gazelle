@@ -35,6 +35,7 @@ if (empty($_GET['type']) || $_GET['type'] == 'torrents') {
 		case 'lastfm':
 			include(SERVER_ROOT.'/sections/top10/lastfm.php');
 			break;
+		
 		default:
 			error(404);
 			break;

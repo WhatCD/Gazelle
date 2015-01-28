@@ -1,24 +1,67 @@
 <?
 class Misc {
-	/**
-	 * Send an email.
-	 *
-	 * @param string $To the email address to send it to.
-	 * @param string $Subject
-	 * @param string $Body
-	 * @param string $From The user part of the user@NONSSL_SITE_URL email address.
-	 * @param string $ContentType text/plain or text/html
-	 */
-	public static function send_email($To, $Subject, $Body, $From = 'noreply', $ContentType = 'text/plain') {
-		$Headers = 'MIME-Version: 1.0'."\r\n";
-		$Headers .= 'Content-type: '.$ContentType.'; charset=iso-8859-1'."\r\n";
-		$Headers .= 'From: '.SITE_NAME.' <'.$From.'@'.NONSSL_SITE_URL.'>'."\r\n";
-		$Headers .= 'Reply-To: '.$From.'@'.NONSSL_SITE_URL."\r\n";
-		$Headers .= 'X-Mailer: Project Gazelle'."\r\n";
-		$Headers .= 'Message-Id: <'.Users::make_secret().'@'.NONSSL_SITE_URL.">\r\n";
-		$Headers .= 'X-Priority: 3'."\r\n";
-		mail($To, $Subject, $Body, $Headers, "-f $From@".NONSSL_SITE_URL);
-	}
+        /**
+         * Send an email.
+         *
+         * We can do this one of two ways - either using MailGun or with PHP's mail function.
+         * Checks for EMAIL_DELIVERY_TYPE and then proceeds as directed to send e-mail.
+         *
+         * @param string $To the email address to send it to.
+         * @param string $Subject
+         * @param string $Body
+         * @param string $From The user part of the user@NONSSL_SITE_URL email address.
+         * @param string $ContentType text/plain or text/html
+         */
+
+        public static function send_email($To, $Subject, $Body, $From, $ContentType) {
+
+                switch (EMAIL_DELIVERY_TYPE) {
+                        case 'local':
+                                // remove the next line if you want to send HTML email from some places...
+                                $ContentType='text/plain';
+                                $Headers = 'MIME-Version: 1.0'."\r\n";
+                                $Headers .= 'Content-type: '.$ContentType.'; charset=iso-8859-1'."\r\n";
+                                $Headers .= 'From: '.SITE_NAME.' <'.$From.'@'.NONSSL_SITE_URL.'>'."\r\n";
+                                $Headers .= 'Reply-To: '.$From.'@'.NONSSL_SITE_URL."\r\n";
+                                $Headers .= 'X-Mailer: Project Gazelle'."\r\n";
+                                $Headers .= 'Message-Id: <'.Users::make_secret().'@'.NONSSL_SITE_URL.">\r\n";
+                                $Headers .= 'X-Priority: 3'."\r\n";
+                                mail($To, $Subject, $Body, $Headers, "-f $From@".NONSSL_SITE_URL);
+                                break;
+
+                        case 'mailgun':
+                                // set up our message first
+                                $From .= '@'.NONSSL_SITE_URL;
+                                $OutgoingEmail = array(
+                                        'from'          => $From,
+                                        'to'            => $To,
+                                        'h:Reply-To'    => $From,
+                                        'subject'       => $Subject,
+                                        'text'          => $Body);
+                                // now let's POST it to mailgun
+                                $Curl = curl_init();
+                                curl_setopt($Curl, CURLOPT_URL, MAILGUN_API_URL);
+                                curl_setopt($Curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
+                                curl_setopt($Curl, CURLOPT_USERPWD, 'api:'.MAILGUN_API_KEY);
+                                curl_setopt($Curl, CURLOPT_RETURNTRANSFER, 1);
+                                curl_setopt($Curl, CURLOPT_CONNECTTIMEOUT, 10);
+                                curl_setopt($Curl, CURLOPT_POST, true);
+                                curl_setopt($Curl, CURLOPT_POSTFIELDS, $OutgoingEmail);
+
+                                $RequestResult = curl_exec($Curl);
+                                $RequestStatusCode = curl_getinfo($Curl, CURLINFO_HTTP_CODE);
+                                curl_close($Curl);
+                                // alert on failed emails
+                                if ($RequestStatusCode != 200) {
+                                        send_irc('PRIVMSG '.STATUS_CHAN." !dev email failed to $To with error message $RequestResult");
+                                        }
+                                break;
+
+                        default:
+                                die('You have either not configured an email delivery method in config.php or your value is incorrect.');
+                                break;
+                }
+        }
 
 
 	/**

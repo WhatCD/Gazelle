@@ -693,7 +693,7 @@ Port: '.BOT_PORT.' ('.BOT_PORT_SSL.' for SSL)
 Once you are connected to our server you will need to join our disabled users channel.
 Type: /join '.BOT_DISABLED_CHAN.'
 
-Please visit us soon so we can help you resolve this matter.');
+Please visit us soon so we can help you resolve this matter.', 'noreply');
 }
 
 if ($MergeStatsFrom && check_perms('users_edit_ratio')) {

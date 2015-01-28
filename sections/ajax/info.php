@@ -93,7 +93,7 @@ if ($CurrentBlog === false) {
 // Subscriptions
 $NewSubscriptions = Subscriptions::has_new_subscriptions();
 
-json_die("success", array(
+json_print("success", array(
 	'username' => $LoggedUser['Username'],
 	'id' => (int)$LoggedUser['ID'],
 	'authkey' => $LoggedUser['AuthKey'],

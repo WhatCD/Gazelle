@@ -86,7 +86,7 @@ while (list($ForumID, $ForumName, $TopicID, $ThreadTitle, $Body, $LastPostID, $L
 	$JsonPosts[] = $JsonPost;
 }
 
-json_die('success', array(
+json_print('success', array(
 	'threads' => $JsonPosts
 ));
 ?>

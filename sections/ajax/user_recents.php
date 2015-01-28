@@ -62,7 +62,7 @@ if (check_paranoia_here('uploads')) {
 	$Results['uploads'] = "hidden";
 }
 
-json_die("success", $Results);
+json_print("success", $Results);
 
 function check_paranoia_here($Setting) {
 	global $Paranoia, $Class, $UserID, $Preview;

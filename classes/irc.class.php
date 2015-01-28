@@ -180,46 +180,6 @@ abstract class IRC_BOT {
 					}
 				}
 
-				if (preg_match("/:([^!]+)![^\s]* QUIT.* /", $this->Data, $Nick)) {
-					if (isset($this->Identified[$Nick[1]])) {
-						unset($this->Identified[$Nick[1]]);
-					}
-					if (isset($this->DisabledUsers[$Nick[1]])) {
-						if ($this->DisabledUsers[$Nick[1]]['UserID'] != 0) {
-							G::$DB->query("
-								DELETE FROM disable_list
-								WHERE Nick = '$Nick[1]'");
-							G::$Cache->decrement_value('num_disablees');
-						}
-						unset($this->DisabledUsers[$Nick[1]]);
-					}
-				}
-
-				if (preg_match("/:([^!]+)![^\s]* PART ".BOT_DISABLED_CHAN.'/', $this->Data, $Nick)) {
-					if (isset($this->DisabledUsers[$Nick[1]])) {
-						if ($this->DisabledUsers[$Nick[1]]['UserID'] != 0) {
-							G::$DB->query("
-								DELETE FROM disable_list
-								WHERE Nick = '$Nick[1]'");
-							G::$Cache->decrement_value('num_disablees');
-						}
-						unset($this->DisabledUsers[$Nick[1]]);
-					}
-				}
-
-				if (preg_match("/:([^!]+)![^\s]* KICK ".BOT_DISABLED_CHAN.'.* /', $this->Data, $Nick)) {
-					$Nick = explode(' ', $Nick[0]);
-					if (isset($this->DisabledUsers[$Nick[3]])) {
-						if ($this->DisabledUsers[$Nick[3]]['UserID'] != 0) {
-							G::$DB->query("
-								DELETE FROM disable_list
-								WHERE Nick = '$Nick[3]'");
-							G::$Cache->decrement_value('num_disablees');
-						}
-						unset($this->DisabledUsers[$Nick[3]]);
-					}
-				}
-
 				if (preg_match('/End of message of the day./', $this->Data)) {
 					$this->connect_events();
 				}

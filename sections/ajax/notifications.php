@@ -99,7 +99,7 @@ foreach ($FilterGroups as $FilterID => $FilterResults) {
 	}
 }
 
-json_die("success", array(
+json_print("success", array(
 	'currentPages' => intval($Page),
 	'pages' => ceil($TorrentCount / NOTIFICATIONS_PER_PAGE),
 	'numNew' => $NumNew,

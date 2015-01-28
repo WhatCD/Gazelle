@@ -197,29 +197,33 @@ class Tags {
 	public static function remove_aliases($Tags) {
 		$TagAliases = self::get_aliases();
 
-		$End = count($Tags['include']);
-		for ($i = 0; $i < $End; $i++) {
-			foreach ($TagAliases as $TagAlias) {
-				if ($Tags['include'][$i] === $TagAlias['BadTag']) {
-					$Tags['include'][$i] = $TagAlias['AliasTag'];
-					break;
+		if (isset($Tags['include'])) {
+			$End = count($Tags['include']);
+			for ($i = 0; $i < $End; $i++) {
+				foreach ($TagAliases as $TagAlias) {
+					if ($Tags['include'][$i] === $TagAlias['BadTag']) {
+						$Tags['include'][$i] = $TagAlias['AliasTag'];
+						break;
+					}
 				}
 			}
+			// Only keep unique entries after unifying tag standard
+			$Tags['include'] = array_unique($Tags['include']);
 		}
 
-		$End = count($Tags['exclude']);
-		for ($i = 0; $i < $End; $i++) {
-			foreach ($TagAliases as $TagAlias) {
-				if (substr($Tags['exclude'][$i], 1) === $TagAlias['BadTag']) {
-					$Tags['exclude'][$i] = '!'.$TagAlias['AliasTag'];
-					break;
+		if (isset($Tags['exclude'])) {
+			$End = count($Tags['exclude']);
+			for ($i = 0; $i < $End; $i++) {
+				foreach ($TagAliases as $TagAlias) {
+					if (substr($Tags['exclude'][$i], 1) === $TagAlias['BadTag']) {
+						$Tags['exclude'][$i] = '!'.$TagAlias['AliasTag'];
+						break;
+					}
 				}
 			}
+			// Only keep unique entries after unifying tag standard
+			$Tags['exclude'] = array_unique($Tags['exclude']);
 		}
-
-		// Only keep unique entries after unifying tag standard
-		$Tags['include'] = array_unique($Tags['include']);
-		$Tags['exclude'] = array_unique($Tags['exclude']);
 
 		return $Tags;
 	}

@@ -37,4 +37,4 @@ foreach ($News as $NewsItem) {
 	);
 }
 
-json_die('success', json_encode($NewsResponse));
+json_print('success', json_encode($NewsResponse));

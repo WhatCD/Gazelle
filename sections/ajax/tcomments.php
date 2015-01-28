@@ -31,7 +31,7 @@ foreach ($Thread as $Key => $Post) {
 	);
 }
 
-json_die("success", array(
+json_print("success", array(
 	'page' => (int)$Page,
 	'pages' => ceil($NumComments / TORRENT_COMMENTS_PER_PAGE),
 	'comments' => $JsonComments

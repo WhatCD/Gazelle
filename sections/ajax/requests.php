@@ -321,7 +321,7 @@ if ($NumResults > 0) {
 }
 
 if ($NumResults == 0) {
-	json_die("success", array(
+	json_print("success", array(
 		'currentPage' => 1,
 		'pages' => 1,
 		'results' => array()
@@ -381,7 +381,7 @@ if ($NumResults == 0) {
 		);
 	}
 
-	json_die("success", array(
+	json_print("success", array(
 		'currentPage' => intval($Page),
 		'pages' => ceil($NumResults / REQUESTS_PER_PAGE),
 		'results' => $JsonResults

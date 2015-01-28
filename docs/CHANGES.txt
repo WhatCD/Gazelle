@@ -1,5 +1,76 @@
 CHANGE LOG
 
+2014-11-06 by porkpie
+    Create a TorrentSearch class that does most of the torrent search job.
+    Add PHP post-processing of matches if a search query doesn't need
+    any torrent-specific fulltext conditions.
+    Comments
+
+2014-11-03 by downinthings
+Fix comments on User API
+
+2014-10-30 by tobbez
+Add stats API method
+
+2014-10-27 by porkpie
+Clear news cache immediately after updating the database
+
+2014-10-20 by Narcolepsy
+Consolidated commit list since 2014-04-20:
+
+Fix some LTR issues (bug thread 189685)
+Move loading comments before View::show_header. This should fix subscriptions and quote notifications appearing when a user is already on the page of that last subscription
+Replace some hardcoded IRC channels with configuration parameters
+Fix HTML in <title> for non-{Music, Audiobooks, Comedy} requests (bug thread 189855)
+Fix: link directly to the torrent on bad files/folders better.php pages (thread 190009)
+Update internal cache when a cache key is changed
+This should make quote notifications disappear when viewing threads (#183300)
+Cast user id to int on user profile pages to get rid of trailing period
+Remove WhatMan's spellcheck tool (seriously it was crap)
+Fix a few cache key typos:
+    Blog => blog
+    requests_$RequestID => request_$RequestID
+    users_stats_$UserID => user_stats_$UserID
+Fix some sorting issues related to Torrents::get_groups not returning the groups in the same order they were passed in; DO NOT iterate over Torrents::get_groups results...
+Fix image in bookmarks JSON API
+Fix comments appearing on the wrong page (bug thread 190203)
+Passwords aren't limited to 40 characters
+Fix better.php/single and rename some variables so they make some sense
+    Bug thread #190289
+Don't continue to process forum post deletes if the post or thread doesn't exist
+Trusting rdns is bad
+Fix two cache issues in the schedule
+    - Permissions of users that are demoted to User/Member for low ratio or upload were not updated/cleared, which meant that e.g. demoted PU users could still see the PU forum
+    - The cache was cleared before the promotion/demotion queries. This could cause a race condition if the cache key were filled again (through a Users::user_info call)
+Fix some cache issues (bug thread 190802)
+Speed up BBCode
+BBCode profiling
+Fix a bunch of bookmarks stuff. HTML/CSS consistency, jQuerified functions
+Bye sizzle
+show rank 4 instead of 5 when 5 points in pms
+More accurate donor rank expiration times
+Apparently users_donor_ranks can contain NULL values.
+    Change these to 0 after fetching to fix cache
+Fix a grammar error and use SITE_NAME constant in the post-invite confirmation PM that gets sent to the inviter
+Remove trailing whitespace in public Gazelle, improve grammar, add some missing spaces in 80char's CSS file
+Remove extraneous whitespace from various files
+Coding standards cleanup in script_start.php
+    Remove some WCD-specific smileys from public Gazelle
+
+    Remove these:
+    * ackbar-what.png
+    * jesusfish-what.png
+    * louisdefunes-what.png
+Add Tools::check_cidr_range to check if an IP is inside a given range in CIDR format
+Torrent size is a 64-bit Sphinx attribute, so let's make use of it
+    Should partially fix bug #185554
+Fix SQLI in PushServer::push_pushbullet
+Minor coding standards fixes in classes/pushserver.class.php
+Fix User Upload Count API
+fix lack of artist name in concert titles
+add mailgun as alternative to self-hosting email, config changes in template to match
+user api additional stats, patch from user downinthings
+
 2014-04-20 by SevenNationArmy
 Replace old IRC applet with Mibbit
 

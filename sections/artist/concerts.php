@@ -16,7 +16,7 @@ if ($ArtistEvents === false) { // Something went wrong
 			make_concert_link($Event);
 		}
 	} else { // Single event
-		make_concert_link($ArtistEvents['events']['event']);
+		make_concert_link($ArtistEvents['events']['event'], $Name);
 	}
 	echo '</ul>';
 }
@@ -34,7 +34,7 @@ $Concerts .= ob_get_clean();
 </div>
 
 <?
-function make_concert_link($Event) {
+function make_concert_link($Event, $Name) {
 	// The event doesn't have a start date (this should never happen)
 	if ($Event['startDate'] == '') {
 		return;
@@ -46,7 +46,7 @@ function make_concert_link($Event) {
 ?>
 	<form class="hidden" action="" id="concert<?=$Event['id']?>" method="post">
 		<input type="hidden" name="action" value="concert_thread" />
-		<input type="hidden" name="concert_title" value="<?='[Concert] ' . display_str($Name) . " - $ConcertTitle"?>" />
+		<input type="hidden" name="concert_title" value="<?='[Concert] ' . $Event['artists']['artist'] . " - $ConcertTitle"?>" />
 		<input type="hidden" name="concert_id" value="<?=$Event['id']?>" />
 		<input type="hidden" name="concert_template" value="<?=get_concert_post_template($Name, $Event)?>" />
 	</form>
@@ -80,7 +80,7 @@ function get_concert_post_template($Artist, $Event) {
 		if (strpos ($Url, '://') === false) {
 			$Url = 'http://' . $Url;
 		}
-		$Website = '[b]Web site:[/b] ' . $Url;
+		$Website = '[b]Website:[/b] ' . $Url;
 	}
 	if (isset($Event['artists']['artist']) && (count($Event['artists']['artist']) === 1 && strtolower($Event['artists']['artist'][1]) == strtolower($Artist))) {
 		$i = 0;

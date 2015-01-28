@@ -51,7 +51,7 @@ foreach ($Results as $Result) {
 	);
 }
 
-json_die("success", array(
+json_print("success", array(
 	'currentPage' => (int)$Page,
 	'pages' => ceil($NumResults / USERS_PER_PAGE),
 	'results' => $JsonUsers

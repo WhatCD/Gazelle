@@ -110,12 +110,13 @@ class Sphinxql extends mysqli {
 	/**
 	 * Escape special characters before sending them to the Sphinx server.
 	 * Two escapes needed because the first one is eaten up by the mysql driver.
+	 * Lowercase ASCII characters because some Sphinx operators are all caps words.
 	 *
 	 * @param string $String string to escape
 	 * @return escaped string
 	 */
 	public static function sph_escape_string($String) {
-		return strtr($String, array(
+		return strtr(strtolower($String), array(
 			'('=>'\\\\(',
 			')'=>'\\\\)',
 			'|'=>'\\\\|',

@@ -37,7 +37,7 @@ if (!is_number($TorrentID)) {
 /* uTorrent Remote and various scripts redownload .torrent files periodically.
 	To prevent this retardation from blowing bandwidth etc., let's block it
 	if the .torrent file has been downloaded four times before */
-$ScriptUAs = array('BTWebClient*', 'Python-urllib*', 'python-requests*');
+$ScriptUAs = array('BTWebClient*', 'Python-urllib*', 'python-requests*', 'uTorrent*');
 if (Misc::in_array_partial($_SERVER['HTTP_USER_AGENT'], $ScriptUAs)) {
 	$DB->query("
 		SELECT 1

@@ -21,7 +21,6 @@ class Tools {
 			G::$DB->set_query_id($QueryID);
 			G::$Cache->cache_value('ip_bans_'.$A, $IPBans, 0);
 		}
-		$Debug->log_var($IPBans, 'IP bans for class '.$A);
 		foreach ($IPBans as $Index => $IPBan) {
 			list ($ID, $FromIP, $ToIP) = $IPBan;
 			if ($IPNum >= $FromIP && $IPNum <= $ToIP) {
@@ -104,9 +103,21 @@ class Tools {
 	 * @return a span with JavaScript code
 	 */
 	public static function get_host_by_ajax($IP) {
-		static $ID = 0;
-		++$ID;
-		return '<span id="host_'.$ID.'">Resolving host...<script type="text/javascript">ajax.get(\'tools.php?action=get_host&ip='.$IP.'\',function(host) {$(\'#host_'.$ID.'\').raw().innerHTML=host;});</script></span>';
+		static $IPs = array();
+		$Class = strtr($IP, '.', '-');
+		$HTML = '<span class="host_'.$Class.'">Resolving host...';
+		if (!isset($IPs[$IP])) {
+			$HTML .= '<script type="text/javascript">' .
+					'$(document).ready(function() {' .
+						'$.get(\'tools.php?action=get_host&ip='.$IP.'\', function(host) {' .
+							'$(\'.host_'.$Class.'\').html(host);' .
+						'});' .
+					'});' .
+				'</script>';
+		}
+		$HTML .= '</span>';
+		$IPs[$IP] = 1;
+		return $HTML;
 	}
 
 
@@ -146,11 +157,22 @@ class Tools {
 	}
 
 	public static function get_country_code_by_ajax($IP) {
-		static $ID = 0;
-		++$ID;
-		return '<span id="cc_'.$ID.'">Resolving CC...<script type="text/javascript">ajax.get(\'tools.php?action=get_cc&ip='.$IP.'\', function(cc) {$(\'#cc_'.$ID.'\').raw().innerHTML = cc;});</script></span>';
+		static $IPs = array();
+		$Class = strtr($IP, '.', '-');
+		$HTML = '<span class="cc_'.$Class.'">Resolving CC...';
+		if (!isset($IPs[$IP])) {
+			$HTML .= '<script type="text/javascript">' .
+					'$(document).ready(function() {' .
+						'$.get(\'tools.php?action=get_cc&ip='.$IP.'\', function(cc) {' .
+							'$(\'.cc_'.$Class.'\').html(cc);' .
+						'});' .
+					'});' .
+				'</script>';
+		}
+		$HTML .= '</span>';
+		$IPs[$IP] = 1;
+		return $HTML;
 	}
-
 
 	/**
 	 * Disable an array of users.

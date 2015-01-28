@@ -81,8 +81,14 @@ $DB->query("
 if (!$DB->has_results()) {
 	error(404);
 }
-$Releases = $DB->to_array('GroupID', MYSQLI_ASSOC, false);
-$GroupIDs = array_keys($Releases);
+$ArtistRoles = array();
+while (list($GroupID, $Importance) = $DB->next_record(MYSQLI_NUM, false)) {
+	// Get the highest importances to place the .torrents in the most relevant folders
+	if (!isset($ArtistRoles[$GroupID]) || $Importance < $ArtistRoles[$GroupID]) {
+		$ArtistRoles[$GroupID] = $Importance;
+	}
+}
+$GroupIDs = array_keys($ArtistRoles);
 
 $SQL = 'SELECT CASE ';
 
@@ -163,12 +169,40 @@ while (list($Downloads, $GroupIDs) = $Collector->get_downloads('GroupID')) {
 			$Collector->skip_file($Download);
 			continue;
 		}
-		if ($Releases[$GroupID]['Importance'] == 1) {
-			$ReleaseTypeName = $ReleaseTypes[$Download['ReleaseType']];
-		} elseif ($Releases[$GroupID]['Importance'] == 2) {
-			$ReleaseTypeName = 'Guest Appearance';
-		} elseif ($Releases[$GroupID]['Importance'] == 3) {
-			$ReleaseTypeName = 'Remixed By';
+		switch ($ArtistRoles[$GroupID]) {
+			/**
+			 * 1 => Main artist
+			 * 2 => Guest artist
+			 * 3 => Remixer
+			 * 4 => Composer
+			 * 5 => Conductor
+			 * 6 => DJ / Compiler
+			 * 7 => Producer
+			 */
+			case '1':
+				$ReleaseTypeName = $ReleaseTypes[$Download['ReleaseType']];
+				break;
+			case '2':
+				$ReleaseTypeName = 'Guest Appearance';
+				break;
+			case '3':
+				$ReleaseTypeName = 'Remixed By';
+				break;
+			case '4':
+				$ReleaseTypeName = 'Composition';
+				break;
+			case '5':
+				$ReleaseTypeName = 'Conducted By';
+				break;
+			case '6':
+				$ReleaseTypeName = 'DJ Mix';
+				break;
+			case '7':
+				$ReleaseTypeName = 'Produced By';
+				break;
+			default:
+				$ReleaseTypeName = 'Other';
+				break;
 		}
 		$Collector->add_file($TorrentFile, $Download, $ReleaseTypeName);
 		unset($Download);

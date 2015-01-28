@@ -1128,7 +1128,7 @@ CREATE TABLE `torrents` (
   `Seeders` int(6) NOT NULL DEFAULT '0',
   `last_action` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `FreeTorrent` enum('0','1','2') NOT NULL DEFAULT '0',
-  `FreeLeechType` enum('0','1','2','3') NOT NULL DEFAULT '0',
+  `FreeLeechType` enum('0','1','2','3','4','5','6','7') NOT NULL DEFAULT '0',
   `Time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `Description` text,
   `Snatched` int(10) unsigned NOT NULL DEFAULT '0',

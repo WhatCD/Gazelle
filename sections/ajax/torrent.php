@@ -128,4 +128,4 @@ $JsonTorrentList[] = array(
 	'username' => $Userinfo['Username']
 );
 
-json_die("success", array('group' => $JsonTorrentDetails, 'torrent' => array_pop($JsonTorrentList)));
+json_print("success", array('group' => $JsonTorrentDetails, 'torrent' => array_pop($JsonTorrentList)));

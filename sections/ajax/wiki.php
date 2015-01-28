@@ -23,7 +23,7 @@ if ($Read > $LoggedUser['EffectiveClass']) {
 Text::$TOC = true;
 $TextBody = Text::full_format($Body, false);
 
-json_die("success", array(
+json_print("success", array(
 	'title' => $Title,
 	'bbBody' => $Body,
 	'body' => $TextBody,
