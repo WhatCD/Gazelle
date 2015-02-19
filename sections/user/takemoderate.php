@@ -181,6 +181,7 @@ if ($_POST['UserStatus'] === 'delete' && check_perms('users_delete_users')) {
 
 $UpdateSet = array();
 $EditSummary = array();
+$TrackerUserUpdates = array('passkey' => $Cur['torrent_pass']);
 
 if ($_POST['ResetRatioWatch'] && check_perms('users_edit_reset_keys')) {
 	$DB->query("
@@ -418,6 +419,7 @@ if ($Visible != $Cur['Visible'] && check_perms('users_make_invisible')) {
 	$UpdateSet[] = "Visible = '$Visible'";
 	$EditSummary[] = 'visibility changed';
 	$LightUpdates['Visible'] = $Visible;
+	$TrackerUserUpdates['visible'] = $Visible;
 }
 
 if ($Uploaded != $Cur['Uploaded'] && $Uploaded != $_POST['OldUploaded'] && (check_perms('users_edit_ratio')
@@ -541,7 +543,7 @@ if ($DisableLeech != $Cur['can_leech'] && check_perms('users_disable_any')) {
 	if (!empty($UserReason)) {
 		Misc::send_pm($UserID, 0, 'Your leeching privileges have been disabled', "Your leeching privileges have been disabled. The reason given was: [quote]{$UserReason}[/quote] If you would like to discuss this, please join ".BOT_DISABLED_CHAN.' on our IRC network. Instructions can be found [url='.site_url().'wiki.php?action=article&amp;name=IRC+-+How+to+join]here[/url].');
 	}
-	Tracker::update_tracker('update_user', array('passkey' => $Cur['torrent_pass'], 'can_leech' => $DisableLeech));
+	$TrackerUserUpdates['can_leech'] = $DisableLeech;
 }
 
 if ($DisableInvites != $Cur['DisableInvites'] && check_perms('users_disable_any')) {
@@ -635,9 +637,11 @@ if ($EnableUser != $Cur['Enabled'] && check_perms('users_disable_users')) {
 	$EnableStr = 'account '.translateUserStatus($Cur['Enabled']).'->'.translateUserStatus($EnableUser);
 	if ($EnableUser == '2') {
 		Tools::disable_users($UserID, '', 1);
+		$TrackerUserUpdates = array();
 	} elseif ($EnableUser == '1') {
 		$Cache->increment('stats_user_count');
-		Tracker::update_tracker('add_user', array('id' => $UserID, 'passkey' => $Cur['torrent_pass']));
+		$VisibleTrIP = $Visible && $Cur['IP'] != '127.0.0.1' ? '1' : '0';
+		Tracker::update_tracker('add_user', array('id' => $UserID, 'passkey' => $Cur['torrent_pass'], 'visible' => $VisibleTrIP));
 		if (($Cur['Downloaded'] == 0) || ($Cur['Uploaded'] / $Cur['Downloaded'] >= $Cur['RequiredRatio'])) {
 			$UpdateSet[] = "i.RatioWatchEnds = '0000-00-00 00:00:00'";
 			$CanLeech = 1;
@@ -650,7 +654,7 @@ if ($EnableUser != $Cur['Enabled'] && check_perms('users_disable_users')) {
 				$UpdateSet[] = "i.RatioWatchDownload = m.Downloaded";
 				$CanLeech = 0;
 			}
-			Tracker::update_tracker('update_user', array('passkey' => $Cur['torrent_pass'], 'can_leech' => '0'));
+			$TrackerUserUpdates['can_leech'] = 0;
 		}
 		$UpdateSet[] = "Enabled = '1'";
 		$LightUpdates['Enabled'] = 1;
@@ -664,6 +668,7 @@ if ($ResetPasskey == 1 && check_perms('users_edit_reset_keys')) {
 	$UpdateSet[] = "torrent_pass = '$Passkey'";
 	$EditSummary[] = 'passkey reset';
 	$HeavyUpdates['torrent_pass'] = $Passkey;
+	$TrackerUserUpdates['passkey'] = $Passkey;
 	$Cache->delete_value('user_'.$Cur['torrent_pass']);
 	//MUST come after the case for updating can_leech.
 
@@ -754,6 +759,10 @@ if (empty($UpdateSet) && empty($EditSummary)) {
 	} else {
 		$EditSummary[] = 'notes added';
 	}
+}
+
+if (count($TrackerUserUpdates) > 1) {
+	Tracker::update_tracker('update_user', $TrackerUserUpdates);
 }
 
 if ($DeleteKeys) {
