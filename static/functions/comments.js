@@ -395,22 +395,36 @@ $(document).ready(function() {
 	var avatars = new Array();
 	$(".double_avatar").each(function() {
 		if ($(this).data("gazelle-second-avatar")) {
+			$(this).data("fading", "");
 			var secondAvatar = $(this).data("gazelle-second-avatar");
 			var originalAvatar = $(this).attr("src");
 			if ($.inArray(secondAvatar, avatars) == -1) {
+				// Preload second image
 				avatars.push(secondAvatar);
-				image = new Image();
+				var image = new Image();
 				image.src = secondAvatar;
 			}
 			$(this).mouseover(function() {
-				$(this).fadeOut(fadeSpeed, function() {
-					$(this).attr("src", secondAvatar);
-				}).fadeIn(fadeSpeed);
+				if ($(this).data("fading") == "") {
+					var originalHeight = $(this).parent().height();
+					$(this).data("fading", "in");
+					$(this).fadeTo(fadeSpeed, 0, function() {
+						$(this).attr("src", secondAvatar);
+						if (!this.parentNode.style.height) {
+							$(this).parent().css("height", Math.max($(this).parent().height(), originalHeight) + 'px');
+						}
+					}).fadeTo(fadeSpeed, 1);
+				}
 			});
 			$(this).mouseout(function() {
-				$(this).fadeOut(fadeSpeed, function() {
-					$(this).attr("src", originalAvatar);
-				}).fadeIn(fadeSpeed);
+				if ($(this).data("fading") != "out" && ($(this).data("fading") != "" || $(this).attr("src") != originalAvatar)) {
+					$(this).data("fading", "out");
+					$(this).fadeOut(fadeSpeed, function() {
+						$(this).attr("src", originalAvatar);
+					}).fadeIn(fadeSpeed, function() {
+						$(this).data("fading", "");
+					});
+				}
 			});
 		}
 

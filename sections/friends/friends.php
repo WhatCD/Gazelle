@@ -13,7 +13,7 @@ include_once(SERVER_ROOT.'/classes/paranoia.class.php');
 
 
 
-View::show_header('Friends');
+View::show_header('Friends','comments');
 
 
 $UserID = $LoggedUser['ID'];
