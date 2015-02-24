@@ -1,5 +1,5 @@
 $(document).ready(function() {
-	var url = new URL();
+	var url = new gazURL();
 	var query = url.query;
 	switch (url.path) {
 		case "forums":

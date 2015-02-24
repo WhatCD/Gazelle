@@ -1,6 +1,6 @@
 var username;
 var postid;
-var url = new URL();
+var url = new gazURL();
 
 function QuoteJump(event, post) {
 	var button = event.button;

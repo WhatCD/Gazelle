@@ -648,14 +648,15 @@ class Users {
 		switch ($Setting) {
 			case 0:
 				if (!empty($Avatar)) {
-					$ToReturn = ($ReturnHTML ? "<img src=\"$Avatar\" width=\"$Size\" $Style $AvatarMouseOverText$SecondAvatar $Class />" : $Avatar);
+					$ToReturn = ($ReturnHTML ? "<div><img src=\"$Avatar\" width=\"$Size\" $Style $AvatarMouseOverText$SecondAvatar $Class /></div>" : $Avatar);
 				} else {
 					$URL = STATIC_SERVER.'common/avatars/default.png';
-					$ToReturn = ($ReturnHTML ? "<img src=\"$URL\" width=\"$Size\" $Style $AvatarMouseOverText$SecondAvatar />" : $URL);
+					$ToReturn = ($ReturnHTML ? "<div><img src=\"$URL\" width=\"$Size\" $Style $AvatarMouseOverText$SecondAvatar /></div>" : $URL);
 				}
 				break;
 			case 2:
 				$ShowAvatar = true;
+				// Fallthrough
 			case 3:
 				switch (G::$LoggedUser['Identicons']) {
 					case 0:
@@ -692,14 +693,14 @@ class Users {
 					$URL = 'https://robohash.org/'.md5($Username)."?set=set$Type&amp;size={$Size}x$Size";
 				}
 				if ($ShowAvatar == true && !empty($Avatar)) {
-					$ToReturn = ($ReturnHTML ? "<img src=\"$Avatar\" width=\"$Size\" $Style $AvatarMouseOverText$SecondAvatar $Class />" : $Avatar);
+					$ToReturn = ($ReturnHTML ? "<div><img src=\"$Avatar\" width=\"$Size\" $Style $AvatarMouseOverText$SecondAvatar $Class /></div>" : $Avatar);
 				} else {
-					$ToReturn = ($ReturnHTML ? "<img src=\"$URL\" width=\"$Size\" $Style $AvatarMouseOverText$SecondAvatar $Class />" : $URL);
+					$ToReturn = ($ReturnHTML ? "<div><img src=\"$URL\" width=\"$Size\" $Style $AvatarMouseOverText$SecondAvatar $Class /></div>" : $URL);
 				}
 				break;
 			default:
 				$URL = STATIC_SERVER.'common/avatars/default.png';
-				$ToReturn = ($ReturnHTML ? "<img src=\"$URL\" width=\"$Size\" $Style $AvatarMouseOverText$SecondAvatar $Class/>" : $URL);
+				$ToReturn = ($ReturnHTML ? "<div><img src=\"$URL\" width=\"$Size\" $Style $AvatarMouseOverText$SecondAvatar $Class/></div>" : $URL);
 		}
 		return $ToReturn;
 	}

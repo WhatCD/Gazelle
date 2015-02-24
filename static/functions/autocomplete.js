@@ -2,7 +2,7 @@ var ARTIST_AUTOCOMPLETE_URL = 'artist.php?action=autocomplete';
 var TAGS_AUTOCOMPLETE_URL = 'torrents.php?action=autocomplete_tags';
 var SELECTOR = '[data-gazelle-autocomplete="true"]';
 $(document).ready(function() {
-	var url = new URL();
+	var url = new gazURL();
 
 	$('#artistsearch' + SELECTOR).autocomplete({
 		deferRequestBy: 300,

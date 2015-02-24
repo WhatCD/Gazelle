@@ -14,7 +14,7 @@ $(document).ready(function() {
 });
 
 function getSkippedPage() {
-	var skip, url = new URL();
+	var skip, url = new gazURL();
 	switch(url.path) {
 		case "inbox":
 			if (url.query.length == 0 || (url.query.length == 1 && url.query.hasOwnProperty('sort'))) {

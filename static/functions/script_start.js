@@ -194,7 +194,7 @@ var util = function (selector, context) {
 	return new util.fn.init(selector, context);
 }
 
-function URL() {
+function gazURL() {
 	var path = window.location.pathname.split('/');
 	var path = path[path.length - 1].split(".")[0];
 	var splitted = window.location.search.substr(1).split("&");
