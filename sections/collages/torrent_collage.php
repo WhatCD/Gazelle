@@ -503,7 +503,7 @@ foreach ($UserAdditions as $UserID => $Additions) {
 					<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 					<input type="hidden" name="collageid" value="<?=$CollageID?>" />
 					<div class="field_div">
-						<textarea name="urls" rows="5" cols="25" style="white-space: nowrap;"></textarea>
+						<textarea name="urls" rows="5" cols="25" style="white-space: pre; word-wrap: normal; overflow: auto;"></textarea>
 					</div>
 					<div class="submit_div">
 						<input type="submit" value="Add" />
