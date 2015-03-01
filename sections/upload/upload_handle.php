@@ -83,7 +83,10 @@ if (empty($_POST['artists'])) {
 	$Artists = $_POST['artists'];
 	$Importance = $_POST['importance'];
 }
-$RequestID = $_POST['requestid'];
+if (!empty($_POST['requestid'])) {
+	$RequestID = $_POST['requestid'];
+	$Properties['RequestID'] = $RequestID;
+}
 //******************************************************************************//
 //--------------- Validate data in upload form ---------------------------------//
 
