@@ -15,22 +15,24 @@ if ($CategoryID == 0 && $UserID != $LoggedUser['ID'] && !check_perms('site_colla
 	error(403);
 }
 
-$DB->query("
-	SELECT ID, Deleted
-	FROM collages
-	WHERE Name = '".db_string($_POST['name'])."'
-		AND ID != '$CollageID'
-	LIMIT 1");
-if ($DB->has_results()) {
-	list($ID, $Deleted) = $DB->next_record();
-	if ($Deleted) {
-		$Err = 'A collage with that name already exists but needs to be recovered, please <a href="staffpm.php">contact</a> the staff team!';
-	} else {
-		$Err = "A collage with that name already exists: <a href=\"/collages.php?id=$ID\">$_POST[name]</a>.";
+if (isset($_POST['name'])) {
+	$DB->query("
+		SELECT ID, Deleted
+		FROM collages
+		WHERE Name = '".db_string($_POST['name'])."'
+			AND ID != '$CollageID'
+		LIMIT 1");
+	if ($DB->has_results()) {
+		list($ID, $Deleted) = $DB->next_record();
+		if ($Deleted) {
+			$Err = 'A collage with that name already exists but needs to be recovered, please <a href="staffpm.php">contact</a> the staff team!';
+		} else {
+			$Err = "A collage with that name already exists: <a href=\"/collages.php?id=$ID\">$_POST[name]</a>.";
+		}
+		$ErrNoEscape = true;
+		include(SERVER_ROOT.'/sections/collages/edit.php');
+		die();
 	}
-	$ErrNoEscape = true;
-	include(SERVER_ROOT.'/sections/collages/edit.php');
-	die();
 }
 
 $TagList = explode(',', $_POST['tags']);
