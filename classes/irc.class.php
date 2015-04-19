@@ -10,6 +10,7 @@ abstract class IRC_BOT {
 	abstract protected function connect_events();
 	abstract protected function channel_events();
 	abstract protected function query_events();
+	abstract protected function irc_events();
 	abstract protected function listener_events();
 
 	protected $Debug = false;
@@ -23,7 +24,6 @@ abstract class IRC_BOT {
 	protected $ListenSocket = false;
 	protected $Listened = false;
 	protected $Connecting = false;
-	protected $Bound = false; // Did we successfully bind to the socket?
 	protected $State = 1; // Drone is live
 	public $Restart = 0; // Die by default
 
@@ -31,7 +31,7 @@ abstract class IRC_BOT {
 		if (isset($_SERVER['HOME']) && is_dir($_SERVER['HOME']) && getcwd() != $_SERVER['HOME']) {
 			chdir($_SERVER['HOME']);
 		}
-		//ini_set('memory_limit', '12M');
+		ob_end_clean();
 		restore_error_handler(); //Avoid PHP error logging
 		set_time_limit(0);
 	}
@@ -42,10 +42,15 @@ abstract class IRC_BOT {
 		$this->post_connect();
 	}
 
-	public function connect_irc($Reconnect = false) {
+	private function connect_irc($Reconnect = false) {
 		$this->Connecting = true;
 		//Open a socket to the IRC server
-		while (!$this->Socket = fsockopen('tls://'.BOT_SERVER, BOT_PORT_SSL)) {
+		if (defined('BOT_PORT_SSL')) {
+			$IrcAddress = 'tls://' . BOT_SERVER . ':' . BOT_PORT_SSL;
+		} else {
+			$IrcAddress = 'tcp://' . BOT_SERVER . ':' . BOT_PORT;
+		}
+		while (!$this->Socket = stream_socket_client($IrcAddress, $ErrNr, $ErrStr)) {
 			sleep(15);
 		}
 		stream_set_blocking($this->Socket, 0);
@@ -55,24 +60,23 @@ abstract class IRC_BOT {
 		}
 	}
 
-	public function connect_listener() {
+	private function connect_listener() {
 		//create a socket to listen on
-		$this->ListenSocket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
-		//socket_set_option($this->ListenSocket, SOL_TCP, SO_REUSEADDR, 1);
-		socket_set_option($this->ListenSocket, SOL_SOCKET, SO_REUSEADDR, 1);
-		$this->Bound = socket_bind($this->ListenSocket, SOCKET_LISTEN_ADDRESS, SOCKET_LISTEN_PORT);
-		socket_listen($this->ListenSocket);
-		socket_set_nonblock($this->ListenSocket);
+		$ListenAddress = 'tcp://' . SOCKET_LISTEN_ADDRESS . ':' . SOCKET_LISTEN_PORT;
+		if (!$this->ListenSocket = stream_socket_server($ListenAddress, $ErrNr, $ErrStr)) {
+			die("Cannot create listen socket: $ErrStr");
+		}
+		stream_set_blocking($this->ListenSocket, false);
 	}
 
-	public function post_connect() {
+	private function post_connect() {
 		fwrite($this->Socket, "NICK ".BOT_NICK."Init\n");
 		fwrite($this->Socket, "USER ".BOT_NICK." * * :IRC Bot\n");
 		$this->listen();
 	}
 
 	public function disconnect() {
-		socket_close($this->ListenSocket);
+		fclose($this->ListenSocket);
 		$this->State = 0; //Drones dead
 	}
 
@@ -158,52 +162,21 @@ abstract class IRC_BOT {
 		G::$Cache->InternalCache = false;
 		stream_set_timeout($this->Socket, 10000000000);
 		while ($this->State == 1) {
-			if ($this->Data = fgets($this->Socket, 256)) {
-				//IP checks
-				//if (preg_match('/:\*\*\* (?:REMOTE)?CONNECT: Client connecting (?:.*) \[(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})\] \[(.+)\]/', $this->Data, $IP)) {
-				//	$this->ip_check($IP[1],true);
-				//}
-
-				if ($this->Debug === true) {
-					$this->send_to(BOT_DEBUG_CHAN, $this->Data);
-				}
-
-				if ($this->Whois !== false) {
-					$Exp = explode(' ', $this->Data);
-					if ($Exp[1] == '307') {
-						$this->Identified[$this->Whois] = 1;
-						$this->send_to($this->LastChan, "$this->Whois correctly identified as a real person!");
-						$this->Whois = false;
-						$this->LastChan = false;
-					} elseif ($Exp[6] == '/WHOIS') {
-						$this->Whois = false;
-					}
-				}
-
-				if (preg_match('/End of message of the day./', $this->Data)) {
-					$this->connect_events();
-				}
-
-				if (preg_match('/PING :(.+)/', $this->Data, $Ping)) {
-					$this->send_raw('PONG :'.$Ping[1]);
-				}
-
-				if (preg_match('/.*PRIVMSG #.*/', $this->Data)) {
-					$this->channel_events();
-				}
-
-				if (preg_match('/.* PRIVMSG '.BOT_NICK.' .*/', $this->Data)) {
-					$this->query_events();
+			$NullSock = null;
+			$Sockets = array($this->Socket, $this->ListenSocket);
+			if (stream_select($Sockets, $NullSock, $NullSock, null) === false) {
+				die();
+			}
+			foreach ($Sockets as $Socket) {
+				if ($Socket === $this->Socket) {
+					$this->irc_events();
+				} else {
+					$this->Listened = stream_socket_accept($Socket);
+					$this->listener_events();
 				}
 			}
-
-			if ($this->Listened = @socket_accept($this->ListenSocket)) {
-				$this->listener_events();
-			}
-
 			G::$DB->LinkID = false;
 			G::$DB->Queries = array();
-			usleep(5000);
 		}
 	}
 }
