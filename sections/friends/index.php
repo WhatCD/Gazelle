@@ -18,9 +18,7 @@ if (!empty($_REQUEST['action'])) {
 			authorize();
 			include(SERVER_ROOT.'/sections/friends/comment.php');
 			break;
-		case 'whois':
-			include(SERVER_ROOT.'/sections/friends/whois.php');
-			break;
+
 		case 'Contact':
 			header('Location: inbox.php?action=compose&to='.$_POST['friendid']);
 			break;

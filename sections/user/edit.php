@@ -810,9 +810,8 @@ list($ArtistsAdded) = $DB->next_record();
 					<div class="setting_description">
 						A strong password:
 						<ul>
-							<li>is 8 characters or longer</li>
-							<li>contains at least 1 lowercase and uppercase letter</li>
-							<li>contains at least a number or symbol</li>
+							<li>is 8 characters or longer, contains at least 1 lowercase and uppercase letter, and contains at least a number or symbol</li>
+							<li>Or is 20 characters or longer.</li>
 						</ul>
 					</div>
 				</td>

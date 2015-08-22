@@ -13,7 +13,7 @@ if (empty($Reset)) {
 	if (!empty($Err)) {
 ?>
 		<strong class="important_text"><?=display_str($Err)?></strong><br /><br />
-<?	} ?> A strong password is 8 characters or longer, contains at least 1 lowercase and uppercase letter, and contains at least a number or symbol.<br /><br />
+<?	} ?> A strong password is 8 characters or longer, contains at least 1 lowercase and uppercase letter, and contains at least a number or symbol, or is 20 characters or longer.<br /><br />
 		<table class="layout" cellpadding="2" cellspacing="1" border="0" align="center" width="100%">
 			<tr valign="top">
 				<td align="right" style="width: 100px;">Password&nbsp;</td>

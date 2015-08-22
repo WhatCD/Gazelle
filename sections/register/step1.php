@@ -41,7 +41,7 @@ if (empty($Sent)) {
 			<td align="right">Verify password&nbsp;</td>
 			<td align="left">
 				<input type="password" name="confirm_password" id="new_pass_2" class="inputtext" placeholder="Verify password" /> <strong id="pass_match"></strong>
-				<p>A strong password is 8 characters or longer, contains at least 1 lowercase and uppercase letter, and contains at least a number or a symbol.</p>
+				<p>A strong password is 8 characters or longer, contains at least 1 lowercase and uppercase letter, and contains at least a number or a symbol, or is 20 characters or longer.</p>
 			</td>
 		</tr>
 		<tr valign="top">

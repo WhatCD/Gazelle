@@ -11,6 +11,7 @@ var SHORT = 4;
 var MATCH_IRCKEY = 5;
 var MATCH_USERNAME = 6;
 var COMMON = 7;
+var MATCH_OLD_PASSWORD = 8;
 
 var USER_PATH = "/user.php";
 
@@ -85,6 +86,7 @@ function validatePassword(password) {
 function calculateComplexity(password) {
 	var length = password.length;
 	var username;
+	var oldPassword;
 
 	if (isUserPage()) {
 		username = $(".username").text();
@@ -97,12 +99,13 @@ function calculateComplexity(password) {
 
 	if (isUserPage()) {
 		irckey = $("#irckey").val();
+		oldPassword =$("#cur_pass").val();
 	}
 
-	if (length >= 8) {
+	if (length >= 8 && length < 20) {
 		setStatus(WEAK);
 	}
-	if (length >= 8 && isStrongPassword(password)) {
+	if ((length >= 8 && isStrongPassword(password)) || length >= 20) {
 		setStatus(STRONG);
 	}
 	if (length > 0 && length < 8) {
@@ -116,6 +119,10 @@ function calculateComplexity(password) {
 			if (password.toLowerCase() == irckey.toLowerCase()) {
 				setStatus(MATCH_IRCKEY);
 			}
+		}
+
+		if (oldPassword.length > 0 && password == oldPassword) {
+			setStatus(MATCH_OLD_PASSWORD);
 		}
 	}
 	if (username.length > 0) {
@@ -174,6 +181,10 @@ function setStatus(strength) {
 	if (strength == COMMON) {
 		 disableSubmit();
 		 $("#pass_strength").text("Password is too common").css("color", "red");
+	}
+	if (strength == MATCH_OLD_PASSWORD) {
+		disableSubmit();
+		$("#pass_strength").text("New password cannot match old password").css("color", "red");
 	}
 	if (strength == CLEAR) {
 		$("#pass_strength").text("");

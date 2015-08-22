@@ -46,7 +46,7 @@ if (isset($_REQUEST['act']) && $_REQUEST['act'] == 'recover') {
 		if ($UserID && strtotime($Expires) > time()) {
 
 		// If the user has requested a password change, and his key has not expired
-			$Validate->SetFields('password', '1', 'regex', 'You entered an invalid password. A strong password is 8 characters or longer, contains at least 1 lowercase and uppercase letter, contains at least a number or symbol', array('regex' => '/(?=^.{8,}$)(?=.*[^a-zA-Z])(?=.*[A-Z])(?=.*[a-z]).*$/'));
+			$Validate->SetFields('password', '1', 'regex', 'You entered an invalid password. A strong password is 8 characters or longer, contains at least 1 lowercase and uppercase letter, and contains at least a number or symbol, or is 20 characters or longer', array('regex' => '/(?=^.{8,}$)(?=.*[^a-zA-Z])(?=.*[A-Z])(?=.*[a-z]).*$|.{20,}/'));
 			$Validate->SetFields('verifypassword', '1', 'compare', 'Your passwords did not match.', array('comparefield' => 'password'));
 
 			if (!empty($_REQUEST['password'])) {
@@ -65,6 +65,7 @@ if (isset($_REQUEST['act']) && $_REQUEST['act'] == 'recover') {
 							i.ResetExpires = '0000-00-00 00:00:00'
 						WHERE m.ID = '$UserID'
 							AND i.UserID = m.ID");
+					
 					$DB->query("
 						INSERT INTO users_history_passwords
 							(UserID, ChangerIP, ChangeTime)

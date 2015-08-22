@@ -1,4 +1,5 @@
 <?
+
 if (isset($_GET['userid']) && check_perms('users_view_invites')) {
 	if (!is_number($_GET['userid'])) {
 		error(403);
@@ -129,12 +130,13 @@ $DB->query("
 	WHERE ID = $UserID");
 list($CanLeech) = $DB->next_record();
 
-if (!$Sneaky
-	&& !$LoggedUser['RatioWatch']
-	&& $CanLeech
-	&& empty($LoggedUser['DisableInvites'])
-	&& ($LoggedUser['Invites'] > 0 || check_perms('site_send_unlimited_invites'))
-	&& ($UserCount <= USER_LIMIT || USER_LIMIT == 0 || check_perms('site_can_invite_always'))
+
+	if (!$Sneaky
+		&& !$LoggedUser['RatioWatch']
+		&& $CanLeech
+		&& empty($LoggedUser['DisableInvites'])
+		&& ($LoggedUser['Invites'] > 0 || check_perms('site_send_unlimited_invites'))
+		&& ($UserCount <= USER_LIMIT || USER_LIMIT == 0 || check_perms('site_can_invite_always'))
 	) { ?>
 	<div class="box pad">
 		<p>Please note that the selling, trading, or publicly giving away our invitations&#8202;&mdash;&#8202;or responding to public invite requests&#8202;&mdash;&#8202;is strictly forbidden, and may result in you and your entire invite tree being banned. This includes offering to give away our invitations on any forum which is not a class-restricted forum on another private tracker.</p>

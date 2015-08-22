@@ -31,7 +31,7 @@ $Val->SetFields('collagecovers', 1, "number", "You forgot to select your collage
 $Val->SetFields('avatar', 0, "regex", "You did not enter a valid avatar URL.", array('regex' => "/^".IMAGE_REGEX."$/i"));
 $Val->SetFields('email', 1, "email", "You did not enter a valid email address.");
 $Val->SetFields('irckey', 0, "string", "You did not enter a valid IRC key. An IRC key must be between 6 and 32 characters long.", array('minlength' => 6, 'maxlength' => 32));
-$Val->SetFields('new_pass_1', 0, "regex", "You did not enter a valid password. A strong password is 8 characters or longer, contains at least 1 lowercase and uppercase letter, and contains at least a number or symbol.", array('regex' => '/(?=^.{8,}$)(?=.*[^a-zA-Z])(?=.*[A-Z])(?=.*[a-z]).*$/'));
+$Val->SetFields('new_pass_1', 0, "regex", "You did not enter a valid password. A strong password is 8 characters or longer, contains at least 1 lowercase and uppercase letter, and contains at least a number or symbol.", array('regex' => '/(?=^.{8,}$)(?=.*[^a-zA-Z])(?=.*[A-Z])(?=.*[a-z]).*$|.{20,}/'));
 $Val->SetFields('new_pass_2', 1, "compare", "Your passwords do not match.", array('comparefield' => 'new_pass_1'));
 if (check_perms('site_advanced_search')) {
 	$Val->SetFields('searchtype', 1, "number", "You forgot to select your default search preference.", array('minlength' => 0, 'maxlength' => 1));
@@ -184,7 +184,9 @@ if (!$Err && ($_POST['cur_pass'] || $_POST['new_pass_1'] || $_POST['new_pass_2']
 	list($PassHash, $Secret) = $DB->next_record();
 
 	if (Users::check_password($_POST['cur_pass'], $PassHash, $Secret)) {
-		if ($_POST['new_pass_1'] && $_POST['new_pass_2']) {
+		if ($_POST['cur_pass'] == $_POST['new_pass_1']) {
+			$Err = 'Your new password cannot be the same as your old password.';
+		} else if ($_POST['new_pass_1'] && $_POST['new_pass_2']) {
 			$ResetPassword = true;
 		}
 	} else {
@@ -333,6 +335,7 @@ if ($ResetPassword) {
 	$ChangerIP = db_string($LoggedUser['IP']);
 	$PassHash = Users::make_crypt_hash($_POST['new_pass_1']);
 	$SQL.= ",m.PassHash = '".db_string($PassHash)."'";
+	
 	$DB->query("
 		INSERT INTO users_history_passwords
 			(UserID, ChangerIP, ChangeTime)
@@ -365,7 +368,7 @@ $SQL .= "WHERE m.ID = '".db_string($UserID)."'";
 $DB->query($SQL);
 
 if ($ResetPassword) {
-	logout();
+	logout_all_sessions();
 }
 
 header("Location: user.php?action=edit&userid=$UserID");

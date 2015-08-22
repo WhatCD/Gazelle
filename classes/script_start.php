@@ -328,6 +328,20 @@ function logout() {
 	die();
 }
 
+/**
+ * Logout all sessions
+ */
+function logout_all_sessions() {
+	$UserID = G::$LoggedUser['ID'];
+	
+	G::$DB->query("
+		DELETE FROM users_sessions
+		WHERE UserID = '$UserID'");
+	
+	G::$Cache->delete_value('users_sessions_' . $UserID);
+	logout();
+}
+
 function enforce_login() {
 	global $SessionID;
 	if (!$SessionID || !G::$LoggedUser) {
