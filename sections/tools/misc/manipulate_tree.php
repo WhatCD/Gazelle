@@ -15,7 +15,8 @@ if ($_POST['id']) {
 		error('Please enter a comment to add to the users affected.');
 	}
 	else {
-		$Comment = db_string($_POST['comment']);
+		$Comment = date('Y-m-d H:i:s') . " - ";
+		$Comment .= db_string($_POST['comment']);
 		$Comment .= "\n" . "Manipulate Tree used by " . $LoggedUser['Username'];
 	}
 	$UserID = $_POST['id'];
