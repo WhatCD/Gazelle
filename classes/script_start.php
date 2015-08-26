@@ -373,6 +373,7 @@ if (!preg_match('/^[a-z0-9]+$/i', $Document)) {
 	error(404);
 }
 
+
 $StripPostKeys = array_fill_keys(array('password', 'cur_pass', 'new_pass_1', 'new_pass_2', 'verifypassword', 'confirm_password', 'ChangePassword', 'Password'), true);
 $Cache->cache_value('php_' . getmypid(), array(
 	'start' => sqltime(),

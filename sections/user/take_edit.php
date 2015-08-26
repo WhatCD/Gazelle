@@ -368,6 +368,7 @@ $SQL .= "WHERE m.ID = '".db_string($UserID)."'";
 $DB->query($SQL);
 
 if ($ResetPassword) {
+	
 	logout_all_sessions();
 }
 
