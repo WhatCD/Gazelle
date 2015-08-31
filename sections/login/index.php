@@ -72,6 +72,8 @@ if (isset($_REQUEST['act']) && $_REQUEST['act'] == 'recover') {
 						VALUES
 							('$UserID', '$_SERVER[REMOTE_ADDR]', '".sqltime()."')");
 					$Reset = true; // Past tense form of "to reset", meaning that password has now been reset
+					G::$LoggedUser['ID'] = $UserID; // Set $LoggedUser['ID'] for logout_all_sessions() to work
+					logout_all_sessions();
 
 
 				}
