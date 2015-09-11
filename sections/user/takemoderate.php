@@ -212,6 +212,10 @@ if ($_POST['ResetIPHistory'] && check_perms('users_edit_reset_keys')) {
 		UPDATE users_history_passkeys
 		SET ChangerIP = ''
 		WHERE UserID = $UserID");
+	$DB->query("
+		UPDATE users_sessions
+		SET IP = '127.0.0.1'
+		WHERE UserID = $UserID");
 
 	$EditSummary[] = 'IP history cleared';
 }

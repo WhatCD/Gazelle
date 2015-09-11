@@ -121,6 +121,7 @@ if ($UsersOnly) {
 		LIMIT $Limit");
 }
 
+
 if (isset($QueryID)) {
 	$DB->query('SELECT FOUND_ROWS()');
 	list($NumResults) = $DB->next_record();
@@ -172,13 +173,15 @@ $Pages = Format::get_pages($Page, $NumResults, IPS_PER_PAGE, 9);
 	<div class="header">
 		<h2>IP address history for <a href="user.php?id=<?=$UserID?>"><?=$UserInfo['Username']?></a></h2>
 		<div class="linkbox">
-<?	if ($UsersOnly) { ?>
+<? 
+if ($UsersOnly) { ?>
 			<a href="userhistory.php?<?=Format::get_url(array('usersonly'))?>" class="brackets">View all IP addresses</a>
 <?	} else { ?>
 			<a href="userhistory.php?<?=Format::get_url()?>&amp;usersonly=1" class="brackets">View IP addresses with users</a>
 <?	} ?>
 		</div>
-<?	if ($Pages) { ?>
+<?	
+	if ($Pages) { ?>
 		<div class="linkbox pager"><?=$Pages?></div>
 <?	} ?>
 	</div>
