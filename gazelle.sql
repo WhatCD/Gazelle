@@ -536,6 +536,11 @@ CREATE TABLE `label_aliases` (
   KEY `AliasLabel` (`AliasLabel`)
 ) ENGINE=InnoDB CHARSET utf8;
 
+CREATE TABLE `last_sent_email` (
+  `UserID` int(10) NOT NULL,
+  PRIMARY KEY (`UserID`)
+) ENGINE=InnoDB CHARSET utf8;
+
 CREATE TABLE `lastfm_users` (
   `ID` int(10) unsigned NOT NULL,
   `Username` varchar(20) NOT NULL,
