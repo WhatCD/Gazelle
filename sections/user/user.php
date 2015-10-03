@@ -346,13 +346,13 @@ if (check_paranoia_here('artistsadded')) {
 }
 
 //Do the ranks
-$UploadedRank = UserRank::get_rank('uploaded', $Uploaded);
-$DownloadedRank = UserRank::get_rank('downloaded', $Downloaded);
-$UploadsRank = UserRank::get_rank('uploads', $Uploads);
-$RequestRank = UserRank::get_rank('requests', $RequestsFilled);
-$PostRank = UserRank::get_rank('posts', $ForumPosts);
-$BountyRank = UserRank::get_rank('bounty', $TotalSpent);
-$ArtistsRank = UserRank::get_rank('artists', $ArtistsAdded);
+//$UploadedRank = UserRank::get_rank('uploaded', $Uploaded);
+//$DownloadedRank = UserRank::get_rank('downloaded', $Downloaded);
+//$UploadsRank = UserRank::get_rank('uploads', $Uploads);
+//$RequestRank = UserRank::get_rank('requests', $RequestsFilled);
+//$PostRank = UserRank::get_rank('posts', $ForumPosts);
+//$BountyRank = UserRank::get_rank('bounty', $TotalSpent);
+//$ArtistsRank = UserRank::get_rank('artists', $ArtistsAdded);
 
 if ($Downloaded == 0) {
 	$Ratio = 1;
@@ -361,7 +361,7 @@ if ($Downloaded == 0) {
 } else {
 	$Ratio = round($Uploaded / $Downloaded, 2);
 }
-$OverallRank = UserRank::overall_score($UploadedRank, $DownloadedRank, $UploadsRank, $RequestRank, $PostRank, $BountyRank, $ArtistsRank, $Ratio);
+//$OverallRank = UserRank::overall_score($UploadedRank, $DownloadedRank, $UploadsRank, $RequestRank, $PostRank, $BountyRank, $ArtistsRank, $Ratio);
 
 ?>
 		<div class="box box_info box_userinfo_percentile">
