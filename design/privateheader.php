@@ -398,8 +398,6 @@ if ($NotificationsManager->is_traditional(NotificationsManager::TORRENTS)) {
 	}
 	$NotificationsManager->clear_notifications_array();
 }
-
-
 if (check_perms('users_mod')) {
 	$ModBar[] = '<a href="tools.php">Toolbox</a>';
 }
