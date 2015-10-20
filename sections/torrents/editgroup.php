@@ -102,7 +102,7 @@ View::show_header('Edit torrent group');
 			<input type="hidden" name="groupid" value="<?=$GroupID?>" />
 			<table cellpadding="3" cellspacing="1" border="0" class="layout border" width="100%">
 				<tr>
-					<td colspan="2" class="center">This is for editing the information related to the <strong>original release</strong> only.</td>
+					<td colspan="2" class="center">This is for editing the information related to the <strong>Original Release</strong> only.</td>
 				</tr>
 				<tr>
 					<td class="label">Year</td>
