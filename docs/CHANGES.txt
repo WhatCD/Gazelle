@@ -1,5 +1,8 @@
 CHANGE LOG
 
+2015-10-19 by newman
+Fix capitalization on the torrent group edit page
+
 2014-11-06 by porkpie
     Create a TorrentSearch class that does most of the torrent search job.
     Add PHP post-processing of matches if a search query doesn't need
