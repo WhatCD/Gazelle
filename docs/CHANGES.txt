@@ -1,5 +1,8 @@
 CHANGE LOG
 
+2015-10-21 by newman
+Update the IRC message sent when creating a new staff blog to be more useful
+
 2015-10-19 by newman
 Fix capitalization on the torrent group edit page
 
