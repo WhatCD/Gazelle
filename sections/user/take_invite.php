@@ -70,10 +70,15 @@ foreach ($Emails as $CurEmail) {
 	}
 	$InviteKey = db_string(Users::make_secret());
 
+$DisabledChan = BOT_DISABLED_CHAN;
+$IRCServer = BOT_SERVER;
+
 $Message = <<<EOT
 The user $Username has invited you to join $SiteName and has specified this address ($CurEmail) as your email address. If you do not know this person, please ignore this email, and do not reply.
 
 Please note that selling invites, trading invites, and giving invites away publicly (e.g. on a forum) is strictly forbidden. If you have received your invite as a result of any of these things, do not bother signing up - you will be banned and lose your chances of ever signing up legitimately.
+
+If you have previously had an account at $SiteName, do not use this invite. Instead, please join $DisabledChan on $IRCServer and ask for your account to be reactivated.
 
 To confirm your invite, click on the following link:
 

@@ -29,5 +29,5 @@ if (empty($Sent) || (!empty($Sent) && $Sent != 1)) {
 	</div>
 </form>
 <?
-View::show_footer();
+View::show_footer(['recover' => true]);
 ?>

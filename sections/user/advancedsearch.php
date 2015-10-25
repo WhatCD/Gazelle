@@ -152,6 +152,7 @@ if (count($_GET)) {
 
 	$Val->SetFields('matchtype', '0', 'inarray', 'Invalid matchtype field', array('inarray' => array('strict', 'fuzzy', 'regex')));
 
+	$Val->SetFields('lockedaccount', '0', 'inarray', 'Invalid locked account field', array('inarray' => array('any', 'locked', 'unlocked')));
 
 	$Val->SetFields('enabled', '0', 'inarray', 'Invalid enabled field', array('inarray' => array('', 0, 1, 2)));
 	$Val->SetFields('class', '0', 'inarray', 'Invalid class', array('inarray' => $ClassIDs));
@@ -282,6 +283,19 @@ if (count($_GET)) {
 				$Where[] = 'um1.IP'.$Match.wrap($_GET['ip'], '', true);
 			}
 		}
+
+		if ($_GET['lockedaccount'] != '' && $_GET['lockedaccount'] != 'any') {
+			$Join['la'] = '';
+			
+			if ($_GET['lockedaccount'] == 'unlocked') {
+				$Join['la'] .= ' LEFT';
+				$Where[] = ' la.UserID IS NULL';
+			}
+
+			$Join['la'] .= ' JOIN locked_accounts AS la ON la.UserID = um1.ID ';
+		}
+
+		
 
 		if (!empty($_GET['cc'])) {
 			if ($_GET['cc_op'] == 'equal') {
@@ -516,8 +530,14 @@ View::show_header('User search');
 				<td>
 					<input type="text" name="ip" size="20" value="<?=display_str($_GET['ip'])?>" />
 				</td>
-				<td class="label nobr"></td>
-				<td></td>
+				<td class="label nobr">Locked Account:</td>
+				<td>
+					<select name="lockedaccount">
+						<option value="any"<? if ($_GET['lockedaccount'] == 'any') { echo ' selected="selected"'; } ?>>Any</option>
+						<option value="locked"<? if ($_GET['lockedaccount'] == 'locked') { echo ' selected="selected"'; } ?>>Locked</option>
+						<option value="unlocked"<? if ($_GET['lockedaccount'] == 'unlocked') { echo ' selected="selected"'; } ?>>Unlocked</option>
+					</select>
+				</td>
 				<td class="label nobr">Secondary class:</td>
 				<td>
 					<select name="secclass">

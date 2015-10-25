@@ -1,5 +1,10 @@
 CHANGE LOG
 
+2015-10-24 by newman
+Implement locked accounts and site options. Locked accounts is an intermediary between enabled and disabled, and is presented on a user's staff tools. It limits the user to navigating to only the locked page and staffpm. Site options eliminates the need to hardcode values that may change in the future.
+
+Users can now also reset their password without logging out.
+
 2015-10-21 by newman
 Update the IRC message sent when creating a new staff blog to be more useful
 

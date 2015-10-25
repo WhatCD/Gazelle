@@ -554,6 +554,13 @@ CREATE TABLE `library_contest` (
   PRIMARY KEY (`UserID`,`TorrentID`)
 ) ENGINE=InnoDB CHARSET utf8;
 
+CREATE TABLE `locked_accounts` (
+  `UserID` int(10) unsigned NOT NULL,
+  `Type` tinyint(1) NOT NULL,
+  PRIMARY KEY (`UserID`),
+  CONSTRAINT `fk_user_id` FOREIGN KEY (`UserID`) REFERENCES `users_main` (`ID`) ON DELETE CASCADE
+) ENGINE=InnoDB CHARSET utf8;
+
 CREATE TABLE `log` (
   `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `Message` varchar(400) NOT NULL,
@@ -793,6 +800,16 @@ CREATE TABLE `site_history` (
   `Date` datetime DEFAULT NULL,
   `Body` mediumtext,
   PRIMARY KEY (`ID`)
+) ENGINE=InnoDB CHARSET utf8;
+
+CREATE TABLE `site_options` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `Name` varchar(64) NOT NULL,
+  `Value` tinytext NOT NULL,
+  `Comment` text NOT NULL,
+  PRIMARY KEY (`ID`),
+  UNIQUE KEY `Name` (`Name`),
+  KEY `name_index` (`Name`)
 ) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `sphinx_a` (

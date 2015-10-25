@@ -66,12 +66,14 @@ if (check_perms('users_mod')) { // Person viewing is a staff member
 			i.DisableRequests," . "
 			m.FLTokens,
 			SHA1(i.AdminComment),
-			i.InfoTitle
+			i.InfoTitle,
+			la.Type AS LockedAccount
 		FROM users_main AS m
 			JOIN users_info AS i ON i.UserID = m.ID
 			LEFT JOIN users_main AS inviter ON i.Inviter = inviter.ID
 			LEFT JOIN permissions AS p ON p.ID = m.PermissionID
 			LEFT JOIN forums_posts AS posts ON posts.AuthorID = m.ID
+			LEFT JOIN locked_accounts AS la ON la.UserID = m.ID
 		WHERE m.ID = '$UserID'
 		GROUP BY AuthorID");
 
@@ -79,7 +81,7 @@ if (check_perms('users_mod')) { // Person viewing is a staff member
 		header("Location: log.php?search=User+$UserID");
 	}
 
-	list($Username,	$Email,	$LastAccess, $IP, $Class, $Uploaded, $Downloaded, $RequiredRatio, $CustomTitle, $torrent_pass, $Enabled, $Paranoia, $Invites, $DisableLeech, $Visible, $JoinDate, $Info, $Avatar, $AdminComment, $Donor, $Artist, $Warned, $SupportFor, $RestrictedForums, $PermittedForums, $InviterID, $InviterName, $ForumPosts, $RatioWatchEnds, $RatioWatchDownload, $DisableAvatar, $DisableInvites, $DisablePosting, $DisableForums, $DisableTagging, $DisableUpload, $DisableWiki, $DisablePM, $DisableIRC, $DisableRequests, $FLTokens, $CommentHash, $InfoTitle) = $DB->next_record(MYSQLI_NUM, array(8, 11));
+	list($Username,	$Email,	$LastAccess, $IP, $Class, $Uploaded, $Downloaded, $RequiredRatio, $CustomTitle, $torrent_pass, $Enabled, $Paranoia, $Invites, $DisableLeech, $Visible, $JoinDate, $Info, $Avatar, $AdminComment, $Donor, $Artist, $Warned, $SupportFor, $RestrictedForums, $PermittedForums, $InviterID, $InviterName, $ForumPosts, $RatioWatchEnds, $RatioWatchDownload, $DisableAvatar, $DisableInvites, $DisablePosting, $DisableForums, $DisableTagging, $DisableUpload, $DisableWiki, $DisablePM, $DisableIRC, $DisableRequests, $FLTokens, $CommentHash, $InfoTitle, $LockedAccount) = $DB->next_record(MYSQLI_NUM, array(8, 11));
 } else { // Person viewing is a normal user
 	$DB->query("
 		SELECT
@@ -1219,6 +1221,30 @@ if (check_perms('users_mod', $Class)) { ?>
 			</tr>
 <?	} ?>
 		</table>
+<?  if (check_perms('users_disable_any')) { ?>
+		<table class="layout">
+			<tr class="colhead">
+				<td colspan="2">
+					Lock Account
+				</td>
+			</tr>
+			<tr>
+	            <td class="label">Lock Account:</td>
+	            <td>
+	                <input type="checkbox" name="LockAccount" id="LockAccount" <? if($LockedAccount) { ?> checked="checked" <? } ?>/>
+	            </td>
+	        </tr>
+	        <tr>
+	            <td class="label">Reason:</td>
+	            <td>
+	                <select name="LockReason">
+	                    <option value="---">---</option>
+	                    <option value="<?=STAFF_LOCKED?>" <? if ($LockedAccount == STAFF_LOCKED) { ?> selected <? } ?>>Staff Lock</option>
+	                </select>
+	            </td>
+	        </tr>
+		</table>
+<?  }  ?>
 		<table class="layout" id="user_privs_box">
 			<tr class="colhead">
 				<td colspan="2">

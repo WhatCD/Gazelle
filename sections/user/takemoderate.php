@@ -71,6 +71,8 @@ $DisablePM = isset($_POST['DisablePM']) ? 1 : 0;
 $DisableIRC = isset($_POST['DisableIRC']) ? 1 : 0;
 $DisableRequests = isset($_POST['DisableRequests']) ? 1 : 0;
 $DisableLeech = isset($_POST['DisableLeech']) ? 0 : 1;
+$LockedAccount = isset($_POST['LockAccount']) ? 1 : 0;
+$LockType = $_POST['LockReason'];
 
 $RestrictedForums = db_string(trim($_POST['RestrictedForums']));
 $PermittedForums = db_string(trim($_POST['PermittedForums']));
@@ -86,7 +88,6 @@ if ($SendHackedMail && !empty($_POST['HackedEmail'])) {
 }
 $MergeStatsFrom = db_string($_POST['MergeStatsFrom']);
 $Reason = db_string($_POST['Reason']);
-
 $HeavyUpdates = array();
 $LightUpdates = array();
 
@@ -127,12 +128,14 @@ $DB->query("
 		m.RequiredRatio,
 		m.FLTokens,
 		i.RatioWatchEnds,
+		la.Type,
 		SHA1(i.AdminComment) AS CommentHash,
 		GROUP_CONCAT(l.PermissionID SEPARATOR ',') AS SecondaryClasses
 	FROM users_main AS m
 		JOIN users_info AS i ON i.UserID = m.ID
 		LEFT JOIN permissions AS p ON p.ID = m.PermissionID
 		LEFT JOIN users_levels AS l ON l.UserID = m.ID
+		LEFT JOIN locked_accounts AS la ON la.UserID = m.ID
 	WHERE m.ID = $UserID
 	GROUP BY m.ID");
 
@@ -182,6 +185,28 @@ if ($_POST['UserStatus'] === 'delete' && check_perms('users_delete_users')) {
 $UpdateSet = array();
 $EditSummary = array();
 $TrackerUserUpdates = array('passkey' => $Cur['torrent_pass']);
+
+$QueryID = G::$DB->get_query_id();
+
+if ($LockType == '---' || $LockedAccount == 0) {
+	if ($Cur['Type']) {
+		$DB->query("DELETE FROM locked_accounts WHERE UserID = '" . $UserID . "'");
+		$EditSummary[] = 'Account unlocked';
+	}
+} else if (!$Cur['Type'] || $Cur['Type'] != $LockType) {
+	$DB->query("INSERT INTO locked_accounts (UserID, Type)
+				VALUES ('" . $UserID . "', '" . $LockType . "')
+				ON DUPLICATE KEY UPDATE Type = '" . $LockType . "'");
+		
+	if ($Cur['Type'] != $LockType) {
+		$EditSummary[] = 'Account lock reason changed to ' . $LockType;
+	} else {
+		$EditSummary[] = 'Account locked (' . $LockType . ')';
+	}
+	
+}
+$Cache->delete_value("user_info_" . $UserID);
+$DB->set_query_id($QueryID);
 
 if ($_POST['ResetRatioWatch'] && check_perms('users_edit_reset_keys')) {
 	$DB->query("

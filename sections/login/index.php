@@ -4,7 +4,8 @@
 Add the JavaScript validation into the display page using the class
 //-----------------------------------*/
 
-if (!empty($LoggedUser['ID'])) {
+// Allow users to reset their password while logged in
+if(!empty($LoggedUser['ID']) && $_REQUEST['act'] != 'recover') {
 	header('Location: index.php');
 	die();
 }
@@ -85,7 +86,6 @@ if (isset($_REQUEST['act']) && $_REQUEST['act'] == 'recover') {
 
 		} else {
 			// Either his key has expired, or he hasn't requested a pass change at all
-
 			if (strtotime($Expires) < time() && $UserID) {
 				// If his key has expired, clear all the reset information
 				$DB->query("
@@ -124,25 +124,8 @@ if (isset($_REQUEST['act']) && $_REQUEST['act'] == 'recover') {
 				if ($UserID) {
 					// Email exists in the database
 					// Set ResetKey, send out email, and set $Sent to 1 to show success page
-					$ResetKey = Users::make_secret();
-					$DB->query("
-						UPDATE users_info
-						SET
-							ResetKey = '".db_string($ResetKey)."',
-							ResetExpires = '".time_plus(60 * 60)."'
-						WHERE UserID = '$UserID'");
+					Users::resetPassword($UserID, $Username, $Email);
 
-					require(SERVER_ROOT.'/classes/templates.class.php');
-					$TPL = NEW TEMPLATE;
-					$TPL->open(SERVER_ROOT.'/templates/password_reset.tpl'); // Password reset template
-
-					$TPL->set('Username', $Username);
-					$TPL->set('ResetKey', $ResetKey);
-					$TPL->set('IP', $_SERVER['REMOTE_ADDR']);
-					$TPL->set('SITE_NAME', SITE_NAME);
-					$TPL->set('SITE_URL', NONSSL_SITE_URL);
-
-					Misc::send_email($Email, 'Password reset information for '.SITE_NAME, $TPL->get(),'noreply');
 					$Sent = 1; // If $Sent is 1, recover_step1.php displays a success message
 
 					//Log out all of the users current sessions
@@ -181,7 +164,6 @@ if (isset($_REQUEST['act']) && $_REQUEST['act'] == 'recover') {
 	} // End if (step 1)
 
 } // End password recovery
-
 // Normal login
 else {
 	$Validate->SetFields('username', true, 'regex', 'You did not enter a valid username.', array('regex' => USERNAME_REGEX));

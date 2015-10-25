@@ -423,6 +423,10 @@ switch ($_REQUEST['action']) {
 		include(SERVER_ROOT.'/sections/tools/misc/manipulate_tree.php');
 		break;
 
+	case 'site_options':
+		include(SERVER_ROOT.'/sections/tools/development/site_options.php');
+		break;
+
 	case 'recommendations':
 		include(SERVER_ROOT.'/sections/tools/misc/recommendations.php');
 		break;

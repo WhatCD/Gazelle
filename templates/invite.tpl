@@ -2,6 +2,8 @@ The user {{InviterName}} has invited you to join {{SITE_NAME}}, and has specifie
 
 Please note that selling invites, trading invites, and giving invites away publicly (e.g. on a forum) is strictly forbidden. If you have received your invite as a result of any of these things, do not bother signing up - you will be banned and lose your chances of ever signing up legitimately.
 
+If you had previously had an account at {{SITE_NAME}}, do not use this invite. Instead, please join {{DISABLED_CHAN}} on {{IRC_SERVER}} and ask for your account to be reactivated.
+
 To confirm your invite, click on the following link:
 
 https://{{SITE_URL}}/register.php?invite={{InviteKey}}

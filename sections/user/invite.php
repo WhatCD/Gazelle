@@ -139,7 +139,8 @@ list($CanLeech) = $DB->next_record();
 		&& ($UserCount <= USER_LIMIT || USER_LIMIT == 0 || check_perms('site_can_invite_always'))
 	) { ?>
 	<div class="box pad">
-		<p>Please note that the selling, trading, or publicly giving away our invitations&#8202;&mdash;&#8202;or responding to public invite requests&#8202;&mdash;&#8202;is strictly forbidden, and may result in you and your entire invite tree being banned. This includes offering to give away our invitations on any forum which is not a class-restricted forum on another private tracker.</p>
+		<p>Please note that selling, trading, or publicly giving away our invitations&#8202;&mdash;&#8202;or responding to public invite requests&#8202;&mdash;&#8202;is strictly forbidden, and may result in you and your entire invite tree being banned. This includes offering to give away our invitations on any forum which is not a class-restricted forum on another private tracker.</p>
+		<p>Do not send an invite to anyone who has previously had a <?=SITE_NAME?> account. Please direct them to <?=BOT_DISABLED_CHAN?> on <?=BOT_SERVER?> if they wish to reactivate their account.</p>
 		<p>Remember that you are responsible for ALL invitees, and your account and/or privileges may be disabled due to your invitees' actions. You should know the person you're inviting. If you aren't familiar enough with the user to trust them, we suggest not inviting them.</p>
 		<p><em>Do not send an invite if you have not read or do not understand the information above.</em></p>
 	</div>

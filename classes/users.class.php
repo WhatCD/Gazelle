@@ -52,6 +52,7 @@ class Users {
 		// the !isset($UserInfo['Paranoia']) can be removed after a transition period
 		if (empty($UserInfo) || empty($UserInfo['ID']) || !isset($UserInfo['Paranoia']) || empty($UserInfo['Class'])) {
 			$OldQueryID = G::$DB->get_query_id();
+
 			G::$DB->query("
 				SELECT
 					m.ID,
@@ -66,12 +67,15 @@ class Users {
 					m.Title,
 					i.CatchupTime,
 					m.Visible,
+					la.Type AS LockedAccount,
 					GROUP_CONCAT(ul.PermissionID SEPARATOR ',') AS Levels
 				FROM users_main AS m
 					INNER JOIN users_info AS i ON i.UserID = m.ID
+					LEFT JOIN locked_accounts AS la ON la.UserID = m.ID
 					LEFT JOIN users_levels AS ul ON ul.UserID = m.ID
 				WHERE m.ID = '$UserID'
 				GROUP BY m.ID");
+
 			if (!G::$DB->has_results()) { // Deleted user, maybe?
 				$UserInfo = array(
 						'ID' => $UserID,
@@ -96,6 +100,10 @@ class Users {
 					$UserInfo['Paranoia'] = array();
 				}
 				$UserInfo['Class'] = $Classes[$UserInfo['PermissionID']]['Level'];
+			}
+
+			if ($UserInfo['LockedAccount'] == "") {
+				unset($UserInfo['LockedAccount']);
 			}
 
 			if (!empty($UserInfo['Levels'])) {
@@ -538,6 +546,7 @@ class Users {
 					. (G::$LoggedUser['ID'] === $UserID ? ' - Expires ' . date('Y-m-d H:i', strtotime($UserInfo['Warned'])) : '')
 					. '" class="tooltip" /></a>' : '';
 		$Str .= ($IsEnabled && $UserInfo['Enabled'] == 2) ? '<a href="rules.php"><img src="'.STATIC_SERVER.'common/symbols/disabled.png" alt="Banned" title="Be good, and you won\'t end up like this user" class="tooltip" /></a>' : '';
+		
 
 		if ($Badges) {
 			$ClassesDisplay = array();
@@ -744,5 +753,35 @@ class Users {
 			// don't return a boolean if you're echoing HTML
 			return $Enabled;
 		}
+	}
+
+	/**
+	 * Initiate a password reset
+	 *
+	 * @param int $UserID The user ID
+	 * @param string $Username The username
+	 * @param string $Email The email address
+	 */
+	public static function resetPassword($UserID, $Username, $Email)
+	{
+		$ResetKey = Users::make_secret();
+		G::$DB->query("
+			UPDATE users_info
+			SET
+				ResetKey = '" . db_string($ResetKey) . "',
+				ResetExpires = '" . time_plus(60 * 60) . "'
+			WHERE UserID = '$UserID'");
+
+		require(SERVER_ROOT . '/classes/templates.class.php');
+		$TPL = NEW TEMPLATE;
+		$TPL->open(SERVER_ROOT . '/templates/password_reset.tpl'); // Password reset template
+
+		$TPL->set('Username', $Username);
+		$TPL->set('ResetKey', $ResetKey);
+		$TPL->set('IP', $_SERVER['REMOTE_ADDR']);
+		$TPL->set('SITE_NAME', SITE_NAME);
+		$TPL->set('SITE_URL', NONSSL_SITE_URL);
+
+		Misc::send_email($Email, 'Password reset information for ' . SITE_NAME, $TPL->get(), 'noreply');
 	}
 }
