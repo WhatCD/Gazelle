@@ -3,6 +3,8 @@ if (!check_perms("users_mod")) {
 	error(404);
 }
 Text::$TOC = true;
+define('QUESTIONS_PER_PAGE', 25);
+list($Page, $Limit) = Format::page_limit(QUESTIONS_PER_PAGE);
 
 $DB->query("
 		SELECT
@@ -28,7 +30,8 @@ $DB->query("
 					FROM staff_answers AS sq
 					WHERE sq.UserID = '$LoggedUser[ID]'
 				)
-		ORDER BY uq.Date DESC");
+		ORDER BY uq.Date DESC
+		LIMIT $Limit");
 $Questions = $DB->to_array();
 
 $DB->query("
@@ -37,8 +40,13 @@ $DB->query("
 list($TotalQuestions) = $DB->next_record();
 
 View::show_header('Ask the Staff', 'questions,bbcode');
-
-?>
+if ($TotalQuestions > QUESTIONS_PER_PAGE) { ?>
+	<div class="linkbox">
+<?
+	$Pages = Format::get_pages($Page, $TotalQuestions, QUESTIONS_PER_PAGE);
+	echo $Pages;?>
+	</div>
+<? } ?>
 <div class="thin">
 	<div class="header">
 		<h2>User Questions</h2>
