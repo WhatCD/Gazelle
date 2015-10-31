@@ -20,10 +20,13 @@ list($FrontLineSupport, $ForumStaff, $Staff) = $SupportStaff;
 			<p>If you are looking for help with a general question, we appreciate it if you would only message through the staff inbox, where we can all help you.</p>
 			<p>You can do that by <strong><a href="#" onclick="$('#compose').gtoggle(); return false;">sending a message to the Staff Inbox</a></strong>.</p>
 		</div>
+	</div>
+	<div class="box pad" style="padding: 0px 10px 10px 10px;">
 		<? View::parse('generic/reply/staffpm.php', array('Hidden' => true)); ?>
 		<br />
-		<h3 id="fls">First-Line Support</h3>
-		<p><strong>These users are not official staff members.</strong> They are users who have volunteered their time to help people in need. Please treat them with respect, and read <a href="wiki.php?action=article&amp;id=260">this</a> before contacting them.</p>
+		<h2 style="text-align: left;">Community Help</h2>
+		<h3 style="font-size: 17px;" id="fls"><i>First-Line Support</i></h3>
+		<p><strong>These users are not official staff members.</strong> They are users who have volunteered their time to help people in need. Please treat them with respect, and read <a href="wiki.php?action=article&amp;id=260">this</a> before contacting them.</p><br />
 		<table class="staff" width="100%">
 			<tr class="colhead">
 				<td style="width: 130px;">Username</td>
@@ -39,12 +42,10 @@ list($FrontLineSupport, $ForumStaff, $Staff) = $SupportStaff;
 
 	} ?>
 		</table>
-	</div>
 	<br />
-	<div class="box pad" style="padding: 0px 10px 10px 10px;">
 		<br />
-		<h3 id="forum_mods">Forum Moderators</h3>
-		<p>Forum Moderators are users who have been promoted to help moderate the forums. They can only help with forum-oriented questions.</p>
+		<h3 style="font-size: 17px;" id="forum_mods"><i>Forum Moderators</i></h3>
+		<p>Forum Moderators are users who have been promoted to help moderate the forums. They can only help with forum-oriented questions.</p><br />
 		<table class="staff" width="100%">
 			<tr class="colhead">
 				<td style="width: 130px;">Username</td>
@@ -67,6 +68,8 @@ list($FrontLineSupport, $ForumStaff, $Staff) = $SupportStaff;
 <?
 	$CurClass = 0;
 	$CloseTable = false;
+	$DevDiv = false;
+	$AdminDiv = false;
 	foreach ($Staff as $StaffMember) {
 		list($ID, $Class, $ClassName, $Username, $Paranoia, $LastAccess, $Remark) = $StaffMember;
 		if ($Class != $CurClass) { // Start new class of staff members
@@ -85,21 +88,37 @@ list($FrontLineSupport, $ForumStaff, $Staff) = $SupportStaff;
 					$HTMLID = 'mods';
 					break;
 				case 'Developer':
+					printSectionDiv("Development");
+					$DevDiv = true;
 					$HTMLID = 'devs';
 					break;
 				case 'Lead Developer':
+					if (!$DevDiv) {
+						printSectionDiv("Development");
+						$DevDiv = true;
+					}
 					$HTMLID = 'lead_devs';
 					break;
 				case 'Administrator':
+				 	printSectionDiv("Administration");
+				 	$AdminDiv = true;
 					$HTMLID = 'admins';
 					break;
+				case 'System Administrator':
 				case 'Sysop':
+					if (!$AdminDiv) {
+						printSectionDiv("Administration");
+					}
 					$HTMLID = 'sysops';
 					break;
 				default:
 					$HTMLID = '';
 			}
-			echo "\t\t<h3 id=\"$HTMLID\">".$ClassName."s</h3>\n";
+			if ($HTMLID != 'mods') {
+				echo "\t\t<h3 style=\"font-size: 17px;\" id=\"$HTMLID\"><i>".$ClassName."s</i></h3>\n";
+			} else {
+				echo "\t\t<h2 style='text-align: left'>" . $ClassName . "s</h2>\n";
+			}
 ?>
 		<table class="staff" width="100%">
 			<tr class="colhead">

@@ -159,3 +159,11 @@ function get_support() {
 		'staff' => get_staff()
 	);
 }
+
+function printSectionDiv($ClassName) {
+?>
+		</div><br />
+		<div class='box pad' style='padding: 10px 10px 10px 10px;'>
+		<h2 style='text-align: left;'><?=$ClassName?></h2>
+<?
+}

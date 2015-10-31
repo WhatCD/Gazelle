@@ -1,6 +1,38 @@
 <?
-if (!check_perms('admin_manage_permissions')) {
+if (!check_perms('admin_manage_permissions') && !check_perms('users_mod')) {
     error(403);
+}
+
+if (!check_perms('admin_manage_permissions')) {
+    View::show_header('Site Options');
+    $DB->query("SELECT Name, Value, Comment FROM site_options");
+?>
+    <div class="header">
+        <h1>Site Options</h1>
+    </div>
+    <table width="100%">
+        <tr class="colhead">
+            <td>Name</td>
+            <td>Value</td>
+            <td>Comment</td>
+        </tr>
+<?
+    $Row = 'a';
+    while (list($Name, $Value, $Comment) = $DB->next_record()) {
+    $Row = $Row === 'a' ? 'b' : 'a';
+?>
+        <tr class="row<?=$Row?>">
+            <td><?=$Name?></td>
+            <td><?=$Value?></td>
+            <td><?=$Comment?></td>
+        </tr>
+<?
+    }
+?>
+    </table>
+<?
+    View::show_footer();
+    die();
 }
 
 if (isset($_POST['submit'])) {

@@ -1,5 +1,11 @@
 CHANGE LOG
 
+2015-10-31 by newman
+Add read-only version of site options for mods
+
+2015-10-30 by newman
+Update staff.php layout
+
 2015-10-27 by newman
 Paginate ask the staff
 

@@ -32,7 +32,7 @@ if ($LoggedUser['RatioWatch']
 		)
 	) {
 		error(403);
-}
+} 
 
 $Email = $_POST['email'];
 $Username = $LoggedUser['Username'];
