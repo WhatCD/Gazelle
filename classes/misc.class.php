@@ -50,10 +50,12 @@ class Misc {
 
                                 $RequestResult = curl_exec($Curl);
                                 $RequestStatusCode = curl_getinfo($Curl, CURLINFO_HTTP_CODE);
+				print_r(curl_error($Curl), true);
                                 curl_close($Curl);
                                 // alert on failed emails
                                 if ($RequestStatusCode != 200) {
                                         send_irc('PRIVMSG '.STATUS_CHAN." !dev email failed to $To with error message $RequestResult");
+					send_irc('PRIVMSG '.STATUS_CHAN."   request status is $RequestStatusCode");
                                         }
                                 break;
 
