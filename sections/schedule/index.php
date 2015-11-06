@@ -980,7 +980,7 @@ if (!$NoDaily && $Day != $NextDay || $_GET['runday']) {
 	echo "Old threads locked\n";
 
 	//------------- Delete dead torrents ------------------------------------//
-
+	
 	sleep(10);
 
 	$DB->query("
@@ -1051,7 +1051,7 @@ if (!$NoDaily && $Day != $NextDay || $_GET['runday']) {
 			VALUES $Values");
 		echo "\nDeleted $i torrents for inactivity\n";
 	}
-
+	
 	$DB->query("
 		SELECT SimilarID
 		FROM artists_similar_scores
