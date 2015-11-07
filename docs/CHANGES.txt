@@ -1,5 +1,8 @@
 CHANGE LOG
 
+2015-11-06 by newman
+Add proper title to torrent stats page. Update token history to display deleted torrents.
+
 2015-10-31 by newman
 Add read-only version of site options for mods
 

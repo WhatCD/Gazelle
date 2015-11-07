@@ -70,8 +70,8 @@ $DB->query("
 		t.Format,
 		t.Encoding
 	FROM users_freeleeches AS f
-		JOIN torrents AS t ON t.ID = f.TorrentID
-		JOIN torrents_group AS g ON g.ID = t.GroupID
+		LEFT JOIN torrents AS t ON t.ID = f.TorrentID
+		LEFT JOIN torrents_group AS g ON g.ID = t.GroupID
 	WHERE f.UserID = $UserID
 	ORDER BY f.Time DESC
 	LIMIT $Limit");
@@ -106,7 +106,11 @@ $i = true;
 foreach ($Tokens as $Token) {
 	$i = !$i;
 	list($TorrentID, $GroupID, $Time, $Expired, $Downloaded, $Uses, $Name, $Format, $Encoding) = $Token;
-	$Name = "<a href=\"torrents.php?torrentid=$TorrentID\">$Name</a>";
+    if ($Name != '') {
+        $Name = "<a href=\"torrents.php?torrentid=$TorrentID\">$Name</a>";
+    } else {
+        $Name = "(<i>Deleted torrent <a href=\"log.php?search=Torrent+$TorrentID\">$TorrentID</a></i>)";
+    }
 	$ArtistName = Artists::display_artists($Artists[$GroupID]);
 	if ($ArtistName) {
 		$Name = $ArtistName.$Name;

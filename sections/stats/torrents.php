@@ -77,7 +77,7 @@ $Pie->color('FF33CC');
 $Pie->generate();
 $Categories = $Pie->url();
 
-View::show_header();
+View::show_header('Detailed torrent statistics');
 ?>
 
 <div class="box pad center">
