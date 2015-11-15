@@ -1,5 +1,8 @@
 CHANGE LOG
 
+2015-11-14 by techietrash
+Fix ctrl+click group collapsing/expanding on OSX
+
 2015-11-06 by newman
 Add proper title to torrent stats page. Update token history to display deleted torrents.
 

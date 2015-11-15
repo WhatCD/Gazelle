@@ -86,13 +86,14 @@ function add_tag(tag) {
 }
 
 function toggle_group(groupid, link, event) {
+	var showRow = true;
 	var clickedRow = link;
 	while (clickedRow.nodeName != 'TR') {
 		clickedRow = clickedRow.parentNode;
 	}
 	var group_rows = clickedRow.parentNode.children;
 	var showing = $(clickedRow).nextElementSibling().has_class('hidden');
-	var allGroups = event.ctrlKey;
+	var allGroups = (event.ctrlKey || event.metaKey); // detect ctrl or cmd
 
 	// for dealing with Mac OS X
 	// http://stackoverflow.com/a/3922353
@@ -101,7 +102,8 @@ function toggle_group(groupid, link, event) {
 				|| event.keyCode == 93 // WebKit (right apple)
 				|| event.keyCode == 224 // Firefox
 				|| event.keyCode == 17 // Opera
-				) ? 91 : null;
+				) ? true : null;
+
 
 	for (var i = 0; i < group_rows.length; i++) {
 		var row = $(group_rows[i]);
@@ -110,6 +112,9 @@ function toggle_group(groupid, link, event) {
 		}
 		if (row.has_class('colhead')) {
 			continue;
+		}
+		if (row.has_class('torrent')) {
+			continue; // Prevents non-grouped torrents from disappearing when collapsing all groups
 		}
 		var relevantRow = row.has_class('group') ? $(group_rows[i + 1]) : row;
 		if (allGroups || allGroupsMac || relevantRow.has_class('groupid_' + groupid)) {
@@ -122,8 +127,8 @@ function toggle_group(groupid, link, event) {
 					section = 'on this page.';
 				}
 				var tooltip = showing
-					? 'Collapse this group. Hold "Ctrl" while clicking to collapse all groups '+section
-					: 'Expand this group. Hold "Ctrl" while clicking to expand all groups '+section;
+					? 'Collapse this group. Hold [Command] <em>(Mac)</em> or [Ctrl] <em>(PC)</em> while clicking to collapse all groups '+section
+					: 'Expand this group. Hold [Command] <em>(Mac)</em> or [Ctrl] <em>(PC)</em> while clicking to expand all groups '+section;
 				$('a.show_torrents_link', row).updateTooltip(tooltip);
 				$('a.show_torrents_link', row).raw().parentNode.className = (showing) ? 'hide_torrents' : 'show_torrents';
 			} else {
@@ -160,19 +165,28 @@ function toggle_edition(groupid, editionid, lnk, event) {
 	}
 	//var showing = has_class(nextElementSibling(clickedRow), 'hidden');
 	var showing = $(clickedRow).nextElementSibling().has_class('hidden');
-	var allEditions = event.ctrlKey;
+	var allEditions = (event.ctrlKey || event.metaKey); // detect ctrl and cmd
+	// for dealing with Mac OS X
+	// http://stackoverflow.com/a/3922353
+	var allEditionsMac = (
+				event.keyCode == 91 // WebKit (left apple)
+				|| event.keyCode == 93 // WebKit (right apple)
+				|| event.keyCode == 224 // Firefox
+				|| event.keyCode == 17 // Opera
+				) ? true : null;
+	
 	var group_rows = $('tr.groupid_' + groupid);
 	for (var i = 0; i < group_rows.results(); i++) {
 		var row = $(group_rows.raw(i));
 		if (row.has_class('edition') && (allEditions || row.raw(0) == clickedRow)) {
 			var tooltip = showing
-				? 'Collapse this edition. Hold "Ctrl" while clicking to collapse all editions in this torrent group.'
-				: 'Expand this edition. Hold "Ctrl" while clicking to expand all editions in this torrent group.';
+				? 'Collapse this edition. Hold [Command] <em>(Mac)</em> or [Ctrl] <em>(PC)</em> while clicking to collapse all editions in this torrent group.'
+				: 'Expand this edition. Hold [Command] <em>(Mac)</em> or [Ctrl] <em>(PC)</em> while clicking to expand all editions in this torrent group.';
 			$('a', row).raw().innerHTML = (showing) ? '&minus;' : '+';
 			$('a', row).updateTooltip(tooltip);
 			continue;
 		}
-		if (allEditions || row.has_class('edition_' + editionid)) {
+		if (allEditions || allEditionsMac || row.has_class('edition_' + editionid)) {
 			if (showing && !row.has_class('torrentdetails')) {
 				row.gshow();
 			} else {

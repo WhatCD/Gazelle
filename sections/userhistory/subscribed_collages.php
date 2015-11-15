@@ -132,7 +132,7 @@ if (!$NumResults) {
 			<tr class="group discog<?=$SnatchedGroupClass?>" id="group_<?=$CollageID?><?=$GroupID?>">
 				<td class="center">
 					<div id="showimg_<?=$CollageID?><?=$GroupID?>" class="<?=($ShowGroups ? 'hide' : 'show')?>_torrents">
-						<a href="#" class="tooltip show_torrents_link" onclick="toggle_group(<?=$CollageID?><?=$GroupID?>, this, event);" title="Expand this group. Hold &quot;Ctrl&quot; while clicking to expand all groups on this page."></a>
+						<a href="#" class="tooltip show_torrents_link" onclick="toggle_group(<?=$CollageID?><?=$GroupID?>, this, event);" title="Expand this group. Hold [Command] <em>(Mac)</em> or [Ctrl] <em>(PC)</em> while clicking to expand all groups on this page."></a>
 					</div>
 				</td>
 				<td colspan="5" class="big_info">
@@ -174,7 +174,7 @@ if (!$NumResults) {
 						$EditionID++;
 ?>
 	<tr class="group_torrent groupid_<?=$CollageID . $GroupID?> edition<?=$SnatchedGroupClass?> hidden">
-		<td colspan="6" class="edition_info"><strong><a href="#" onclick="toggle_edition(<?=$CollageID?><?=$GroupID?>, <?=$EditionID?>, this, event);" class="tooltip" title="Collapse this edition. Hold &quot;Ctrl&quot; while clicking to collapse all editions in this torrent group.">&minus;</a> <?=Torrents::edition_string($Torrent, $Group)?></strong></td>
+		<td colspan="6" class="edition_info"><strong><a href="#" onclick="toggle_edition(<?=$CollageID?><?=$GroupID?>, <?=$EditionID?>, this, event);" class="tooltip" title="Collapse this edition. Hold [Command] <em>(Mac)</em> or [Ctrl] <em>(PC)</em> while clicking to collapse all editions in this torrent group.">&minus;</a> <?=Torrents::edition_string($Torrent, $Group)?></strong></td>
 	</tr>
 <?
 					}
