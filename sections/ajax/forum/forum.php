@@ -20,9 +20,7 @@ if (!is_number($ForumID)) {
 }
 
 if (isset($_GET['pp'])) {
-    
-    $PerPage = $_GET['pp'];
-    
+	$PerPage = (int) $_GET['pp'];
 } elseif (isset($LoggedUser['PostsPerPage'])) {
 	$PerPage = $LoggedUser['PostsPerPage'];
 } else {
