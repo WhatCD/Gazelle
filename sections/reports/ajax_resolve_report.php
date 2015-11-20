@@ -1,11 +1,11 @@
 <?
 authorize();
 
-if ((!check_perms('admin_reports') && !check_perms('project_team') && !check_perms('site_moderate_forums')) || (empty($_POST['reportid']) && !is_number($_POST['reportid']))) {
+if (!check_perms('admin_reports') && !check_perms('project_team') && !check_perms('site_moderate_forums')) {
 	ajax_error();
 }
 
-$ReportID = $_POST['reportid'];
+$ReportID = (int) $_POST['reportid'];
 
 $DB->query("
 	SELECT Type

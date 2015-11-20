@@ -50,7 +50,7 @@ if (!isset($_POST['type'])) {
 }
 
 
-$ExtraID = $_POST['otherid'];
+$ExtraID = db_string($_POST['otherid']);
 
 if (!empty($_POST['extra'])) {
 	$Extra = db_string($_POST['extra']);

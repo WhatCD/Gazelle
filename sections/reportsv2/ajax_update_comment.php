@@ -7,12 +7,7 @@ if (!check_perms('admin_reports')) {
 	error(403);
 }
 
-if (empty($_POST['reportid']) || !is_number($_POST['reportid'])) {
-	echo 'HAX ATTEMPT!'.$_GET['reportid'];
-	die();
-}
-
-$ReportID = $_POST['reportid'];
+$ReportID = (int) $_POST['reportid'];
 
 $Message = db_string($_POST['comment']);
 //Message can be blank!

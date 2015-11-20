@@ -1,5 +1,8 @@
 CHANGE LOG
 
+2015-11-19 by lawnmower
+Fix several XSS and SQLi vulerabilities
+
 2015-11-14 by techietrash
 Fix ctrl+click group collapsing/expanding on OSX
 

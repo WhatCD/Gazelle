@@ -5,11 +5,7 @@ if (!check_perms('admin_reports') && !check_perms('project_team') && !check_perm
 	error(403);
 }
 
-if (empty($_POST['reportid']) && !is_number($_POST['reportid'])) {
-	error(403);
-}
-
-$ReportID = $_POST['reportid'];
+$ReportID = (int) $_POST['reportid'];
 
 $DB->query("
 	SELECT Type

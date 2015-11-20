@@ -6,7 +6,7 @@ if (!check_perms('users_mod')) {
 	error(403);
 }
 
-$UserID = $_REQUEST['userid'];
+$UserID = (int) $_REQUEST['userid'];
 
 switch ($_REQUEST['dupeaction']) {
 	case 'remove':
