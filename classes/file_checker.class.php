@@ -6,6 +6,9 @@ $MusicExtensions = array_fill_keys(
 		'flac', 'gif', 'htm', 'html', 'jpeg', 'jpg', 'lit', 'log', 'm3u', 'm3u8', 'm4a', 'm4b',
 		'md5', 'mobi', 'mp3', 'mp4', 'nfo', 'pdf', 'pls', 'png', 'rtf', 'sfv', 'txt'),
 	true);
+$BadExtensions = array_fill_keys(array(
+       'torrent'
+   ), true);
 $Keywords = array(
 	'ahashare.com', 'demonoid.com', 'demonoid.me', 'djtunes.com', 'h33t', 'housexclusive.net',
 	'limetorrents.com', 'mixesdb.com', 'mixfiend.blogstop', 'mixtapetorrent.blogspot',
@@ -46,15 +49,21 @@ function check_name($Name) {
 }
 
 function check_extensions($Type, $Name) {
-	global $MusicExtensions, $ComicsExtensions;
+   global $MusicExtensions, $ComicsExtensions, $BadExtensions;
+
+   $extension = get_file_extension($Name);
 	if ($Type == 'Music' || $Type == 'Audiobooks' || $Type == 'Comedy' || $Type == 'E-Books') {
-		if (!isset($MusicExtensions[get_file_extension($Name)])) {
+       if (!isset($MusicExtensions[$extension])) {
 			invalid_error($Name);
 		}
 	} elseif ($Type == 'Comics') {
-		if (!isset($ComicsExtensions[get_file_extension($Name)])) {
+       if (!isset($ComicsExtensions[$extension])) {
 			invalid_error($Name);
 		}
+   } else {
+       if (isset($BadExtensions[$extension])) {
+           forbidden_error($Name);
+       }
 	}
 }
 
