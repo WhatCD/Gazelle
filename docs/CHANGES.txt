@@ -1,5 +1,8 @@
 CHANGE LOG
 
+2015-12-01 by newman
+Fix typo in locked accounts index.php
+
 2015-11-20 by lawnmower
 Add extension blacklist for uploaded torrents
 
