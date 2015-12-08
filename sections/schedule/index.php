@@ -1344,7 +1344,6 @@ if (!$NoDaily && $Day != $NextDay || $_GET['runday']) {
 			AND AssignedToUser IS NULL");
 
 	Donations::schedule();
-
 }
 /*************************************************************************\
 //--------------Run twice per month -------------------------------------//

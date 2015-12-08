@@ -66,14 +66,14 @@ if (isset($_REQUEST['act']) && $_REQUEST['act'] == 'recover') {
 							i.ResetExpires = '0000-00-00 00:00:00'
 						WHERE m.ID = '$UserID'
 							AND i.UserID = m.ID");
-					
 					$DB->query("
 						INSERT INTO users_history_passwords
 							(UserID, ChangerIP, ChangeTime)
 						VALUES
 							('$UserID', '$_SERVER[REMOTE_ADDR]', '".sqltime()."')");
 					$Reset = true; // Past tense form of "to reset", meaning that password has now been reset
-					G::$LoggedUser['ID'] = $UserID; // Set $LoggedUser['ID'] for logout_all_sessions() to work
+					$LoggedUser['ID'] = $UserID; // Set $LoggedUser['ID'] for logout_all_sessions() to work
+					
 					logout_all_sessions();
 
 
