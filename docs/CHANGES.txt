@@ -1,5 +1,8 @@
 CHANGE LOG
 
+2015-12-16 by lawnmower
+Fix adding donor points with decimals
+
 2015-12-01 by newman
 Fix typo in locked accounts index.php
 
