@@ -227,7 +227,7 @@ switch ($_REQUEST['action']) {
 					GROUP BY p.ID");
 				list($ID, $Name, $Level, $Secondary, $Forums, $Values, $DisplayStaff, $UserCount) = $DB->next_record(MYSQLI_NUM, array(5));
 
-				if ($Level > $LoggedUser['EffectiveClass'] || $_REQUEST['level'] > $LoggedUser['EffectiveClass']) {
+				if (!check_perms('admin_manage_permissions', $Level)) {
 					error(403);
 				}
 				$Values = unserialize($Values);
