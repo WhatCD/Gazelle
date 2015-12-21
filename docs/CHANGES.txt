@@ -1,5 +1,8 @@
 CHANGE LOG
 
+2015-12-20 by newman
+Add password age to user profiles
+
 2015-12-18 by newman
 Add override option in check_perms() for overriding $MinClass
 

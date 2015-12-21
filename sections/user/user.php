@@ -558,7 +558,19 @@ if ($Override = check_perms('users_mod') || $OwnProfile || !empty($SupportFor)) 
 		?></li>
 <?
 }
+
+if ($OwnProfile || check_perms('users_mod')) { 
+	$DB->query("SELECT MAX(uhp.ChangeTime), ui.JoinDate
+				FROM users_info ui
+				LEFT JOIN users_history_passwords uhp ON uhp.UserID = $UserID
+				WHERE ui.UserID = $UserID");
+	list($PasswordHistory, $JoinDate) = G::$DB->next_record();
+	$Age = (empty($PasswordHistory)) ? time_diff($JoinDate) : time_diff($PasswordHistory);
+	$PasswordAge = substr($Age, 0, strpos($Age, " ago"));
 ?>
+	<li>Password age: <?=$PasswordAge?></li>
+<? } ?>
+
 			</ul>
 		</div>
 <?
