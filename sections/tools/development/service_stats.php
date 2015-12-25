@@ -1,5 +1,5 @@
 <?
-if (!check_perms('site_debug')) {
+if (!check_perms('site_debug') || !check_perms('admin_clear_cache')) {
 	error(403);
 }
 if (isset($_POST['global_flush'])) {

@@ -6,6 +6,10 @@ if (!isset($_REQUEST['authkey']) || !isset($_REQUEST['torrent_pass'])) {
 	$UserID		 = $LoggedUser['ID'];
 	$AuthKey	 = $LoggedUser['AuthKey'];
 } else {
+	if (strpos($_REQUEST['torrent_pass'], '_') !== false) {
+		error(404);
+	}
+	
 	$UserInfo = $Cache->get_value('user_'.$_REQUEST['torrent_pass']);
 	if (!is_array($UserInfo)) {
 		$DB->query("

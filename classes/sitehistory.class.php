@@ -244,7 +244,7 @@ class SiteHistory {
 	}
 
 	public static function delete_event($ID) {
-		if (empty($ID)) {
+		if (!is_numeric($ID)) {
 			error(404);
 		}
 		$QueryID = G::$DB->get_query_id();

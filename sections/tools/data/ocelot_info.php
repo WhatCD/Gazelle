@@ -30,7 +30,7 @@ View::show_header('Tracker info');
 		<h2>Tracker info</h2>
 	</div>
 	<div class="linkbox">
-		<a href="?action=<?=$_GET['action']?>" class="brackets" />Main stats</a>
+		<a href="?action=<?=$_REQUEST['action']?>" class="brackets" />Main stats</a>
 	</div>
 	<div class="sidebar">
 		<div class="box box2">
@@ -76,7 +76,7 @@ if (!empty($UserPeerStats)) {
 <?
 } elseif (isset($_GET['userid'])) {
 ?>
-				User <?=$_GET['userid']?> doesn't exist
+				User <?=display_str($_GET['userid'])?> doesn't exist
 <?
 } else {
 ?>

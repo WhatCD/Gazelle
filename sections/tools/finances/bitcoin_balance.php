@@ -17,7 +17,7 @@ $Balance = DonationsBitcoin::get_balance() . ' BTC';
 <?
 if (empty($_GET['list'])) {
 ?>
-	<a href="?action=<?=$_GET['action']?>&amp;list=1" class="brackets">Show donor list</a>
+	<a href="?action=<?=$_REQUEST['action']?>&amp;list=1" class="brackets">Show donor list</a>
 <?
 } else {
 	$BitcoinAddresses = DonationsBitcoin::get_received();

@@ -6,6 +6,10 @@ class CalendarView {
 	private static $Events;
 
 	public static function render_title($Month, $Year) {
+		if (!is_numeric($Month) || !is_numeric($Year)) {
+			error(404);
+		}
+
 		$NextMonth = $Month % 12 == 0 ? 1 : $Month + 1;
 		$PreviousMonth = $Month == 1 ? 12 : $Month - 1;
 		$NextYear = $Year;

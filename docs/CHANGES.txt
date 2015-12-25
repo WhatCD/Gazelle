@@ -1,5 +1,8 @@
 CHANGE LOG
 
+2015-12-24 by newman
+Fix several XSS, SQLi, and misc vulnerabilities
+
 2015-12-20 by newman
 Add password age to user profiles
 

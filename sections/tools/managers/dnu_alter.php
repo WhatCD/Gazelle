@@ -9,10 +9,10 @@ if ($_POST['submit'] == 'Reorder') { // Reorder
 	foreach ($_POST['item'] as $Position => $Item) {
 		$Position = db_string($Position);
 		$Item = db_string($Item);
-		$DB->query('
+		$DB->query("
 			UPDATE `do_not_upload`
-			SET `Sequence` = ' . $Position . '
-			WHERE `id` = '. $Item);
+			SET `Sequence` = '" . $Position . "'
+			WHERE `id` = '" . $Item . "'");
 	}
 
 } elseif ($_POST['submit'] == 'Delete') { //Delete
