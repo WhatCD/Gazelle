@@ -1,4 +1,6 @@
 <?
+authorize();
+
 if (!check_perms('admin_manage_wiki')) {
 	error(403);
 }
@@ -10,6 +12,13 @@ $ID = (int)$_GET['id'];
 
 if ($ID == INDEX_ARTICLE) {
 	error('You cannot delete the main wiki article.');
+}
+
+$DB->query("SELECT MinClassEdit FROM wiki_articles WHERE ID = '$ID'");
+list($MinEditClass) = $DB->next_record();
+
+if ($MinEditClass > $LoggedUser['EffectiveClass']) {
+    error(403);
 }
 
 $DB->query("

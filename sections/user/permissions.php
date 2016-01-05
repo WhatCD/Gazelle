@@ -1,10 +1,18 @@
 <?
 //TODO: Redo HTML
-if (!check_perms('admin_manage_permissions')) {
-	error(403);
-}
 if (!isset($_REQUEST['userid']) || !is_number($_REQUEST['userid'])) {
 	error(404);
+}
+
+// Get the user class of the user being edited to ensure that the logged in user has permission
+$DB->query("SELECT p.Level 
+            FROM permissions p
+            JOIN users_main AS um ON um.PermissionID = p.ID
+            WHERE um.ID = '" . $_REQUEST['userid'] . "'");
+list($UserClass) = $DB->next_record();
+
+if (!check_perms('admin_manage_permissions', $UserClass)) {
+	error(403);
 }
 
 include(SERVER_ROOT."/classes/permissions_form.php");
