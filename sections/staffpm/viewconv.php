@@ -122,7 +122,8 @@ if ($ConvID = (int)$_GET['id']) {
 		// List common responses
 		$DB->query("
 			SELECT ID, Name
-			FROM staff_pm_responses");
+			FROM staff_pm_responses
+			ORDER BY Name ASC");
 		while (list($ID, $Name) = $DB->next_record()) {
 ?>
 					<option value="<?=$ID?>"><?=$Name?></option>

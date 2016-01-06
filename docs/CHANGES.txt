@@ -1,5 +1,8 @@
 CHANGE LOG
 
+2016-01-05 by newman
+Left align staff PM common answer preview. Sort staff PM common responses alphabetically instead of by ID
+
 2016-01-03 by newman
 Fix several permissions bugs
 

@@ -61,7 +61,7 @@ View::show_header('Staff PMs', 'staffpm');
 $DB->query("
 	SELECT ID, Message, Name
 	FROM staff_pm_responses
-	ORDER BY ID DESC");
+	ORDER BY Name ASC");
 while (list($ID, $Message, $Name) = $DB->next_record()) {
 
 ?>
@@ -76,7 +76,7 @@ while (list($ID, $Message, $Name) = $DB->next_record()) {
 					<input type="text" name="name" id="response_name_<?=$ID?>" size="87" value="<?=display_str($Name)?>" />
 				</div>
 				<div class="pad">
-					<div class="box pad hidden" id="response_div_<?=$ID?>">
+					<div class="box pad hidden" style="text-align: left;" id="response_div_<?=$ID?>">
 						<?=Text::full_format($Message)?>
 					</div>
 					<textarea rows="10" cols="87" id="response_message_<?=$ID?>" name="message"><?=display_str($Message)?></textarea>
