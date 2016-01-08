@@ -1,5 +1,11 @@
 CHANGE LOG
 
+2016-01-07 by lawnmower
+Remove usage of top_snatchers. Send reseed requests to the last 100 snatchers
+
+2016-01-07 by newman
+Add JS confirmation to request re-seed button
+
 2016-01-05 by newman
 Left align staff PM common answer preview. Sort staff PM common responses alphabetically instead of by ID
 
