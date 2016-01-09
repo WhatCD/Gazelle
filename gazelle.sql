@@ -1120,11 +1120,6 @@ CREATE TABLE `top10_history_torrents` (
   `TagString` varchar(100) NOT NULL DEFAULT ''
 ) ENGINE=InnoDB CHARSET utf8;
 
-CREATE TABLE `top_snatchers` (
-  `UserID` int(10) unsigned NOT NULL,
-  PRIMARY KEY (`UserID`)
-) ENGINE=InnoDB CHARSET utf8;
-
 CREATE TABLE `torrents` (
   `ID` int(10) NOT NULL AUTO_INCREMENT,
   `GroupID` int(10) NOT NULL,

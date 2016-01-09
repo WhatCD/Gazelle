@@ -1,5 +1,8 @@
 CHANGE LOG
 
+2016-01-08 by newman
+Add lossy master approval request report type. Remove unapproved cassette report type
+
 2016-01-07 by lawnmower
 Remove usage of top_snatchers. Send reseed requests to the last 100 snatchers
 

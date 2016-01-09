@@ -566,27 +566,6 @@ Your torrent was reported because it was sourced from an audience recording.'
 The Uploading Rules require that all uploads contain audio tracks with accurate file names. Your torrent has been marked as having incorrect or incomplete file names. It is now listed on [url='.site_url().'better.php]better.php[/url] and is eligible for trumping. You are of course free to fix this torrent yourself. Add or fix the file names and upload the replacement torrent to the site. Then, report (RP) the older torrent using the category "Bad File Names Trump" and indicate in the report comments that you have fixed the file names. Be sure to provide a permalink (PL) to the new replacement torrent.'
 				)
 			),
-			'cassette' => array(
-				'priority' => '260',
-				'reason' => '17',
-				'title' => 'Unapproved Cassette',
-				'report_messages' => array(
-					'If the album was never released other than on cassette, please include a source.'
-				),
-				'report_fields' => array(
-					'link' => '0'
-				),
-				'resolve_options' => array(
-					'upload' => '0',
-					'warn' => '1',
-					'delete' => '1',
-					'pm' => '[rule]2.10.1[/rule]. Cassettes are allowed under strict conditions.
-[rule]2.10.1.1[/rule]. Releases available only on cassette may be uploaded under special strict conditions (see [url='.site_url().'wiki.php?action=article&amp;id=593]this wiki[/url] for information on cassette ripping).
-
-[rule]2.10.1.2[/rule]. Rips must be made from official cassette sources. Bootlegs are often from unofficial sources and may be deleted if they do not meet high quality audio standards (see rule [rule]2.10.8[/rule]).
-When uploading new cassette-sourced torrents, be sure to include in the release description evidence of its uniqueness in the form of discography information from a reputable source as well as pictures of the cassette you ripped.'
-				)
-			),
 			'skips' => array(
 				'priority' => '220',
 				'reason' => '13',
@@ -624,6 +603,25 @@ Your torrent was reported because one or more tracks contain encoding errors.'
 [rule]2.2.10.6.2[/rule]. If you created a CD range rip that has matching CRCs for test and copy, and where every track has an AccurateRip score of 2 or more, then you may submit your torrent for manual score adjustment.
 [rule]2.2.10.9.2[/rule]. If you find that an appended log has not been scored properly, please report the torrent and use the log rescore option.
 Your torrent has now been properly scored by the staff.'
+				)
+			),
+			'lossyapproval' => array(
+				'priority' => '161',
+				'reason' => '-1',
+				'title' => 'Lossy Master Approval Request',
+				'report_messages' => array(
+					'Please include as much information as possible to verify the report, including spectral analysis images.',
+					'For WEB purchases, please include a link to the webstore where you obtained the album and a screenshot of your invoice.',
+					'For CDs or other physical media, please include a photograph of the album next to a piece of paper with your username written on it.',
+					'<strong class="important_text">Anything included in the proof images field will only be viewable by staff.</strong>'
+				),
+				'report_fields' => array(
+					'proofimages' => '2'
+				),
+				'resolve_options' => array(
+					'upload' => '0',
+					'warn' => '0',
+					'delete' => '0'
 				)
 			)
 		),

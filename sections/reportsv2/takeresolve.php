@@ -202,6 +202,18 @@ if ($DB->affected_rows() > 0 || !$Report) {
 		$SendPM = true;
 	}
 
+	if ($_POST['resolve_type'] == 'lossyapproval') {
+		$DB->query("
+			INSERT INTO torrents_lossymaster_approved
+			VALUES ($TorrentID, ".$LoggedUser['ID'].", '".sqltime()."')");
+		$DB->query("
+			SELECT GroupID
+			FROM torrents
+			WHERE ID = $TorrentID");
+		list($GroupID) = $DB->next_record();
+		$Cache->delete_value("torrents_details_$GroupID");
+	}
+
 	//Log and delete
 	if (isset($Escaped['delete']) && check_perms('users_mod')) {
 		$DB->query("
