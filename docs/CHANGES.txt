@@ -1,5 +1,8 @@
 CHANGE LOG
 
+2016-01-10 by newman
+Fix typo in ajax_report.php
+
 2016-01-08 by newman
 Add lossy master approval request report type. Remove unapproved cassette report type
 

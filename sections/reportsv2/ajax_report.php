@@ -83,7 +83,7 @@ if (array_key_exists('proofimages', $ReportType['report_fields'])) {
 ?>
 	<tr>
 		<td class="label">
-			Link(s) to proof images<?=($ReportType['report_fields']['sitelink'] == '1' ? ' <strong class="important_text">(Required)</strong>:' : '')?>:
+			Link(s) to proof images<?=($ReportType['report_fields']['proofimages'] == '1' ? ' <strong class="important_text">(Required)</strong>:' : '')?>:
 		</td>
 		<td>
 			<input id="image" type="text" name="image" size="50" value="<?=(!empty($_POST['proofimages']) ? display_str($_POST['proofimages']) : '')?>" />
