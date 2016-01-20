@@ -95,12 +95,8 @@ $DB->query("
 
 $Invited = $DB->to_array();
 
-$JSIncludes = '';
-if (check_perms('users_mod') || check_perms('admin_advanced_user_search')) {
-	$JSIncludes = 'invites';
-}
+View::show_header('Invites');
 
-View::show_header('Invites', $JSIncludes);
 ?>
 <div class="thin">
 	<div class="header">

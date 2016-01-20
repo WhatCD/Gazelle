@@ -1,5 +1,8 @@
 CHANGE LOG
 
+2016-01-19 by newman
+Fix PRs 93 and 91
+
 2016-01-10 by newman
 Fix typo in ajax_report.php
 

@@ -6,7 +6,7 @@ if (!check_perms('site_recommend_own') && !check_perms('site_manage_recommendati
 	error(403);
 }
 
-$GroupIDi = $_GET['groupid'];
+$GroupID = $_GET['groupid'];
 if (!$GroupID || !is_number($GroupID)) {
 	error(404);
 }
