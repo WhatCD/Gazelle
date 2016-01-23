@@ -289,6 +289,9 @@ if (check_perms('site_send_unlimited_invites')) {
 					<li id="nav_friends"<?=
 						Format::add_class($PageID, array('friends'), 'active', true)?>>
 						<a href="friends.php">Friends</a></li>
+					<li id="nav_better"<?=
+						Format::add_class($PageID, array('better'), 'active', true)?>>
+						<a href="better.php">Better</a></li>
 				</ul>
 			</div>
 			<div id="menu">

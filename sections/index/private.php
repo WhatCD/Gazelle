@@ -488,7 +488,7 @@ foreach ($News as $NewsItem) {
 ?>
 		<div id="more_news" class="box">
 			<div class="head">
-				<em><span><a href="#" onclick="news_ajax(event, 3, <?=$NewsCount?>, <?=check_perms('admin_manage_news') ? 1 : 0; ?>); return false;">Click to load more news</a>.</span> To browse old news posts, <a href="forums.php?action=viewforum&amp;forumid=19">click here</a>.</em>
+				<em><span><a href="#" onclick="news_ajax(event, 3, <?=$NewsCount?>, <?=check_perms('admin_manage_news') ? 1 : 0; ?>, false); return false;">Click to load more news</a>.</span> To browse old news posts, <a href="forums.php?action=viewforum&amp;forumid=19">click here</a>.</em>
 			</div>
 		</div>
 	</div>

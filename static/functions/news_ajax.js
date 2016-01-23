@@ -1,9 +1,10 @@
-function news_ajax(event, count, offset, privileged) {
+function news_ajax(event, count, offset, privileged, authkey) {
 	/*
 	 * event - The click event, passed to hide the element when necessary.
 	 * count - Number of news items to fetch.
 	 * offset - Database offset for fetching news.
 	 * privilege - Gotta check your privilege (used to show/hide [Edit] on news).
+	 * authkey - Either the user's authkey or false. Used for rendering the [Delete] button on the news tool.
 	 */
 	// Unbind onclick to avoid spamclicks.
 	$(event.target).attr('onclick', 'return false;');
@@ -18,7 +19,7 @@ function news_ajax(event, count, offset, privileged) {
 		if (typeof data == 'undefined' || data == null || data.status != "success" || typeof response == 'undefined' || response == null) {
 			console.log("ERR ajax_news(" + (new Error).lineNumber + "): Unknown data or failure returned.");
 			// Return to original paremeters, no news were added.
-			$(event.target).attr('onclick', 'news_ajax(event, ' + count + ', ' + offset + ', ' + privileged + '); return false;');
+			$(event.target).attr('onclick', 'news_ajax(event, ' + count + ', ' + offset + ', ' + privileged + ', ' + authkey + '); return false;');
 		} else {
 			if (response.length == 0) {
 				$(event.target).parent().remove();
@@ -31,7 +32,10 @@ function news_ajax(event, count, offset, privileged) {
 						Class: targetClass
 					}));
 					// I'm so happy with this condition statement.
-					if (privileged) {
+					if (privileged && authkey !== false) {
+						// Append [Delete] button and hide [Hide] button if on the news toolbox page
+						$('#news' + this[0]).append('<div class="head"><strong>' + this[1] + '</strong> ' + this[2] + ' - <a href="tools.php?action=editnews&amp;id=' + this[0] + '" class="brackets">Edit</a> <a class="brackets" href="tools.php?action=deletenews&amp;id=' + this[0] + '&amp;auth=' + authkey + '">Delete</a></div>');
+					} else if (privileged) {
 						$('#news' + this[0]).append('<div class="head"><strong>' + this[1] + '</strong> ' + this[2] + ' - <a href="tools.php?action=editnews&amp;id=' + this[0] + '" class="brackets">Edit</a><span style="float: right;"><a class="brackets" onclick="$(\'#newsbody' + this[0] + '\').gtoggle(); this.innerHTML=(this.innerHTML == \'Hide\' ? \'Show\' : \'Hide\'); return false;" href="#">Hide</a></span></div>');
 					} else {
 						$('#news' + this[0]).append('<div class="head"><strong>' + this[1] + '</strong> ' + this[2] + '<span style="float: right;"><a class="brackets" onclick="$(\'#newsbody' + this[0] + '\').gtoggle(); this.innerHTML=(this.innerHTML == \'Hide\' ? \'Show\' : \'Hide\'); return false;" href="#">Hide</a></span></div>');
@@ -46,6 +50,6 @@ function news_ajax(event, count, offset, privileged) {
 	.fail(function() {
 		console.log("WARN ajax_news(" + (new Error).lineNumber + "): AJAX get failed.");
 		// Return to original paremeters, no news were added.
-		$(event.target).attr('onclick', 'news_ajax(event, ' + count + ', ' + offset + ', ' + privileged + '); return false;');
+		$(event.target).attr('onclick', 'news_ajax(event, ' + count + ', ' + offset + ', ' + privileged + ', ' + authkey + '); return false;');
 	});
 }

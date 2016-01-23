@@ -883,17 +883,20 @@ if (check_perms('users_mod', $Class) || $IsFLS) {
 	$DB->query("
 		SELECT
 			SQL_CALC_FOUND_ROWS
-			ID,
-			Subject,
-			Status,
-			Level,
-			AssignedToUser,
-			Date,
-			ResolverID
-		FROM staff_pm_conversations
-		WHERE UserID = $UserID
-			AND (Level <= $UserLevel OR AssignedToUser = '".$LoggedUser['ID']."')
-		ORDER BY Date DESC");
+			spc.ID,
+			spc.Subject,
+			spc.Status,
+			spc.Level,
+			spc.AssignedToUser,
+			spc.Date,
+			COUNT(spm.ID) AS Resplies,
+			spc.ResolverID
+		FROM staff_pm_conversations AS spc
+		JOIN staff_pm_messages spm ON spm.ConvID = spc.ID
+		WHERE spc.UserID = $UserID
+			AND (spc.Level <= $UserLevel OR spc.AssignedToUser = '".$LoggedUser['ID']."')
+		GROUP BY spc.ID
+		ORDER BY spc.Date DESC");
 	if ($DB->has_results()) {
 		$StaffPMs = $DB->to_array();
 ?>
@@ -906,11 +909,12 @@ if (check_perms('users_mod', $Class) || $IsFLS) {
 					<td>Subject</td>
 					<td>Date</td>
 					<td>Assigned to</td>
+					<td>Replies</td>
 					<td>Resolved by</td>
 				</tr>
 <?
 		foreach ($StaffPMs as $StaffPM) {
-			list($ID, $Subject, $Status, $Level, $AssignedToUser, $Date, $ResolverID) = $StaffPM;
+			list($ID, $Subject, $Status, $Level, $AssignedToUser, $Date, $Replies, $ResolverID) = $StaffPM;
 			// Get assigned
 			if ($AssignedToUser == '') {
 				// Assigned to class
@@ -936,6 +940,7 @@ if (check_perms('users_mod', $Class) || $IsFLS) {
 					<td><a href="staffpm.php?action=viewconv&amp;id=<?=$ID?>"><?=display_str($Subject)?></a></td>
 					<td><?=time_diff($Date, 2, true)?></td>
 					<td><?=$Assigned?></td>
+					<td><?=$Replies - 1?></td>
 					<td><?=$Resolver?></td>
 				</tr>
 <?		} ?>

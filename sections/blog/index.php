@@ -139,6 +139,8 @@ if (check_perms('admin_manage_blog')) {
 		<br />
 <?
 }
+
+if ($_GET['action'] != 'editblog') {
 ?>
 <div class="thin">
 <?
@@ -197,6 +199,7 @@ foreach ($Blog as $BlogItem) {
 	</div>
 	<br />
 <?
+}
 }
 ?>
 </div>

@@ -3,8 +3,8 @@ enforce_login();
 if (!check_perms('admin_manage_news')) {
 	error(403);
 }
-
-View::show_header('Manage news', 'bbcode');
+$NewsCount = 5;
+View::show_header('Manage news', 'bbcode,news_ajax');
 
 switch ($_GET['action']) {
 	case 'takeeditnews':
@@ -58,7 +58,7 @@ switch ($_GET['action']) {
 			</div>
 		</div>
 	</form>
-
+<? if ($_GET['action'] != 'editnews') { ?>
 	<h2>News archive</h2>
 <?
 $DB->query('
@@ -68,7 +68,9 @@ $DB->query('
 		Body,
 		Time
 	FROM news
-	ORDER BY Time DESC');// LIMIT 20
+	ORDER BY Time DESC
+	LIMIT ' . $NewsCount);// LIMIT 20
+$Count = 0;
 while (list($NewsID, $Title, $Body, $NewsTime) = $DB->next_record()) {
 ?>
 	<div class="box vertical_space news_post">
@@ -78,6 +80,16 @@ while (list($NewsID, $Title, $Body, $NewsTime) = $DB->next_record()) {
 			<a href="tools.php?action=deletenews&amp;id=<?=$NewsID?>&amp;auth=<?=$LoggedUser['AuthKey']?>" class="brackets">Delete</a>
 		</div>
 		<div class="pad"><?=Text::full_format($Body) ?></div>
+	</div>
+<?
+	if (++$Count > ($NewsCount - 1)) {
+		break;
+	}
+} ?>
+	<div id="more_news" class="box">
+		<div class="head">
+			<em><span><a href="#" onclick="news_ajax(event, 3, <?=$NewsCount?>, 1, '<?=$LoggedUser['AuthKey']?>'); return false;">Click to load more news</a>.</span></em>
+		</div>
 	</div>
 <? } ?>
 </div>

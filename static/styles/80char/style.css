@@ -276,7 +276,7 @@ ul.thin li { margin:0px 0px; padding:0px; }
 	border-radius: 5px;
 }
 
-#index #nav_index a, #torrents #nav_torrents a, #collage #nav_collages a, #requests #nav_requests a, #forums #nav_forums a, #chat #nav_irc a, #top10 #nav_top10 a, #rules #nav_rules a, #wiki #nav_wiki a, #staff #nav_staff #nav_inbox #nav_staffinbox #nav_uploaded #nav_bookmarks #nav_notifications #nav_subscriptions #nav_comments #nav_friends a {
+#index #nav_index a, #torrents #nav_torrents a, #collage #nav_collages a, #requests #nav_requests a, #forums #nav_forums a, #chat #nav_irc a, #top10 #nav_top10 a, #rules #nav_rules a, #wiki #nav_wiki a, #staff #nav_staff #nav_inbox #nav_staffinbox #nav_uploaded #nav_bookmarks #nav_notifications #nav_subscriptions #nav_comments #nav_friends #nav_better a {
 	color: #000000;
 	background: #A5A5A5;
 	padding: 1px 4px;

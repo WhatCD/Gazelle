@@ -64,18 +64,21 @@ list($Page, $Limit) = Format::page_limit(MESSAGES_PER_PAGE);
 $StaffPMs = $DB->query("
 	SELECT
 		SQL_CALC_FOUND_ROWS
-		ID,
-		Subject,
-		UserID,
-		Status,
-		Level,
-		AssignedToUser,
-		Date,
-		Unread,
-		ResolverID
-	FROM staff_pm_conversations
+		spc.ID,
+		spc.Subject,
+		spc.UserID,
+		spc.Status,
+		spc.Level,
+		spc.AssignedToUser,
+		spc.Date,
+		spc.Unread,
+		COUNT(spm.ID) AS NumReplies,
+		spc.ResolverID
+	FROM staff_pm_conversations AS spc
+	JOIN staff_pm_messages spm ON spm.ConvID = spc.ID
 	$WhereCondition
-	ORDER BY $SortStr Level DESC, Date DESC
+	GROUP BY spc.ID
+	ORDER BY $SortStr spc.Level DESC, spc.Date DESC
 	LIMIT $Limit
 ");
 
@@ -146,6 +149,7 @@ if (!$DB->has_results()) {
 					<td>Sender</td>
 					<td>Date</td>
 					<td>Assigned to</td>
+					<td>Replies</td>
 <?	if ($ViewString == 'Resolved') { ?>
 					<td>Resolved by</td>
 <?	} ?>
@@ -153,7 +157,7 @@ if (!$DB->has_results()) {
 <?
 
 	// List messages
-	while (list($ID, $Subject, $UserID, $Status, $Level, $AssignedToUser, $Date, $Unread, $ResolverID) = $DB->next_record()) {
+	while (list($ID, $Subject, $UserID, $Status, $Level, $AssignedToUser, $Date, $Unread, $NumReplies, $ResolverID) = $DB->next_record()) {
 		$Row = $Row === 'a' ? 'b' : 'a';
 		$RowClass = "row$Row";
 
@@ -192,6 +196,7 @@ if (!$DB->has_results()) {
 					<td><?=$UserStr?></td>
 					<td><?=time_diff($Date, 2, true)?></td>
 					<td><?=$Assigned?></td>
+					<td><?=$NumReplies - 1?></td>
 <?		if ($ViewString == 'Resolved') { ?>
 					<td><?=$ResolverStr?></td>
 <?		} ?>
