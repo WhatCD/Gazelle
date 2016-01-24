@@ -92,7 +92,7 @@ a img {
 }
 
 #header {
-	padding-top: 20px;
+	padding-top: 14px;
 	margin: 0 auto;
 	width: 960px;
 	height: 154px;
@@ -363,7 +363,6 @@ ul#userinfo_minor a:hover {
 	display: block;
 	width:114px;
 	height: 41px;
-	background: transparent url('images/header_logo.png') no-repeat top left;
 	margin-left: 11px;
 	margin-top: 25px;
 }
