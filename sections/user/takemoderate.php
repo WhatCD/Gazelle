@@ -266,6 +266,17 @@ if ($_POST['ResetEmailHistory'] && check_perms('users_edit_reset_keys')) {
 		UPDATE users_main
 		SET Email = '$Username@".SITE_URL."'
 		WHERE ID = '$UserID'");
+	$DB->query("
+		UPDATE users_history_invites AS uhi
+		JOIN users_main um ON um.ID = uhi.InvitedID
+		  AND (
+		    um.IP IN ('127.0.0.1', '0.0.0.0')
+		    OR um.Visible = '0'
+		  )
+		SET uhi.Email = '$Username@".SITE_URL."'
+		WHERE uhi.Email != um.Email
+			AND uhi.InvitedID = '$UserID'");
+
 	$EditSummary[] = 'Email history cleared';
 }
 
