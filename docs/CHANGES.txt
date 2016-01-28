@@ -1,5 +1,8 @@
 CHANGE LOG
 
+2016-01-27 by newman
+Fix downloading torrents via wget or other utilities when account is locked. This should prevent plugins like autodl-irssi from downloading torrents after an account becomes locked
+
 2016-01-23 by newman
 Add confirmation for deleting poll options. Don't load all news and blogs when editing one. Don't load all news when writing a new post, instead load 5 and add the "click to view more" link, similar to the homepage. Add "Replies" column to staffpm.php and Staff PMs on user profiles. Add better.php header link
 

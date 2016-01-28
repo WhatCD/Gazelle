@@ -192,11 +192,13 @@ if ($LockType == '---' || $LockedAccount == 0) {
 	if ($Cur['Type']) {
 		$DB->query("DELETE FROM locked_accounts WHERE UserID = '" . $UserID . "'");
 		$EditSummary[] = 'Account unlocked';
+		$Cache->delete_value('user_' . $Cur['torrent_pass']);
 	}
 } else if (!$Cur['Type'] || $Cur['Type'] != $LockType) {
 	$DB->query("INSERT INTO locked_accounts (UserID, Type)
 				VALUES ('" . $UserID . "', '" . $LockType . "')
 				ON DUPLICATE KEY UPDATE Type = '" . $LockType . "'");
+	$Cache->delete_value('user_' . $Cur['torrent_pass']);
 		
 	if ($Cur['Type'] != $LockType) {
 		$EditSummary[] = 'Account lock reason changed to ' . $LockType;

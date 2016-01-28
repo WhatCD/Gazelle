@@ -13,21 +13,27 @@ if (!isset($_REQUEST['authkey']) || !isset($_REQUEST['torrent_pass'])) {
 	$UserInfo = $Cache->get_value('user_'.$_REQUEST['torrent_pass']);
 	if (!is_array($UserInfo)) {
 		$DB->query("
-			SELECT ID, DownloadAlt
+			SELECT ID, DownloadAlt, la.UserID
 			FROM users_main AS m
 				INNER JOIN users_info AS i ON i.UserID = m.ID
+				LEFT JOIN locked_accounts AS la ON la.UserID = m.ID
 			WHERE m.torrent_pass = '".db_string($_REQUEST['torrent_pass'])."'
 				AND m.Enabled = '1'");
 		$UserInfo = $DB->next_record();
 		$Cache->cache_value('user_'.$_REQUEST['torrent_pass'], $UserInfo, 3600);
 	}
 	$UserInfo = array($UserInfo);
-	list($UserID, $DownloadAlt) = array_shift($UserInfo);
+	list($UserID, $DownloadAlt, $Locked) = array_shift($UserInfo);
 	if (!$UserID) {
 		error(0);
 	}
 	$TorrentPass = $_REQUEST['torrent_pass'];
 	$AuthKey = $_REQUEST['authkey'];
+
+	if ($Locked == $UserID) {
+		header('HTTP/1.1 403 Forbidden');
+		die();
+	}
 }
 
 $TorrentID = $_REQUEST['id'];
