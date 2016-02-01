@@ -1,5 +1,8 @@
 CHANGE LOG
 
+2016-01-31 by newman
+Allow locked accounts to send staff PMs to staff only
+
 2016-01-27 by newman
 Fix downloading torrents via wget or other utilities when account is locked. This should prevent plugins like autodl-irssi from downloading torrents after an account becomes locked
 
