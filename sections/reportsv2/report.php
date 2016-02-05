@@ -19,6 +19,11 @@ if (!isset($_GET['id']) || !is_number($_GET['id'])) {
 			LEFT JOIN torrents AS t ON t.GroupID = tg.ID
 		WHERE t.ID = " . $_GET['id']);
 	list($CategoryID, $GroupID) = $DB->next_record();
+	if (empty($CategoryID) || empty($GroupID)) {
+		// Deleted torrent
+		header("Location: log.php?search=Torrent+" . $TorrentID);
+		die();
+	}
 	$Artists = Artists::get_artist($GroupID);
 	$TorrentCache = get_group_info($GroupID, true, $RevisionID);
 	$GroupDetails = $TorrentCache[0];

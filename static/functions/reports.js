@@ -10,7 +10,7 @@ function toggleNotes(id) {
 
 function saveNotes(id) {
 	var notes = $('#notes_' + id).raw().value;
-	notes = notes.replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, '<br />');
+	notes = notes.replace(/(\r\n|\n\r|\r|\n)/g, '<br />');
 	var post = new Array();
 	post['id'] = id;
 	post['notes'] = notes;
