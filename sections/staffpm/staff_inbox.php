@@ -5,59 +5,45 @@ View::show_header('Staff Inbox');
 $View = display_str($_GET['view']);
 $UserLevel = $LoggedUser['EffectiveClass'];
 
+
+$LevelCap = 1000;
+
+
 // Setup for current view mode
 $SortStr = 'IF(AssignedToUser = '.$LoggedUser['ID'].', 0, 1) ASC, ';
 switch ($View) {
 	case 'unanswered':
 		$ViewString = 'Unanswered';
-		$WhereCondition = "
-			WHERE (Level <= $UserLevel OR AssignedToUser = '".$LoggedUser['ID']."')
-				AND Status = 'Unanswered'";
+		$Status = "Unanswered";
 		break;
 	case 'open':
 		$ViewString = 'Unresolved';
-		$WhereCondition = "
-			WHERE (Level <= $UserLevel OR AssignedToUser = '".$LoggedUser['ID']."')
-				AND Status IN ('Open', 'Unanswered')";
+		$Status = "Open', 'Unanswered";
 		$SortStr = '';
 		break;
 	case 'resolved':
 		$ViewString = 'Resolved';
-		$WhereCondition = "
-			WHERE (Level <= $UserLevel OR AssignedToUser = '".$LoggedUser['ID']."')
-				AND Status = 'Resolved'";
+		$Status = "Resolved";
 		$SortStr = '';
 		break;
 	case 'my':
 		$ViewString = 'Your Unanswered';
-		$WhereCondition = "
-			WHERE (Level = $UserLevel OR AssignedToUser = '".$LoggedUser['ID']."')
-				AND Status = 'Unanswered'";
+		$Status = "Unanswered";
 		break;
 	default:
-		if ($UserLevel >= 700) {
+		$Status = "Unanswered";
+		if ($UserLevel >= $Classes[MOD]['Level'] || $UserLevel == $Classes[FORUM_MOD]['Level']) {
 			$ViewString = 'Your Unanswered';
-			$WhereCondition = "
-				WHERE (
-						(Level >= ".max($Classes[MOD]['Level'], 700)." AND Level <= $UserLevel)
-						OR AssignedToUser = '".$LoggedUser['ID']."'
-					)
-					AND Status = 'Unanswered'";
-		} elseif ($UserLevel == 650) {
-			// Forum Mods
-			$ViewString = 'Your Unanswered';
-			$WhereCondition = "
-				WHERE (Level = $UserLevel OR AssignedToUser = '".$LoggedUser['ID']."')
-					AND Status = 'Unanswered'";
 		} else {
 			// FLS
 			$ViewString = 'Unanswered';
-			$WhereCondition = "
-				WHERE (Level <= $UserLevel OR AssignedToUser = '".$LoggedUser['ID']."')
-					AND Status = 'Unanswered'";
 		}
 		break;
 }
+
+$WhereCondition = "
+	WHERE (LEAST($LevelCap, spc.Level) <= $UserLevel OR spc.AssignedToUser = '".$LoggedUser['ID']."')
+	  AND spc.Status IN ('$Status')";
 
 list($Page, $Limit) = Format::page_limit(MESSAGES_PER_PAGE);
 // Get messages

@@ -182,6 +182,9 @@ switch ($_REQUEST['action']) {
 	case 'tokens':
 		include(SERVER_ROOT.'/sections/tools/managers/tokens.php');
 		break;
+	case 'multiple_freeleech':
+		include(SERVER_ROOT.'/sections/tools/managers/multiple_freeleech.php');
+		break;
 	case 'ocelot':
 		include(SERVER_ROOT.'/sections/tools/managers/ocelot.php');
 		break;

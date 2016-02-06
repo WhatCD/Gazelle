@@ -408,12 +408,15 @@ if (check_perms('users_mod') || G::$LoggedUser['PermissionID'] == FORUM_MOD) {
 	$NumStaffPMs = G::$Cache->get_value('num_staff_pms_'.G::$LoggedUser['ID']);
 	if ($NumStaffPMs === false) {
 		if (check_perms('users_mod')) {
+			
+			$LevelCap = 1000;
+			
 			G::$DB->query("
 				SELECT COUNT(ID)
 				FROM staff_pm_conversations
 				WHERE Status = 'Unanswered'
 					AND (AssignedToUser = ".G::$LoggedUser['ID']."
-						OR (Level >= ".max(700, $Classes[MOD]['Level'])."
+						OR (LEAST('$LevelCap', Level) <= '".G::$LoggedUser['EffectiveClass']."'
 							AND Level <= ".G::$LoggedUser['Class']."))");
 		}
 		if (G::$LoggedUser['PermissionID'] == FORUM_MOD) {

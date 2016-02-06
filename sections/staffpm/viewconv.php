@@ -7,6 +7,11 @@ if ($ConvID = (int)$_GET['id']) {
 		FROM staff_pm_conversations
 		WHERE ID = $ConvID");
 	list($Subject, $UserID, $Level, $AssignedToUser, $Unread, $Status) = $DB->next_record();
+	
+	$LevelCap = 1000;
+	
+
+	$Level = min($Level, $LevelCap);
 
 	if (!(($UserID == $LoggedUser['ID'])
 			|| ($AssignedToUser == $LoggedUser['ID'])

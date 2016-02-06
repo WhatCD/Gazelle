@@ -1,5 +1,8 @@
 CHANGE LOG
 
+2016-02-05 by newman
+Add tool to mark multiple torrent groups/collages as FL/NL/Regular, optionally NLing torrents above a certain size. Add level cap to Staff PMs
+
 2016-02-04 by newman
 Fix regex in reports.js to not remove the last character of each line except the last. Redirect to log.php when attempting to report a deleted torrent
 

@@ -7,13 +7,13 @@ class Permissions {
 	 * @param string $MinClass Return false if the user's class level is below this.
 	 */
 	public static function check_perms($PermissionName, $MinClass = 0) {
-        
-        $OverrideClass = 1000;
-        
-        $Override = G::$LoggedUser['EffectiveClass'] >= $OverrideClass;
+		
+		$OverrideClass = 1000;
+		
+		$Override = G::$LoggedUser['EffectiveClass'] >= $OverrideClass;
 		return (
-			isset(G::$LoggedUser['Permissions'][$PermissionName])
-			&& G::$LoggedUser['Permissions'][$PermissionName]
+			($PermissionName == null ||
+			(isset(G::$LoggedUser['Permissions'][$PermissionName]) && G::$LoggedUser['Permissions'][$PermissionName]))
 			&& (G::$LoggedUser['Class'] >= $MinClass
 				|| G::$LoggedUser['EffectiveClass'] >= $MinClass
 				|| $Override)
