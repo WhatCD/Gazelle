@@ -1,5 +1,8 @@
 CHANGE LOG
 
+2016-02-06 by newman
+Fix some Staff PM bugs
+
 2016-02-05 by newman
 Add tool to mark multiple torrent groups/collages as FL/NL/Regular, optionally NLing torrents above a certain size. Add level cap to Staff PMs
 

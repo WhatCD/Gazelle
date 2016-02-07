@@ -24,12 +24,15 @@ if ($Message = db_string($_POST['message'])) {
 	} elseif ($ConvID = (int)$_POST['convid']) {
 		// Check if conversation belongs to user
 		$DB->query("
-			SELECT UserID, AssignedToUser
+			SELECT UserID, AssignedToUser, Level
 			FROM staff_pm_conversations
 			WHERE ID = $ConvID");
-		list($UserID, $AssignedToUser) = $DB->next_record();
+		list($UserID, $AssignedToUser, $Level) = $DB->next_record();
 
-		if ($UserID == $LoggedUser['ID'] || $IsFLS || $UserID == $AssignedToUser) {
+		$LevelCap = 1000;
+
+		$Level = min($Level, $LevelCap);
+		if ($UserID == $LoggedUser['ID'] || ($IsFLS && $LoggedUser['EffectiveClass'] >= $Level) || $UserID == $AssignedToUser) {
 			// Response to existing conversation
 			$DB->query("
 				INSERT INTO staff_pm_messages

@@ -10,7 +10,7 @@ if ($ConvID = (int)$_GET['convid']) {
 		SELECT Level
 		FROM staff_pm_conversations
 		WHERE ID = $ConvID");
-	list($Level) = $DB->next_record;
+	list($Level) = $DB->next_record();
 
 	if ($Level == 0) {
 		// FLS conversation, assign to staff (moderator)
@@ -49,9 +49,12 @@ if ($ConvID = (int)$_GET['convid']) {
 		SELECT Level, AssignedToUser
 		FROM staff_pm_conversations
 		WHERE ID = $ConvID");
-	list($Level, $AssignedToUser) = $DB->next_record;
+	list($Level, $AssignedToUser) = $DB->next_record();
+	
+	$LevelCap = 1000;
+	
 
-	if ($LoggedUser['EffectiveClass'] >= $Level || $AssignedToUser == $LoggedUser['ID']) {
+	if ($LoggedUser['EffectiveClass'] >= min($Level, $LevelCap) || $AssignedToUser == $LoggedUser['ID']) {
 		// Staff member is allowed to assign conversation, assign
 		list($LevelType, $NewLevel) = explode('_', db_string($_POST['assign']));
 
