@@ -334,6 +334,14 @@ if (count($_GET)) {
 			$Where[] = implode(' AND ', num_compare('Invites', $_GET['invites'], $Invites1, $Invites2));
 		}
 
+		if (strlen($_GET['invitees1'])) {
+			$Invitees1 = round($_GET['invitees1']);
+			$Invitees2 = round($_GET['invitees2']);
+			$Join['ui2'] = ' JOIN users_info AS ui2 ON ui2.Inviter = um1.ID ';
+			$Having[] = implode(' AND ', num_compare('COUNT(ui2.Inviter)', $_GET['invitees'], $Invitees1, $Invitees2));
+			$Group[] = 'um1.ID';
+		}
+		
 		if ($_GET['disabled_invites'] == 'yes') {
 			$Where[] = 'ui1.DisableInvites = \'1\'';
 		} elseif ($_GET['disabled_invites'] == 'no') {
@@ -447,9 +455,14 @@ if (count($_GET)) {
 			$SQL .= ' WHERE '.implode(' AND ', $Where);
 		}
 
+		if (count($Group)) {
+			$SQL .= " GROUP BY " . implode(' ,', $Group);
+		}
+
 		if (count($Having)) {
 			$SQL .= ' HAVING '.implode(' AND ', $Having);
 		}
+
 		$SQL .= $Order;
 
 		if (count($Where) > 0 || count($Join) > 0 || count($Having) > 0) {
@@ -725,6 +738,27 @@ View::show_header('User search');
 					</select>
 					<input type="text" name="cc" size="2" value="<?=display_str($_GET['cc'])?>" />
 				</td>
+			</tr>
+
+			<tr>
+				
+				
+				<td></td>
+				<td></td>
+				
+				<td width="30%" class="label nobr"># of invitees:</td>
+				<td>
+					<select name="invitees">
+						<option value="equal" <?=isset($_GET['invitees']) && $_GET['invitees'] == 'equal' ? 'selected' : ''?>>Equal</option>
+						<option value="above" <?=isset($_GET['invitees']) && $_GET['invitees'] == 'above' ? 'selected' : ''?>>Above</option>
+						<option value="below" <?=isset($_GET['invitees']) && $_GET['invitees'] == 'below' ? 'selected' : ''?>>Below</option>
+						<option value="between" <?=isset($_GET['invitees']) && $_GET['invitees'] == 'between' ? 'selected' : ''?>>Between</option>
+					</select>
+					<input type="text" name="invitees1" size="6" value="<?=display_str($_GET['invitees1'])?>" />
+					<input type="text" name="invitees2" size="6" value="<?=display_str($_GET['invitees2'])?>" />
+				</td>
+				<td></td>
+				<td></td>
 			</tr>
 
 			<tr>
