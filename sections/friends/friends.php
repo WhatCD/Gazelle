@@ -19,13 +19,18 @@ View::show_header('Friends','comments');
 $UserID = $LoggedUser['ID'];
 
 
+$Select = "f.FriendID";
+$Where = "f.UserID = '$UserID'";
+
+
+
 list($Page, $Limit) = Format::page_limit(FRIENDS_PER_PAGE);
 
 // Main query
 $DB->query("
 	SELECT
 		SQL_CALC_FOUND_ROWS
-		f.FriendID,
+		$Select,
 		f.Comment,
 		m.Username,
 		m.Uploaded,
@@ -37,7 +42,7 @@ $DB->query("
 	FROM friends AS f
 		JOIN users_main AS m ON f.FriendID = m.ID
 		JOIN users_info AS i ON f.FriendID = i.UserID
-	WHERE f.UserID = '$UserID'
+	WHERE $Where
 	ORDER BY Username
 	LIMIT $Limit");
 $Friends = $DB->to_array(false, MYSQLI_BOTH, array(6, 'Paranoia'));
@@ -52,7 +57,7 @@ list($Results) = $DB->next_record();
 	<div class="header">
 		<h2>Friends List</h2>
 	</div>
-	<div class="linkbox">
+	<div class="linkbox"> 
 <?
 // Pagination
 $Pages = Format::get_pages($Page, $Results, FRIENDS_PER_PAGE, 9);

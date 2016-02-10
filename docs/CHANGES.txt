@@ -1,5 +1,8 @@
 CHANGE LOG
 
+2016-02-10 by newman
+Make advanced searching by invitees not timeout. Set snatched to off by default to drastically improve page load time
+
 2016-02-06 by newman
 Fix some Staff PM bugs
 

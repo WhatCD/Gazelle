@@ -221,6 +221,16 @@ if (count($_GET)) {
 					WHERE xs.uid = um1.ID
 				) AS Snatches,";
 		}
+		if ($_GET['invitees'] == 'off') {
+			$SQL .= "'X' AS Invitees,";
+		} else {
+			$SQL .= "
+			(
+			    SELECT COUNT(ui2.UserID)
+			    FROM users_info AS ui2
+			    WHERE um1.ID = ui2.Inviter
+  			) AS Invitees,";
+		}
 		$SQL .= '
 				um1.PermissionID,
 				um1.Email,
@@ -334,12 +344,10 @@ if (count($_GET)) {
 			$Where[] = implode(' AND ', num_compare('Invites', $_GET['invites'], $Invites1, $Invites2));
 		}
 
-		if (strlen($_GET['invitees1'])) {
+		if (strlen($_GET['invitees1']) && $_GET['invitees'] != 'off') {
 			$Invitees1 = round($_GET['invitees1']);
 			$Invitees2 = round($_GET['invitees2']);
-			$Join['ui2'] = ' JOIN users_info AS ui2 ON ui2.Inviter = um1.ID ';
-			$Having[] = implode(' AND ', num_compare('COUNT(ui2.Inviter)', $_GET['invitees'], $Invitees1, $Invitees2));
-			$Group[] = 'um1.ID';
+			$Having[] = implode(' AND ', num_compare('Invitees', $_GET['invitees'], $Invitees1, $Invitees2));
 		}
 		
 		if ($_GET['disabled_invites'] == 'yes') {
@@ -687,7 +695,7 @@ View::show_header('User search');
 						<option value="above"<?   if (isset($_GET['snatched']) && $_GET['snatched'] === 'above')   { echo ' selected="selected"'; } ?>>Above</option>
 						<option value="below"<?   if (isset($_GET['snatched']) && $_GET['snatched'] === 'below')   { echo ' selected="selected"'; } ?>>Below</option>
 						<option value="between"<? if (isset($_GET['snatched']) && $_GET['snatched'] === 'between') { echo ' selected="selected"'; } ?>>Between</option>
-						<option value="off"<?     if (isset($_GET['snatched']) && $_GET['snatched'] === 'off')     { echo ' selected="selected"'; } ?>>Off</option>
+						<option value="off"<?     if (!isset($_GET['snatched']) || $_GET['snatched'] === 'off')     { echo ' selected="selected"'; } ?>>Off</option>
 					</select>
 					<input type="text" name="snatched1" size="6" value="<?=display_str($_GET['snatched1'])?>" />
 					<input type="text" name="snatched2" size="6" value="<?=display_str($_GET['snatched2'])?>" />
@@ -753,6 +761,7 @@ View::show_header('User search');
 						<option value="above" <?=isset($_GET['invitees']) && $_GET['invitees'] == 'above' ? 'selected' : ''?>>Above</option>
 						<option value="below" <?=isset($_GET['invitees']) && $_GET['invitees'] == 'below' ? 'selected' : ''?>>Below</option>
 						<option value="between" <?=isset($_GET['invitees']) && $_GET['invitees'] == 'between' ? 'selected' : ''?>>Between</option>
+						<option value="off" <?=!isset($_GET['invitees']) || $_GET['invitees'] == 'off' ? 'selected' : ''?>>Off</option>
 					</select>
 					<input type="text" name="invitees1" size="6" value="<?=display_str($_GET['invitees1'])?>" />
 					<input type="text" name="invitees2" size="6" value="<?=display_str($_GET['invitees2'])?>" />
@@ -843,9 +852,12 @@ echo $Pages;
 			<td>Downloads</td>
 			<td>Snatched</td>
 			<td>Invites</td>
+<? 		if (isset($_GET['invitees']) && $_GET['invitees'] != 'off') { ?>
+			<td>Invitees</td>
+<?		} ?>
 		</tr>
 <?
-while (list($UserID, $Username, $Uploaded, $Downloaded, $Snatched, $Class, $Email, $Enabled, $IP, $Invites, $DisableInvites, $Warned, $Donor, $JoinDate, $LastAccess) = $DB->next_record()) { ?>
+while (list($UserID, $Username, $Uploaded, $Downloaded, $Snatched, $Invitees, $Class, $Email, $Enabled, $IP, $Invites, $DisableInvites, $Warned, $Donor, $JoinDate, $LastAccess) = $DB->next_record()) { ?>
 		<tr>
 			<td><?=Users::format_username($UserID, true, true, true, true)?></td>
 			<td><?=Format::get_ratio_html($Uploaded, $Downloaded)?></td>
@@ -866,6 +878,9 @@ while (list($UserID, $Username, $Uploaded, $Downloaded, $Snatched, $Class, $Emai
 			<td><?=number_format((int)$Downloads)?></td>
 			<td><?=(is_numeric($Snatched) ? number_format($Snatched) : display_str($Snatched))?></td>
 			<td><? if ($DisableInvites) { echo 'X'; } else { echo number_format($Invites); } ?></td>
+<? 		if (isset($_GET['invitees']) && $_GET['invitees'] != 'off') { ?>
+			<td><?=number_format($Invitees)?></td>
+<?		} ?>
 		</tr>
 <?
 }
