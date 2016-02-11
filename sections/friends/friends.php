@@ -21,6 +21,8 @@ $UserID = $LoggedUser['ID'];
 
 $Select = "f.FriendID";
 $Where = "f.UserID = '$UserID'";
+$Join1 = "f.FriendID = m.ID";
+$Join2 = "f.FriendID = i.UserID";
 
 
 
@@ -40,8 +42,8 @@ $DB->query("
 		m.LastAccess,
 		i.Avatar
 	FROM friends AS f
-		JOIN users_main AS m ON f.FriendID = m.ID
-		JOIN users_info AS i ON f.FriendID = i.UserID
+		JOIN users_main AS m ON $Join1
+		JOIN users_info AS i ON $Join2
 	WHERE $Where
 	ORDER BY Username
 	LIMIT $Limit");
@@ -57,7 +59,7 @@ list($Results) = $DB->next_record();
 	<div class="header">
 		<h2>Friends List</h2>
 	</div>
-	<div class="linkbox"> 
+	<div class="linkbox">
 <?
 // Pagination
 $Pages = Format::get_pages($Page, $Results, FRIENDS_PER_PAGE, 9);
