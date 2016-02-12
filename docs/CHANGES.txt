@@ -1,5 +1,8 @@
 CHANGE LOG
 
+2016-02-11 by newman
+Fix punctuation typo in uploading rules
+
 2016-02-10 by newman
 Make advanced searching by invitees not timeout. Set snatched to off by default to drastically improve page load time
 
