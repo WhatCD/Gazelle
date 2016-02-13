@@ -1,5 +1,8 @@
 CHANGE LOG
 
+2016-02-13 by lawnmower
+minor usability improvement to artist alias editing
+
 2016-02-11 by newman
 Fix punctuation typo in uploading rules
 

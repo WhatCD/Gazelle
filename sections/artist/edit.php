@@ -102,6 +102,7 @@ View::show_header('Edit artist');
 			<ul>
 
 <?
+	$NonRedirectingAliases = array();
 	$DB->query("
 		SELECT AliasID, Name, UserID, Redirect
 		FROM artists_alias
@@ -118,7 +119,12 @@ View::show_header('Edit artist');
 <?		}
 		if ($Redirect) { ?>
 					(writes redirect to <span class="tooltip" title="Target alias ID"><?=$Redirect?></span>)
-<?		} ?>
+<?		}
+		else {
+			$NonRedirectingAliases[$AliasID] = $AliasName;
+		}
+?>
+
 					<a href="artist.php?action=delete_alias&amp;aliasid=<?=$AliasID?>&amp;auth=<?=$LoggedUser['AuthKey']?>" title="Delete this alias" class="brackets tooltip">X</a>
 				</li>
 <?	}
@@ -139,9 +145,13 @@ View::show_header('Edit artist');
 					<input type="text" name="name" size="40" value="<?=$Name?>" />
 				</div>
 				<div class="field_div">
-					<span class="label"><strong>Writes redirect to (enter an Alias ID; leave blank or enter "0" for no redirect):</strong></span>
-					<br />
-					<input type="text" name="redirect" size="40" value="<?=$DefaultRedirectID?>" /><br />
+					<span class="label"><strong>Writes redirect to:</strong></span>
+					<select name="redirect">
+						<option value="0">Non-redirecting alias</option>
+<?	foreach($NonRedirectingAliases as $AliasID => $AliasName) { ?>
+						<option value="<?=$AliasID?>"<?=$AliasID == $DefaultRedirectID ? " selected" : ""?>><?=$AliasName?></option>
+<?	} ?>
+					</select><br />
 				</div>
 				<div class="submit_div">
 					<input type="submit" value="Add alias" />
