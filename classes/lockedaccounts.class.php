@@ -21,7 +21,7 @@ class LockedAccounts
         if ($LockedByUserID == 0) {
             $Username = "System";
         } else {
-            G::$DB->query("SELECT Username FROM users_main WHERE ID = '" . $UserID . "'");
+            G::$DB->query("SELECT Username FROM users_main WHERE ID = '" . $LockedByUserID . "'");
             list($Username) = G::$DB->next_record();
         }
 
@@ -46,7 +46,7 @@ class LockedAccounts
         if ($UnlockedByUserID == 0) {
             $Username = "System";
         } else {
-            G::$DB->query("SELECT Username FROM users_main WHERE ID = '" . $UserID . "'");
+            G::$DB->query("SELECT Username FROM users_main WHERE ID = '" . $UnlockedByUserID . "'");
             list($Username) = G::$DB->next_record();
         }
 
