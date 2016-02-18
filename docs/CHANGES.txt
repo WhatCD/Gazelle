@@ -1,5 +1,8 @@
 CHANGE LOG
 
+2016-02-18 by newman
+Fix staff seeing FLS-assigned staff PMs. Add checkbox to allow adding a linked account or editing a linked account without updating staff notes
+
 2016-02-13 by lawnmower
 minor usability improvement to artist alias editing
 

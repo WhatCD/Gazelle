@@ -1,5 +1,6 @@
 <?
-function link_users($UserID, $TargetID) {
+function link_users($UserID, $TargetID, $IgnoreComments) {
+
 	global $DB, $LoggedUser;
 
 	authorize();
@@ -69,12 +70,14 @@ function link_users($UserID, $TargetID) {
 		$DB->query("INSERT INTO users_dupes (UserID, GroupID) VALUES ($UserID, $GroupID)");
 	}
 
-	$AdminComment = sqltime()." - Linked accounts updated: [user]".$UserInfo['Username']."[/user] and [user]".$TargetInfo['Username']."[/user] linked by ".$LoggedUser['Username'];
-	$DB->query("
-		UPDATE users_info AS i
-			JOIN users_dupes AS d ON d.UserID = i.UserID
-		SET i.AdminComment = CONCAT('".db_string($AdminComment)."\n\n', i.AdminComment)
-		WHERE d.GroupID = $GroupID");
+	if (!$IgnoreComments) {
+		$AdminComment = sqltime()." - Linked accounts updated: [user]".$UserInfo['Username']."[/user] and [user]".$TargetInfo['Username']."[/user] linked by ".$LoggedUser['Username'];
+		$DB->query("
+			UPDATE users_info AS i
+				JOIN users_dupes AS d ON d.UserID = i.UserID
+			SET i.AdminComment = CONCAT('".db_string($AdminComment)."\n\n', i.AdminComment)
+			WHERE d.GroupID = $GroupID");
+	}
 }
 
 function unlink_user($UserID) {
@@ -122,7 +125,7 @@ function delete_dupegroup($GroupID) {
 	$DB->query("DELETE FROM dupe_groups WHERE ID = '$GroupID'");
 }
 
-function dupe_comments($GroupID, $Comments) {
+function dupe_comments($GroupID, $Comments, $IgnoreComments) {
 	global $DB, $LoggedUser;
 
 	authorize();
@@ -140,7 +143,9 @@ function dupe_comments($GroupID, $Comments) {
 		WHERE ID = $GroupID");
 	list($OldCommentHash) = $DB->next_record();
 	if ($OldCommentHash != sha1($Comments)) {
-		$AdminComment = sqltime()." - Linked accounts updated: Comments updated by ".$LoggedUser['Username'];
+		if (!$IgnoreComments) {
+			$AdminComment = sqltime()." - Linked accounts updated: Comments updated by ".$LoggedUser['Username'];
+		}
 		if ($_POST['form_comment_hash'] == $OldCommentHash) {
 			$DB->query("
 				UPDATE dupe_groups
@@ -153,11 +158,13 @@ function dupe_comments($GroupID, $Comments) {
 				WHERE ID = '$GroupID'");
 		}
 
-		$DB->query("
-			UPDATE users_info AS i
-				JOIN users_dupes AS d ON d.UserID = i.UserID
-			SET i.AdminComment = CONCAT('".db_string($AdminComment)."\n\n', i.AdminComment)
-			WHERE d.GroupID = $GroupID");
+		if (!$IgnoreComments) {
+			$DB->query("
+				UPDATE users_info AS i
+					JOIN users_dupes AS d ON d.UserID = i.UserID
+				SET i.AdminComment = CONCAT('".db_string($AdminComment)."\n\n', i.AdminComment)
+				WHERE d.GroupID = $GroupID");
+		}
 	}
 }
 
@@ -241,7 +248,9 @@ function user_dupes_table($UserID) {
 				</table>
 				<div class="pad hidden linkedaccounts">
 					<label for="target">Link this user with: </label>
-					<input type="text" name="target" id="target" />
+					<input type="text" name="target" id="target" /><br />
+					<label for="ignore_comments">Do not update staff notes</label>
+					<input type="checkbox" name="ignore_comments" id="ignore_comments" /><br />
 					<input type="submit" value="Update" id="submitlink" />
 				</div>
 			</div>

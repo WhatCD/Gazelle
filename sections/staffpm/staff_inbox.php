@@ -45,6 +45,14 @@ $WhereCondition = "
 	WHERE (LEAST($LevelCap, spc.Level) <= $UserLevel OR spc.AssignedToUser = '".$LoggedUser['ID']."')
 	  AND spc.Status IN ('$Status')";
 
+if ($ViewString == 'Your Unanswered') {
+	if ($UserLevel >= $Classes[MOD]['Level']) {
+		$WhereCondition .= " AND spc.Level >= " . $Classes[MOD]['Level'];
+	} else if ($UserLevel == $Classes[FORUM_MOD]['Level']) {
+		$WhereCondition .= " AND spc.Level >= " . $Classes[FORUM_MOD]['Level'];
+	}
+}
+
 list($Page, $Limit) = Format::page_limit(MESSAGES_PER_PAGE);
 // Get messages
 $StaffPMs = $DB->query("
