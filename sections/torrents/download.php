@@ -184,7 +184,7 @@ $DB->query("
 
 Torrents::set_snatch_update_time($UserID, Torrents::SNATCHED_UPDATE_AFTERDL);
 list($Contents) = $DB->next_record(MYSQLI_NUM, false);
-$FileName = TorrentsDL::construct_file_name($Info['PlainArtists'], $Name, $Year, $Media, $Format, $Encoding, false, $DownloadAlt);
+$FileName = TorrentsDL::construct_file_name($Info['PlainArtists'], $Name, $Year, $Media, $Format, $Encoding, $TorrentID, $DownloadAlt);
 
 if ($DownloadAlt) {
 	header('Content-Type: text/plain; charset=utf-8');
