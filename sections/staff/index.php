@@ -88,31 +88,38 @@ list($FrontLineSupport, $ForumStaff, $Staff) = $SupportStaff;
 					$HTMLID = 'mods';
 					break;
 				case 'Developer':
-					printSectionDiv("Development");
-					$DevDiv = true;
 					$HTMLID = 'devs';
 					break;
+				case 'Lead Developer':
+					$HTMLID = 'lead_devs';
+					break;
+				case 'System Administrator':
+					$HTMLID = 'sys_admins';
+					break;
+				case 'Administrator':
+					$HTMLID = 'admins';
+					break;
+				case 'Sysop':
+					$HTMLID = 'sysops';
+					break;
+				default:
+					$HTMLID = '';
+			}
+			switch ($ClassName) {
+				case 'Developer': // fall through
 				case 'Lead Developer':
 					if (!$DevDiv) {
 						printSectionDiv("Development");
 						$DevDiv = true;
 					}
-					$HTMLID = 'lead_devs';
 					break;
-				case 'Administrator':
-				 	printSectionDiv("Administration");
-				 	$AdminDiv = true;
-					$HTMLID = 'admins';
-					break;
-				case 'System Administrator':
+				case 'System Administrator': // fall through
+				case 'Administrator': // fall through
 				case 'Sysop':
 					if (!$AdminDiv) {
 						printSectionDiv("Administration");
+						$AdminDiv = true;
 					}
-					$HTMLID = 'sysops';
-					break;
-				default:
-					$HTMLID = '';
 			}
 			if ($HTMLID != 'mods') {
 				echo "\t\t<h3 style=\"font-size: 17px;\" id=\"$HTMLID\"><i>".$ClassName."s</i></h3>\n";
