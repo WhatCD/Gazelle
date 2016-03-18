@@ -77,6 +77,19 @@ switch ($_REQUEST['action']) {
 		include(SERVER_ROOT.'/sections/tools/managers/whitelist_alter.php');
 		break;
 
+	case 'enable_requests':
+		include(SERVER_ROOT.'/sections/tools/managers/enable_requests.php');
+		break;
+	case 'ajax_take_enable_request':
+		if (FEATURE_EMAIL_REENABLE) {
+			include(SERVER_ROOT.'/sections/tools/managers/ajax_take_enable_request.php');
+		} else {
+			// Prevent post requests to the ajax page
+			header("Location: tools.php");
+			die();
+		}
+		break;
+
 	case 'login_watch':
 		include(SERVER_ROOT.'/sections/tools/managers/login_watch.php');
 		break;

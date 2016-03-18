@@ -1,11 +1,31 @@
 <?
 View::show_header('Disabled');
-if (empty($_POST['submit']) || empty($_POST['username'])) {
+
+if (isset($_POST['email']) && FEATURE_EMAIL_REENABLE) {
+	// Handle auto-enable request
+	if ($_POST['email'] != '') {
+		$Output = AutoEnable::new_request(db_string($_POST['username']), db_string($_POST['email']));
+	} else {
+		$Output = "Please enter a valid email address.";
+	}
+
+	$Output .= "<br /><br /><a href='login.php?action=disabled'>Back</a>";
+}
+if ((empty($_POST['submit']) || empty($_POST['username'])) && !isset($Output)) {
 ?>
 <p class="warning">
 Your account has been disabled.<br />
-This is either due to inactivity or rule violation(s).<br />
-To discuss this with staff, come to our IRC network at: <?=BOT_SERVER?><br />
+This is either due to inactivity or rule violation(s).<br /><br /></p>
+<? if (FEATURE_EMAIL_REENABLE) { ?>
+If you believe your account was in good standing and was disabled for inactivity, you may request it be re-enabled via email using the form below.<br />
+Please note that you will need access to the email account associated with your account at What.CD for this to work;<br />
+if you do not, please see the section after this form.<br /><br />
+<form action="" method="POST">
+	<input type="email" class="inputtext" placeholder="Email Address" name="email" required /> <input type="submit" value="Submit" />
+	<input type="hidden" name="username" value="<?=$_COOKIE['username']?>" />
+</form><br /><br />
+<? } ?>
+If you are unsure why your account is disabled, or you wish to discuss this with staff, come to our IRC network at: <?=BOT_SERVER?><br />
 And join <?=BOT_DISABLED_CHAN?><br /><br />
 <strong>Be honest.</strong> At this point, lying will get you nowhere.<br /><br /><br />
 </p>
@@ -40,7 +60,7 @@ Please use your <?=SITE_NAME?> username.
 	<input type="submit" name="submit" value="Join WebIRC" />
 </form>
 <?
-} else {
+} else if (!isset($Output)) {
 	$Nick = $_POST['username'];
 	$Nick = preg_replace('/[^a-zA-Z0-9\[\]\\`\^\{\}\|_]/', '', $Nick);
 	if (strlen($Nick) == 0) {
@@ -76,6 +96,9 @@ Please use your <?=SITE_NAME?> username.
 	</div>
 </div>
 <?
+} else {
+	echo $Output;
 }
+
 View::show_footer();
 ?>

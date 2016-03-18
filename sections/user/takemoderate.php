@@ -698,6 +698,7 @@ if ($EnableUser != $Cur['Enabled'] && check_perms('users_disable_users')) {
 			}
 			$TrackerUserUpdates['can_leech'] = 0;
 		}
+		$UpdateSet[] = "i.BanReason = '0'";
 		$UpdateSet[] = "Enabled = '1'";
 		$LightUpdates['Enabled'] = 1;
 	}

@@ -115,6 +115,7 @@ View::show_header('Staff Tools');
 <?
 	// begin Queue category
 	$ToolsHTML = "";
+	create_row("Auto-Enable requests", "tools.php?action=enable_requests", check_perms("users_mod"));
 	create_row("Login watch", "tools.php?action=login_watch", check_perms("admin_login_watch"));
 
 	if ($ToolsHTML) {

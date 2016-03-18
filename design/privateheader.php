@@ -496,6 +496,18 @@ if (check_perms('admin_reports')) {
 }
 
 
+if (check_perms('users_mod') && FEATURE_EMAIL_REENABLE) {
+	$NumEnableRequests = G::$Cache->get_value(AutoEnable::CACHE_KEY_NAME);
+	if ($NumEnableRequests === false) {
+		G::$DB->query("SELECT COUNT(1) FROM users_enable_requests WHERE Outcome IS NULL");
+		list($NumEnableRequests) = G::$DB->next_record();
+		G::$Cache->cache_value(AutoEnable::CACHE_KEY_NAME, $NumEnableRequests);
+	}
+
+	if ($NumEnableRequests > 0) {
+		$ModBar[] = '<a href="tools.php?action=enable_requests">' . $NumEnableRequests . " Enable requests</a>";
+	}
+}
 ?>
 <?
 if (!empty($Alerts) || !empty($ModBar)) { ?>

@@ -69,6 +69,9 @@ define('STARTING_INVITES', 0); //# of invites to give to newly registered users
 define('BLOCK_TOR', false); //Set to true to block Tor users
 define('BLOCK_OPERA_MINI', false); //Set to true to block Opera Mini proxy
 define('DONOR_INVITES', 2);
+if (!defined('FEATURE_EMAIL_REENABLE')) {
+	define('FEATURE_EMAIL_REENABLE', true);
+}
 
 // User class IDs needed for automatic promotions. Found in the 'permissions' table
 // Name of class	Class ID (NOT level)

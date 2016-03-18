@@ -330,7 +330,9 @@ else {
 						log_attempt($UserID);
 						if ($Enabled == 2) {
 
-							header('location:login.php?action=disabled');
+							// Save the username in a cookie for the disabled page
+							setcookie('username', db_string($_POST['username']), time() + 60 * 60, '/', '', false);
+							header('Location: login.php?action=disabled');
 						} elseif ($Enabled == 0) {
 							$Err = 'Your account has not been confirmed.<br />Please check your email.';
 						}

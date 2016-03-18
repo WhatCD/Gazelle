@@ -1410,6 +1410,24 @@ CREATE TABLE `users_enable_recommendations` (
   KEY `Enable` (`Enable`)
 ) ENGINE=InnoDB CHARSET utf8;
 
+CREATE TABLE `users_enable_requests` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `UserID` int(10) unsigned NOT NULL,
+  `Email` varchar(255) NOT NULL,
+  `IP` varchar(15) NOT NULL DEFAULT '0.0.0.0',
+  `UserAgent` text NOT NULL,
+  `Timestamp` datetime NOT NULL,
+  `HandledTimestamp` datetime DEFAULT NULL,
+  `Token` char(32) DEFAULT NULL,
+  `CheckedBy` int(10) unsigned DEFAULT NULL,
+  `Outcome` tinyint(1) DEFAULT NULL COMMENT '1 for approved, 2 for denied, 3 for discarded',
+  PRIMARY KEY (`ID`),
+  KEY `UserId` (`UserID`),
+  KEY `CheckedBy` (`CheckedBy`),
+  CONSTRAINT `users_enable_requests_ibfk_1` FOREIGN KEY (`UserID`) REFERENCES `users_main` (`ID`),
+  CONSTRAINT `users_enable_requests_ibfk_2` FOREIGN KEY (`CheckedBy`) REFERENCES `users_main` (`ID`)
+) ENGINE=InnoDB CHARSET utf8;
+
 CREATE TABLE `users_freeleeches` (
   `UserID` int(10) NOT NULL,
   `TorrentID` int(10) NOT NULL,
