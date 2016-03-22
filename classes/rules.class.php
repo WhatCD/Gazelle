@@ -6,26 +6,105 @@ class Rules {
 	 *
 	 */
 	public static function display_golden_rules() {
-		?>
-		<ol>
-			<li>All staff decisions must be respected. If you take issue with a decision, you must do so privately with the staff member who issued the decision or with an administrator of the site. Complaining about staff decisions in public or otherwise disrespecting staff members will not be taken lightly.</li>
-			<li>Access to this web site is a privilege, not a right, and it can be taken away from you for any reason.</li>
-			<li>One account per person per lifetime. Anyone creating additional accounts will be banned. Additionally, unless your account is immune to <a href="wiki.php?action=article&amp;id=8">inactivity pruning</a>, accounts are automatically disabled if one page load is not made at least once every four months.</li>
-			<li>Avatars must not exceed <span class="tooltip" title="262,144 bytes">256 kB</span> or be vertically longer than 400 pixels. Avatars must be safe for work, be entirely unoffensive, and cannot contain any nudity or religious imagery. Use common sense.</li>
-			<li>Do not post our torrent files on other sites. Your personal passkey is embedded in every torrent file. The tracker will automatically disable your account if you share your torrent files with others. You will not get your account back. This does not prohibit you from sharing the content of the torrents on other sites, but this does prohibit you from sharing the torrent file itself (i.e. the file with a ".torrent" file extension).</li>
-			<li>Any torrent you are seeding to this tracker must have <em>only</em> <?=SITE_NAME?>'s tracker URL in it. Adding another BitTorrent tracker's URL will cause incorrect data to be sent to our tracker, and you will be disabled for cheating. Similarly, your client must have DHT and PEX (peer exchange) disabled for all <?=SITE_NAME?> torrents.</li>
-			<li>This is a BitTorrent site which promotes sharing amongst the community. If you are not willing to give back to the community what you take from it, this site is not for you. In other words, we expect you to have an acceptable share ratio. If you download a torrent, please seed the copy you have until there are sufficient people seeding the torrent before you stop.</li>
-			<li>Do not browse the site using proxies or Tor. The site will automatically alert us. This includes VPNs with dynamic IP addresses.</li>
-			<li>Asking for invites to any site is not allowed anywhere on <?=SITE_NAME?> or our IRC network. Invites may be offered in the Invites forum and nowhere else.</li>
-			<li>Trading, selling, and publicly offering <?=SITE_NAME?> invites is strictly prohibited; this includes on any forum which is not a class-restricted section on a private, invitation-only, BitTorrent tracker. Responding to public requests for invites may also jeopardize your account and the accounts of those you invite from a public request.</li>
-			<li>Trading, selling, sharing, or giving away your account is strictly prohibited. If you no longer want your account, send a <a href="staffpm.php">Staff PM</a> requesting that it be disabled.</li>
-			<li>You are completely responsible for the people you invite. If your invitees are caught cheating or trading/selling invites, not only will they be banned, so will you. Be careful who you invite. Invites are a precious commodity.</li>
-			<li>Be careful when sharing an IP address or a computer with a friend if they have (or have had) an account. From then on, your accounts will be permanently linked, and if one of you violates the rules, both accounts will be disabled along with any other accounts linked by IP address. This rule applies to logging into the site.</li>
-			<li>Attempting to find or exploit a bug in the site code is the worst possible offense you can commit. We have automatic systems in place for monitoring these activities, and committing them will result in the banning of you, your inviter, and your inviter's entire invite tree.</li>
-			<li>We're a community. Working together is what makes this place what it is. There are well over a thousand new torrents uploaded every day and, sadly, the staff aren't psychic. If you come across something that violates a rule, report it, and help us better organize the site for you.</li>
-			<li>We respect the wishes of other BitTorrent trackers here, as we wish for them to do the same. Please refrain from posting full names or links to sites that do not want to be mentioned.</li>
-		</ol>
-<?
+		$site_name = SITE_NAME;
+		$disabled_channel = BOT_DISABLED_CHAN;
+		$staffpm = '<a href="staffpm.php">Staff PM</a>';
+		$irc = '<a href="chat.php">IRC</a>';
+		$vpns_article = '<a href="wiki.php?action=article&name=vpns">Proxy/VPN Tips</a>';
+		$ips_article = '<a href="wiki.php?action=article&name=ips">Multiple IPs</a>';
+		$autofl_article = '<a href="wiki.php?action=article&name=autofl">Freeleech Autosnatching Policy</a>';
+		$bugs_article = '<a href="wiki.php?action=article&name=bugs">Responsible Disclosure Policy</a>';
+		$exploit_article = '<a href="wiki.php?action=article&name=exploit">Exploit Policy</a>';
+		$golden_rules = array(
+			[ 'n' => "1.1",
+			  'short' => "Do not create more than one account.",
+			  'long' => "Users are allowed one account per lifetime. If your account is disabled, contact staff in ${disabled_channel} on ${irc}." ],
+			[ 'n' => "1.2",
+			  'short' => "Do not trade, sell, give away, or offer accounts.",
+			  'long' => "If you no longer wish to use your account, send a ${staffpm} and request that your account be disabled." ],
+			[ 'n' => "1.3",
+			  'short' => "Do not share accounts.",
+			  'long' => "Accounts are for personal use only. Granting access to your account in any way (e.g., shared login details, external programs) is prohibited. <a href=\"wiki.php?action=article&name=invite\">Invite</a> friends or direct them to the <a href=\"http://www.whatinterviewprep.com/\">IRC Interview</a>." ],
+			[ 'n' => "2.1",
+			  'short' => "Do not invite bad users.",
+			  'long' => "You are responsible for your invitees. You will not be punished if your invitees fail to maintain required share ratios, but invitees who break golden rules will place your invite privileges and account at risk." ],
+			[ 'n' => "2.2",
+			  'short' => "Do not trade, sell, publicly give away, or publicly offer invites.",
+			  'long' => "Invites should only be given to people you know and trust. There is one exception to this rule: invites may also be offered in class-restricted forums on other invitation-only private trackers where official ${site_name} recruitment threads don't already exist. Responding to public invite requests may place your account or invites privileges at risk." ],
+			[ 'n' => "2.3",
+			  'short' => "Do not request invites or accounts.",
+			  'long' => "Requesting invites to&mdash;or accounts on&mdash;${site_name} or other trackers is prohibited. Invites may be <i>offered</i>, but not requested, in the site's Invites forum (restricted to the <a href=\"wiki.php?action=article&name=classes\">Power User class</a> and above). You may request invites by messaging users only when they have offered them in the Invites Forum. Unsolicited invite requests, even by private message, are prohibited." ],
+			[ 'n' => "3.1",
+			  'short' => "Do not engage in ratio manipulation.",
+			  'long' => "Transferring buffer&mdash;or increasing your buffer&mdash;through unintended uses of the BitTorrent protocol or site features (e.g., <a href=\"rules.php?p=requests\">request abuse</a>) constitutes ratio manipulation. When in doubt, send a ${staffpm} asking for more information." ],
+			[ 'n' => "3.2",
+			  'short' => "Do not report incorrect data to the tracker (i.e., cheating).",
+			  'long' => "Reporting incorrect data to the tracker constitutes cheating, whether it is accomplished through the use of a modified \"cheat client\" or through manipulation of an approved client." ],
+			[ 'n' => "3.3",
+			  'short' => "Do not use unapproved clients.",
+			  'long' => "Your client must be found on the <a href=\"rules.php?p=clients\">Client Whitelist</a>. You must not use clients that have been modified in any way. Developers interested in testing unstable clients must first receive staff approval." ],
+			[ 'n' => "3.4",
+			  'short' => "Do not modify ${site_name} .torrent files.",
+			  'long' => "Embedding non-${site_name} announce URLs in ${site_name} .torrents is prohibited. Doing so causes false data to be reported and will be interpreted as cheating. This applies to standalone .torrent files and .torrent files that have been loaded into a client." ],
+			[ 'n' => "3.5",
+			  'short' => "Do not share .torrent files or your passkey.",
+			  'long' => "Embedded in each ${site_name} .torrent file is an announce URL containing your personal passkey. Passkeys enable users to report stats to the tracker." ],
+			[ 'n' => "4.1",
+			  'short' => "Do not blackmail, threaten, or expose fellow users.",
+			  'long' => "Exposing or threatening to expose private information about users for any reason is prohibited. Private information includes but is not limited to personally identifying information (e.g., names, records, biographical details, photos). Information that hasn't been openly volunteered by a user should not be discussed or shared without permission. This includes private information collected via investigations into openly volunteered information (e.g., Google search results)." ],
+			[ 'n' => "4.2",
+			  'short' => "Do not scam or defraud.",
+			  'long' => "Scams (e.g., phishing) of any kind are prohibited." ],
+			[ 'n' => "4.3",
+			  'short' => "Do not disrespect staff decisions.",
+			  'long' => "Disagreements must be discussed privately with the deciding moderator. If the moderator has retired or is unavailable, you may send a ${staffpm}. Do not contact multiple moderators hoping to find one amenable to your cause; however, you may contact a site administrator if you require a second opinion. Options for contacting staff include private message, Staff PM, and ${disabled_channel} on ${irc}." ],
+			[ 'n' => "4.4",
+			  'short' => "Do not impersonate staff.",
+			  'long' => "Impersonating staff or official service accounts (e.g., Drone) on-site, off-site, or on IRC is prohibited. Deceptively misrepresenting staff decisions is also prohibited." ],
+			[ 'n' => "4.5",
+			  'short' => "Do not backseat moderate.",
+			  'long' => "\"Backseat moderation\" occurs when users police other users. Confronting, provoking, or chastising users suspected of violating rules&mdash;or users suspected of submitting reports&mdash;is prohibited. Submit a report if you see a rule violation." ],
+			[ 'n' => "4.6",
+			  'short' => "Do not request special events.",
+			  'long' => "Special events (e.g., freeleech, neutral leech, picks) are launched at the discretion of the staff. They do not adhere to a fixed schedule, and may not be requested by users." ],
+			[ 'n' => "4.7",
+			  'short' => "Do not harvest user-identifying information.",
+			  'long' => "Using ${site_name}'s services to harvest user-identifying information of any kind (e.g., IP addresses, personal links) through the use of scripts, exploits, or other techniques is prohibited." ],
+			[ 'n' => "4.8",
+			  'short' => "Do not use ${site_name}'s services (including the tracker, website, and IRC network) for commercial gain.",
+			  'long' => "Commercializing services provided by or code maintained by ${site_name} (e.g., Gazelle, Ocelot) is prohibited. Commercializing content provided by ${site_name} users via the aforementioned services (e.g., user torrent data) is prohibited. Referral schemes, financial solicitations, and money offers are also prohibited." ],
+			[ 'n' => "5.1",
+			  'short' => "Do not browse ${site_name} using proxies (including any VPN) with dynamic or shared IP addresses.",
+			  'long' => "You may browse the site through a private server/proxy only if it has a static IP address unique to you, or through your private or shared seedbox. Note that this applies to every kind of proxy, including VPN services, Tor, and public proxies. When in doubt, send a ${staffpm} seeking approval of your proxy or VPN. See our ${vpns_article} and ${ips_article} articles for more information." ],
+			[ 'n' => "5.2",
+			  'short' => "Do not abuse automated site access.",
+			  'long' => "All automated site access must be done through the <a href=\"https://github.com/WhatCD/Gazelle/wiki/JSON-API-Documentation\">API</a>. API use is limited to 5 requests within any 10-second window. Scripts and other automated processes must not scrape the site's HTML pages." ],
+			[ 'n' => "5.3",
+			  'short' => "Do not autosnatch freeleech torrents.",
+			  'long' => "The automatic snatching of freeleech torrents using any method involving little or no user-input (e.g., API-based scripts, log or site scraping, etc.) is prohibited. See ${site_name}'s ${autofl_article} article for more information." ],
+			[ 'n' => "6.1",
+			  'short' => "Do not seek or exploit live bugs for any reason.",
+			  'long' => "Seeking or exploiting bugs in the live site (as opposed to a local development environment) is prohibited. If you discover a critical bug or security vulnerability, immediately report it in accordance with ${site_name}'s ${bugs_article}. Non-critical bugs can be reported in the <a href=\"forums.php?action=viewforum&forumid=27\">Bugs Forum</a>." ],
+			[ 'n' => "6.2",
+			  'short' => "Do not publish exploits.",
+			  'long' => "The publication, organization, dissemination, sharing, technical discussion, or technical facilitation of exploits is prohibited at staff discretion. Exploits are defined as unanticipated or unaccepted uses of internal, external, non-profit, or for-profit services. See ${site_name}'s ${exploit_article} article for more information. Exploits are subject to reclassification at any time." ]
+		);
+		echo "<ul class=\"rules golden_rules\">\n";
+		foreach($golden_rules as $gr) {
+			$r_link = "gr${gr['n']}";
+			echo    "<li id=\"${r_link}\">" .
+					"<a href=\"#${r_link}\" class=\"rule_link\">${gr['n']}.</a>" .
+					'<div class="rule_wrap">' .
+						'<div class="rule_short">' .
+							$gr['short'] .
+						'</div>' .
+						'<div class="rule_long">' .
+							$gr['long'] .
+						'</div>' .
+					'</div>' .
+				"</li>\n";
+		}
+		echo "</ul>\n";
 	}
 
 	/**

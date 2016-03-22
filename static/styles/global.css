@@ -20,6 +20,31 @@ pre br {
 	text-align: center;
 }
 
+ul.rules {
+	list-style-type: none;
+}
+
+div.rule_short {
+	font-weight: bold;
+	font-size: 10pt;
+}
+
+div.rule_wrap {
+	display: inline-table;
+	width: 96%;
+}
+
+a.rule_link {
+	display: inline-table;
+	font-weight: bold;
+	font-size: 10pt;
+	width: 4%;
+}
+
+.golden_rules {
+	list-style-type: none !important;
+}
+
 ul.collage_images {
 	padding: 0px;
 	width: 590px;

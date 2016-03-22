@@ -70,6 +70,7 @@
 				These rules govern what tags can and cannot be added.
 			</td>
 		</tr>
+<!--
 		<tr class="colhead">
 			<td colspan="2">Other languages (Please note, these are community-maintained and are subject to error.)</td>
 		</tr>
@@ -105,6 +106,7 @@
 				Las reglas en espa&#241;ol
 			</td>
 		</tr>
+-->
 	</table>
 </div>
 <!-- END Other Sections -->
