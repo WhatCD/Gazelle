@@ -360,13 +360,9 @@ class Users {
 	 * @return random alphanumeric string
 	 */
 	public static function make_secret($Length = 32) {
-		$Secret = '';
-		$Chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
-		$CharLen = strlen($Chars) - 1;
-		for ($i = 0; $i < $Length; ++$i) {
-			$Secret .= $Chars[mt_rand(0, $CharLen)];
-		}
-		return $Secret;
+		$NumBytes = (int) round($Length / 2);
+		$Secret = bin2hex(openssl_random_pseudo_bytes($NumBytes));
+		return substr($Secret, 0, $Length);
 	}
 
 	/**

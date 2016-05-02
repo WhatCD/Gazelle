@@ -39,13 +39,9 @@ function error($Code) {
 }
 
 function make_secret($Length = 32) {
-	$Secret = '';
-	$Chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
-	for ($i = 0; $i < $Length; $i++) {
-		$Rand = mt_rand(0, strlen($Chars) - 1);
-		$Secret .= substr($Chars, $Rand, 1);
-	}
-	return str_shuffle($Secret);
+	$NumBytes = (int) round($Length / 2);
+	$Secret = bin2hex(openssl_random_pseudo_bytes($NumBytes));
+	return substr($Secret, 0, $Length);
 }
 
 function is_number($Str) {
