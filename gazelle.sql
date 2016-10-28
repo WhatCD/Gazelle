@@ -1343,6 +1343,14 @@ CREATE TABLE `torrents_votes` (
   CONSTRAINT `torrents_votes_ibfk_1` FOREIGN KEY (`GroupID`) REFERENCES `torrents_group` (`ID`) ON DELETE CASCADE
 ) ENGINE=InnoDB CHARSET utf8;
 
+CREATE TABLE `upload_contest` (
+  `TorrentID` int(10) unsigned NOT NULL,
+  `UserID` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`TorrentID`),
+  KEY `UserID` (`UserID`),
+  CONSTRAINT `upload_contest_ibfk_1` FOREIGN KEY (`UserID`) REFERENCES `users_main` (`ID`) ON DELETE CASCADE
+) ENGINE=InnoDB CHARSET utf8;
+
 CREATE TABLE `user_questions` (
   `ID` int(10) NOT NULL AUTO_INCREMENT,
   `Question` mediumtext NOT NULL,

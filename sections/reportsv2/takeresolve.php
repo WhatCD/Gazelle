@@ -151,14 +151,13 @@ if ($DB->affected_rows() > 0 || !$Report) {
 		$Cache->decrement('num_torrent_reportsv2');
 	}
 
-
 	if (isset($Escaped['upload'])) {
 		$Upload = true;
 	} else {
 		$Upload = false;
 	}
 
-	if ($_POST['resolve_type'] == 'tags_lots') {
+	if ($_POST['resolve_type'] === 'tags_lots') {
 		$DB->query("
 			INSERT IGNORE INTO torrents_bad_tags
 				(TorrentID, UserID, TimeAdded)
@@ -172,8 +171,7 @@ if ($DB->affected_rows() > 0 || !$Report) {
 		$Cache->delete_value("torrents_details_$GroupID");
 		$SendPM = true;
 	}
-
-	if ($_POST['resolve_type'] == 'folders_bad') {
+	elseif ($_POST['resolve_type'] === 'folders_bad') {
 		$DB->query("
 			INSERT IGNORE INTO torrents_bad_folders
 				(TorrentID, UserID, TimeAdded)
@@ -187,7 +185,7 @@ if ($DB->affected_rows() > 0 || !$Report) {
 		$Cache->delete_value("torrents_details_$GroupID");
 		$SendPM = true;
 	}
-	if ($_POST['resolve_type'] == 'filename') {
+	elseif ($_POST['resolve_type'] === 'filename') {
 		$DB->query("
 			INSERT IGNORE INTO torrents_bad_files
 				(TorrentID, UserID, TimeAdded)
@@ -201,8 +199,7 @@ if ($DB->affected_rows() > 0 || !$Report) {
 		$Cache->delete_value("torrents_details_$GroupID");
 		$SendPM = true;
 	}
-
-	if ($_POST['resolve_type'] == 'lossyapproval') {
+	elseif ($_POST['resolve_type'] === 'lossyapproval') {
 		$DB->query("
 			INSERT INTO torrents_lossymaster_approved
 			VALUES ($TorrentID, ".$LoggedUser['ID'].", '".sqltime()."')");
@@ -212,6 +209,11 @@ if ($DB->affected_rows() > 0 || !$Report) {
 			WHERE ID = $TorrentID");
 		list($GroupID) = $DB->next_record();
 		$Cache->delete_value("torrents_details_$GroupID");
+	}
+	elseif ($_POST['resolve_type'] === 'upload_contest') {
+		$DB->query("
+			INSERT INTO upload_contest
+			VALUES ($TorrentID, $UploaderID)");
 	}
 
 	//Log and delete
