@@ -1,5 +1,8 @@
 CHANGE LOG
 
+2016-11-01 by Bourbon
+Remove username substring search functionality. Username searches must now be exact to return a result.
+
 2016-02-18 by newman
 Fix staff seeing FLS-assigned staff PMs. Add checkbox to allow adding a linked account or editing a linked account without updating staff notes
 
