@@ -30,7 +30,7 @@ class Rules {
 			  'long' => "You are responsible for your invitees. You will not be punished if your invitees fail to maintain required share ratios, but invitees who break golden rules will place your invite privileges and account at risk." ],
 			[ 'n' => "2.2",
 			  'short' => "Do not trade, sell, publicly give away, or publicly offer invites.",
-			  'long' => "Invites should only be given to people you know and trust. There is one exception to this rule: invites may also be offered in class-restricted forums on other invitation-only private trackers where official ${site_name} recruitment threads don't already exist. Responding to public invite requests may place your account or invites privileges at risk." ],
+			  'long' => "Only invite people you know and trust. Do not offer invites via other trackers, forums, social media, or other public locations. Responding to public invite requests is prohibited. Exception: Staff-designated recruiters may offer invites in approved locations." ],
 			[ 'n' => "2.3",
 			  'short' => "Do not request invites or accounts.",
 			  'long' => "Requesting invites to&mdash;or accounts on&mdash;${site_name} or other trackers is prohibited. Invites may be <i>offered</i>, but not requested, in the site's Invites forum (restricted to the <a href=\"wiki.php?action=article&name=classes\">Power User class</a> and above). You may request invites by messaging users only when they have offered them in the Invites Forum. Unsolicited invite requests, even by private message, are prohibited." ],
